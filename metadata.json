@@ -1,0 +1,6 @@
+{
+  "name": "Batalha das Funções - RPG Matemático",
+  "description": "RPG de batalhas em turnos em estilo pixel art no universo das Funções do 2º Grau com sistema de precisão matemática, combos, evoluções, chefes e salvamento em nuvem no Google Drive.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
