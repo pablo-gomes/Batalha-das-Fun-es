@@ -4,7 +4,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'potion_hp',
     name: 'Poção Matemática',
-    icon: '🧪',
+    icon: 'FlaskConical',
     description: 'Restaura 30 pontos de Vida (HP) da sua criatura instantaneamente.',
     type: 'heal_hp',
     amount: 3,
@@ -14,7 +14,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'potion_energy',
     name: 'Éter Discriminante',
-    icon: '⚡',
+    icon: 'Zap',
     description: 'Restaura 25 pontos de Energia para usar habilidades matemáticas.',
     type: 'restore_energy',
     amount: 3,
@@ -24,7 +24,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'calc_hint',
     name: 'Calculadora Mística',
-    icon: '🔮',
+    icon: 'Gem',
     description: 'Desbloqueia todas as 3 dicas passo a passo da função atual sem perder recompensas.',
     type: 'dica_extra',
     amount: 2,
@@ -34,7 +34,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'parabola_shield',
     name: 'Escudo Parabólico',
-    icon: '🛡️',
+    icon: 'Shield',
     description: 'Reduz em 50% o dano do próximo golpe sofrido pela criatura.',
     type: 'shield',
     amount: 2,
@@ -44,7 +44,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'combo_multiplier',
     name: 'Multiplicador Crítico',
-    icon: '🔥',
+    icon: 'Flame',
     description: 'Dobra (+100%) o dano do próximo ataque se a resposta tiver alta precisão.',
     type: 'damage_boost',
     amount: 1,
@@ -54,7 +54,7 @@ export const INITIAL_ITEMS: InventoryItem[] = [
   {
     id: 'formula_codex',
     name: 'Livro de Bhaskara',
-    icon: '📖',
+    icon: 'BookOpen',
     description: 'Mostra todas as fórmulas da função quadrática durante a batalha.',
     type: 'formula_book',
     amount: 1,

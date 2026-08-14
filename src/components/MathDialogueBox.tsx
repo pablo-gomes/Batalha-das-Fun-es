@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Creature, MathChallenge, Skill, InventoryItem } from '../types';
 import { ParabolaGraph } from './ParabolaGraph';
 import { sound } from '../utils/audio';
+import { GameIcon } from '../utils/iconMap';
+import { Shield, Zap, Gamepad2, BookOpen, ArrowLeft, Swords, ShieldCheck, Package, BarChart2, Crosshair, Lightbulb, BarChart3 } from 'lucide-react';
 
 interface MathDialogueBoxProps {
   playerCreature: Creature;
@@ -76,10 +78,10 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
           <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
           <span className="text-[10px] sm:text-xs font-pixel text-cyan-300 uppercase tracking-wider">
             {isDefenseTurn 
-              ? '🛡️ FASE DE DEFESA: BLOQUEIE O GOLPE!' 
+              ? <><Shield size={10} className="inline mr-1" />FASE DE DEFESA: BLOQUEIE O GOLPE!</>
               : activeMenu === 'challenge' 
-                ? `⚡ DESAFIO MATEMÁTICO: ${selectedSkill?.name || 'Ataque'}`
-                : `🎮 TURNO DE ${playerCreature.name.toUpperCase()}`
+                ? <><Zap size={10} className="inline mr-1" />DESAFIO MATEMÁTICO: {selectedSkill?.name || 'Ataque'}</>
+                : <><Gamepad2 size={10} className="inline mr-1" />TURNO DE {playerCreature.name.toUpperCase()}</>
             }
           </span>
         </div>
@@ -92,7 +94,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
             }}
             className="text-[9px] font-pixel bg-slate-800 hover:bg-slate-700 text-amber-300 px-2 py-1 rounded border border-amber-500/40 flex items-center gap-1 transition-colors"
           >
-            📖 Grimório
+            <BookOpen size={10} /> Grimório
           </button>
           {activeMenu !== 'main' && !isDefenseTurn && (
             <button
@@ -101,9 +103,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 setActiveMenu('main');
                 setHintLevel(0);
               }}
-              className="text-[9px] font-pixel bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded border border-slate-600"
+              className="text-[9px] font-pixel bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded border border-slate-600 flex items-center gap-1"
             >
-              ⬅ Voltar
+              <ArrowLeft size={9} /> Voltar
             </button>
           )}
         </div>
@@ -131,7 +133,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               }}
               className="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-red-300 shadow-[2px_2px_0_#450a0a] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
             >
-              ⚔️ ATACAR
+              <Swords size={12} /> ATACAR
             </button>
 
             <button
@@ -141,7 +143,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               }}
               className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-blue-300 shadow-[2px_2px_0_#172554] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
             >
-              🛡️ DEFENDER
+              <ShieldCheck size={12} /> DEFENDER
             </button>
 
             <button
@@ -151,7 +153,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               }}
               className="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-emerald-300 shadow-[2px_2px_0_#064e3b] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
             >
-              🎒 ITENS
+              <Package size={12} /> ITENS
             </button>
 
             <button
@@ -161,7 +163,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               }}
               className="bg-gradient-to-r from-purple-600 to-fuchsia-700 hover:from-purple-500 hover:to-fuchsia-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-purple-300 shadow-[2px_2px_0_#3b0764] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
             >
-              📈 GRÁFICO
+              <BarChart2 size={12} /> GRÁFICO
             </button>
           </div>
         </div>
@@ -190,7 +192,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 >
                   <div className="flex flex-col">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-sm">{skill.icon}</span>
+                    <GameIcon name={skill.icon} size={14} />
                       <span className="font-pixel text-[10px] sm:text-[11px] text-white">
                         {skill.name}
                       </span>
@@ -236,7 +238,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{item.icon}</span>
+                    <GameIcon name={item.icon} size={18} />
                     <div>
                       <div className="font-pixel text-[10px] text-white">{item.name}</div>
                       <div className="text-[9px] font-mono text-slate-400">{item.description}</div>
@@ -266,7 +268,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
             />
           </div>
           <div className="w-full md:w-1/2 text-left text-[10px] font-mono text-slate-300 space-y-1 bg-slate-900 p-2.5 rounded border border-slate-800">
-            <p className="font-pixel text-[10px] text-purple-300 mb-1">🔍 Como ler a Parábola:</p>
+            <p className="font-pixel text-[10px] text-purple-300 mb-1"><BarChart2 size={10} className="inline mr-1" /> Como ler a Parábola:</p>
             <p>• <strong>Raízes (x₁, x₂):</strong> onde f(x) = 0 toca o eixo X horizontal.</p>
             <p>• <strong>Vértice V(Xᵥ, Yᵥ):</strong> ponto de pico máx ou fundo mín.</p>
             <p>• <strong>Corte Y (0, c):</strong> onde cruza a linha vertical Y.</p>
@@ -293,7 +295,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                   onClick={() => setShowGraphModal(!showGraphModal)}
                   className="text-[9px] font-pixel bg-indigo-900 hover:bg-indigo-800 text-indigo-200 px-2 py-1 rounded border border-indigo-500 transition-colors"
                 >
-                  {showGraphModal ? 'Ocultar Gráfico' : '📊 Ver Gráfico'}
+                  {showGraphModal ? 'Ocultar Gráfico' : <><BarChart3 size={9} className="inline mr-1" />Ver Gráfico</>}
                 </button>
               </div>
             </div>
@@ -304,7 +306,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
             {/* Precision hint */}
             <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mt-1">
-              <span>🎯 Sistema de Precisão: 100% Exato = Golpe Crítico Máximo!</span>
+              <span><Crosshair size={9} className="inline mr-0.5" /> Sistema de Precisão: 100% Exato = Golpe Crítico Máximo!</span>
               <span className="text-amber-400">Tolerância: ±{currentChallenge.tolerance}</span>
             </div>
           </div>
@@ -334,7 +336,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 hintLevel >= 1 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
               }`}
             >
-              💡 Dica 1: Fórmula
+              <Lightbulb size={9} className="inline mr-1" /> Dica 1: Fórmula
             </button>
             <button
               type="button"
@@ -346,7 +348,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 hintLevel >= 2 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
               }`}
             >
-              💡 Dica 2: Valores
+              <Lightbulb size={9} className="inline mr-1" /> Dica 2: Valores
             </button>
             <button
               type="button"
@@ -358,7 +360,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 hintLevel >= 3 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
               }`}
             >
-              💡 Dica 3: Resolução
+              <Lightbulb size={9} className="inline mr-1" /> Dica 3: Resolução
             </button>
 
             {hintLevel > 0 && (
@@ -424,7 +426,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                     : 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black border-amber-300'
                 }`}
               >
-                {isDefenseTurn ? '🛡️ ERGUER DEFESA!' : '⚡ LANÇAR ATAQUE!'}
+                {isDefenseTurn ? <><Shield size={11} className="inline mr-1" />ERGUER DEFESA!</> : <><Zap size={11} className="inline mr-1" />LANÇAR ATAQUE!</> }
               </button>
             </form>
           )}

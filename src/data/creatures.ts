@@ -10,7 +10,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 35,
     accuracy: 95,
     description: 'Encontra as raízes x₁ e x₂ da função para desferir um golpe duplo cortante.',
-    icon: '⚡',
+    icon: 'Zap',
     requiredLevel: 1
   },
   explosao_delta: {
@@ -22,7 +22,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 45,
     accuracy: 90,
     description: 'Calcula o discriminante Δ = b² - 4ac para liberar uma detonação térmica.',
-    icon: '🔥',
+    icon: 'Flame',
     requiredLevel: 3
   },
   vortice_vertice: {
@@ -34,7 +34,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 55,
     accuracy: 85,
     description: 'Calcula o ponto extremo V(Xv, Yv) para aprisionar o inimigo em gravidade máxima.',
-    icon: '🌀',
+    icon: 'Orbit',
     requiredLevel: 5
   },
   precisao_fx: {
@@ -46,7 +46,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 25,
     accuracy: 100,
     description: 'Ataque rápido e ágil calculando o valor numérico exato da função.',
-    icon: '🎯',
+    icon: 'Crosshair',
     requiredLevel: 1
   },
   barreira_concavidade: {
@@ -58,7 +58,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 0,
     accuracy: 100,
     description: 'Identifica o sinal de a para erguer uma cúpula parabólica refletora de dano.',
-    icon: '🛡️',
+    icon: 'Shield',
     requiredLevel: 2
   },
   corte_eixo_y: {
@@ -70,7 +70,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 28,
     accuracy: 95,
     description: 'Focaliza a interseção no eixo Y (0, c) para um disparo perfurante instantâneo.',
-    icon: '📍',
+    icon: 'MapPin',
     requiredLevel: 2
   },
   eixo_simetria: {
@@ -82,7 +82,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 0,
     accuracy: 95,
     description: 'Calcula o eixo x = -b/2a para duplicar a defesa e recuperar 15 de energia.',
-    icon: '📐',
+    icon: 'Ruler',
     requiredLevel: 4
   },
   ataque_supremo_bhaskara: {
@@ -94,7 +94,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
     basePower: 90,
     accuracy: 80,
     description: 'Invoca a sabedoria suprema dos Mestres da Álgebra em um meteoro parabólico.',
-    icon: '💥',
+    icon: 'Bomb',
     requiredLevel: 8
   }
 };

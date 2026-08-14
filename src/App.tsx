@@ -13,7 +13,7 @@ import { EvolutionModal } from './components/EvolutionModal';
 import { GoogleDriveSaveModal } from './components/GoogleDriveSaveModal';
 import { GameSaveData } from './services/driveStorage';
 import { sound } from './utils/audio';
-import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud } from 'lucide-react';
+import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, Coins } from 'lucide-react';
 
 const STORAGE_KEY_PLAYER = 'batalha_funcoes_player_creature';
 
@@ -261,7 +261,7 @@ export default function App() {
 
             {playerCreature && (
               <div className="hidden sm:flex items-center gap-1 font-pixel text-[10px] text-amber-300 bg-slate-950 px-2 py-1 rounded border border-slate-800">
-                <span>🪙</span> {coins}
+                <Coins size={12} className="text-amber-400" /> {coins}
               </div>
             )}
 

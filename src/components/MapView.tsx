@@ -1,6 +1,7 @@
-import React from 'react';
 import { Region } from '../types';
 import { sound } from '../utils/audio';
+import { GameIcon } from '../utils/iconMap';
+import { Map, Lock, Swords, CheckCircle2, Crown } from 'lucide-react';
 
 interface MapViewProps {
   regions: Region[];
@@ -32,7 +33,7 @@ export const MapView: React.FC<MapViewProps> = ({
             ⬅ Menu Principal
           </button>
           <h1 className="font-pixel text-sm sm:text-base text-amber-300">
-            🗺️ Mapa das Regiões Quadráticas
+            <Map className="inline mr-1 mb-0.5" size={14} /> Mapa das Regiões Quadráticas
           </h1>
         </div>
 
@@ -61,12 +62,18 @@ export const MapView: React.FC<MapViewProps> = ({
                     : 'bg-slate-950 border-slate-800 opacity-50 cursor-not-allowed'
               }`}
             >
-              <div className="text-2xl mb-1">{region.icon}</div>
+              <div className="text-2xl mb-1 flex items-center justify-center">
+                <GameIcon name={region.icon} size={24} />
+              </div>
               <div className="font-pixel text-[10px] text-white truncate">
                 {region.name.replace(/^[^\s]+\s/, '')}
               </div>
               <div className="text-[9px] font-mono text-slate-400 truncate mt-0.5">
-                {region.unlocked ? (region.bossDefeated ? '✓ Concluído' : 'Em progresso') : '🔒 Bloqueado'}
+                {region.unlocked ? (region.bossDefeated ? (
+                  <span className="flex items-center gap-0.5"><CheckCircle2 size={9} className="text-emerald-400" /> Concluído</span>
+                ) : 'Em progresso') : (
+                  <span className="flex items-center gap-0.5"><Lock size={9} /> Bloqueado</span>
+                )}
               </div>
             </button>
           );
@@ -78,7 +85,7 @@ export const MapView: React.FC<MapViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-slate-800 pb-4 mb-4 gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-3xl">{selectedRegion.icon}</span>
+              <span className="text-3xl flex items-center"><GameIcon name={selectedRegion.icon} size={28} /></span>
               <div>
                 <h2 className="font-pixel text-base sm:text-lg text-amber-300">
                   {selectedRegion.name}
@@ -119,8 +126,8 @@ export const MapView: React.FC<MapViewProps> = ({
                     Fase {idx + 1}
                   </span>
                   {stage.isBoss && (
-                    <span className="bg-rose-950 text-rose-300 border border-rose-700 text-[9px] font-pixel px-1.5 py-0.5 rounded">
-                      👑 CHEFE
+                    <span className="bg-rose-950 text-rose-300 border border-rose-700 text-[9px] font-pixel px-1.5 py-0.5 rounded flex items-center gap-1">
+                      <Crown size={9} /> CHEFE
                     </span>
                   )}
                 </div>
@@ -138,13 +145,13 @@ export const MapView: React.FC<MapViewProps> = ({
                   sound.playConfirm();
                   onStartStage(stage);
                 }}
-                className={`w-full font-pixel text-[11px] py-2.5 px-3 rounded-lg border-2 shadow active:translate-y-0.5 transition-all ${
+                className={`w-full font-pixel text-[11px] py-2.5 px-3 rounded-lg border-2 shadow active:translate-y-0.5 transition-all flex items-center justify-center ${
                   stage.isBoss 
                     ? 'bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white border-rose-300' 
                     : 'bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white border-emerald-300'
                 }`}
               >
-                ⚔️ ENTRAR NA BATALHA
+                <Swords size={11} className="mr-1" /> ENTRAR NA BATALHA
               </button>
             </div>
           ))}

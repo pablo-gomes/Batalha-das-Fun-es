@@ -6,6 +6,7 @@ import { MathDialogueBox } from './MathDialogueBox';
 import { generateMathChallenge, generateEnemyDefenseChallenge, calculatePrecision } from '../utils/mathEngine';
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
+import { Flame, X, AlertTriangle, Trophy, Star, Skull, PartyPopper } from 'lucide-react';
 
 interface BattleSceneProps {
   playerCreature: Creature;
@@ -213,7 +214,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
           currentEnergy: Math.min(prev.maxEnergy, prev.currentEnergy + 5) // +5 MP on hit
         }));
 
-        setTurnMessage(`${precision.message} ${player.name} desferiu ${totalDamage} de dano! 🔥 Combo x${newCombo}`);
+        setTurnMessage(`${precision.message} ${player.name} desferiu ${totalDamage} de dano! COMBO x${newCombo}`);
 
         setTimeout(() => {
           setIsEnemyHit(false);
@@ -232,7 +233,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
         sound.playWrong();
         triggerFloatingText('FALHOU! 0 DANO', 'miss', 'enemy');
         setPlayer(prev => ({ ...prev, comboCount: 0, statusCondition: null }));
-        setTurnMessage(`❌ ${precision.message} O ataque de ${player.name} falhou! Combo zerado.`);
+        setTurnMessage(`[X] ${precision.message} O ataque de ${player.name} falhou! Combo zerado.`);
 
         setTimeout(() => {
           startEnemyTurn();
@@ -248,7 +249,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
   const startEnemyTurn = () => {
     if (enemy.currentHp <= 0 || isBattleOver) return;
 
-    setTurnMessage(`⚠️ ${enemy.name} está preparando um ataque quadrático! Responda rápido para defender!`);
+    setTurnMessage(`[!] ${enemy.name} está preparando um ataque quadrático! Responda rápido para defender!`);
     
     // Generate reactive defensive challenge
     const defenseChallenge = generateEnemyDefenseChallenge(enemy.level);
@@ -274,21 +275,21 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
         // DEFESA PERFEITA!
         sound.playShield();
         finalDamage = 0;
-        triggerFloatingText('🛡️ DEFESA PERFEITA! (0 Dano)', 'heal', 'player');
-        setTurnMessage(`✨ DEFESA PERFEITA! ${player.name} calculou a trajetória e bloqueou todo o ataque!`);
+        triggerFloatingText('DEFESA PERFEITA! (0 Dano)', 'heal', 'player');
+        setTurnMessage(`DEFESA PERFEITA! ${player.name} calculou a trajetória e bloqueou todo o ataque!`);
       } else if (precision.rating === 'ALTA') {
         finalDamage = Math.round(baseEnemyDmg * 0.35);
         sound.playHit();
         setIsPlayerHit(true);
-        triggerFloatingText(`🛡️ BLOQUEIO PARCIAL (-${finalDamage})`, 'normal', 'player');
-        setTurnMessage(`🛡️ Boa defesa! Dano do ataque inimigo reduzido para apenas ${finalDamage}!`);
+        triggerFloatingText(`BLOQUEIO PARCIAL (-${finalDamage})`, 'normal', 'player');
+        setTurnMessage(`Boa defesa! Dano do ataque inimigo reduzido para apenas ${finalDamage}!`);
       } else {
         // Weak or failed defense
         finalDamage = Math.round(baseEnemyDmg * (shieldActive ? 0.6 : 1.1));
         sound.playHit();
         setIsPlayerHit(true);
-        triggerFloatingText(`💥 GOLPE RECEBIDO (-${finalDamage})`, 'crit', 'player');
-        setTurnMessage(`❌ Defesa falhou! ${player.name} sofreu ${finalDamage} de dano!`);
+        triggerFloatingText(`GOLPE RECEBIDO (-${finalDamage})`, 'crit', 'player');
+        setTurnMessage(`[X] Defesa falhou! ${player.name} sofreu ${finalDamage} de dano!`);
       }
 
       setShieldActive(false);
@@ -323,7 +324,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
     const earnedXp = Math.round(enemy.level * 45 + (player.comboCount * 10));
     const earnedCoins = Math.round(enemy.level * 25);
 
-    setTurnMessage(`🎉 ${enemy.name} foi derrotado! Você ganhou +${earnedXp} XP e +${earnedCoins} Moedas!`);
+    setTurnMessage(`${enemy.name} foi derrotado! Você ganhou +${earnedXp} XP e +${earnedCoins} Moedas!`);
 
     // Level up calculation
     let updatedPlayer = { ...player };
@@ -337,7 +338,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
       updatedPlayer.attack += 3;
       updatedPlayer.defense += 2;
       sound.playLevelUp();
-      setTurnMessage(`⭐ SUBIU DE NÍVEL! ${player.name} agora é Nível ${updatedPlayer.level}!`);
+      setTurnMessage(`SUBIU DE NÍVEL! ${player.name} agora é Nível ${updatedPlayer.level}!`);
     }
 
     setTimeout(() => {
@@ -348,7 +349,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
   const handlePlayerDefeated = () => {
     setIsBattleOver(true);
     sound.playWrong();
-    setTurnMessage(`💀 ${player.name} não resistiu aos cálculos do adversário...`);
+    setTurnMessage(`${player.name} não resistiu aos cálculos do adversário...`);
     setTimeout(() => {
       onDefeat();
     }, 2200);

@@ -3,7 +3,8 @@ import { Creature } from '../types';
 import { STARTER_CREATURES } from '../data/creatures';
 import { PixelSprite } from './PixelSprite';
 import { sound } from '../utils/audio';
-import { Cloud } from 'lucide-react';
+import { Cloud, Gamepad2 } from 'lucide-react';
+import { GameIcon } from '../utils/iconMap';
 
 interface StarterSelectionProps {
   onSelectStarter: (creature: Creature) => void;
@@ -21,8 +22,8 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
     <div className="w-full max-w-4xl mx-auto p-4 select-none space-y-5">
       {/* Title */}
       <div className="text-center space-y-2">
-        <h1 className="font-pixel text-lg sm:text-2xl text-amber-300">
-          🎮 Escolha sua Criatura Inicial!
+        <h1 className="font-pixel text-lg sm:text-2xl text-amber-300 flex items-center justify-center gap-2">
+          <Gamepad2 size={18} className="text-amber-400" /> Escolha sua Criatura Inicial!
         </h1>
         <p className="font-mono text-xs sm:text-sm text-slate-300">
           Cada criatura é especialista em um fundamento da Função do 2º Grau.
@@ -38,7 +39,7 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
               className="inline-flex items-center gap-2 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/80 text-cyan-300 px-3.5 py-1.5 rounded-full font-mono text-xs shadow-md transition-all active:scale-95 cursor-pointer"
             >
               <Cloud size={14} className="text-cyan-400" />
-              <span>Já tem um save? <strong>Carregar do Google Drive ☁️</strong></span>
+              <span>Já tem um save? <strong>Carregar do Google Drive</strong></span>
             </button>
           </div>
         )}
@@ -118,7 +119,7 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
             <div className="grid grid-cols-2 gap-2">
               {creature.skills.slice(0, 2).map((sk) => (
                 <div key={sk.id} className="bg-slate-950 p-2 rounded border border-slate-800 text-[11px] font-mono">
-                  <span className="text-amber-300 font-bold">{sk.icon} {sk.name}</span>
+                  <span className="text-amber-300 font-bold flex items-center gap-1"><GameIcon name={sk.icon} size={12} /> {sk.name}</span>
                   <p className="text-slate-400 text-[9px] line-clamp-1">{sk.description}</p>
                 </div>
               ))}
