@@ -15,10 +15,10 @@ export const INITIAL_ITEMS: InventoryItem[] = [
     id: 'potion_energy',
     name: 'Éter Discriminante',
     icon: 'Zap',
-    description: 'Restaura 25 pontos de Energia para usar habilidades matemáticas.',
+    description: 'Restaura 45 pontos de Energia para usar habilidades matemáticas.',
     type: 'restore_energy',
     amount: 3,
-    value: 25,
+    value: 45,
     cost: 40
   },
   {

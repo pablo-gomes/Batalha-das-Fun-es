@@ -284,33 +284,37 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
       {(activeMenu === 'challenge' || isDefenseTurn) && currentChallenge && (
         <div className="flex-1 flex flex-col justify-between space-y-2">
           {/* Formula & Question Banner */}
-          <div className="bg-white border-2 border-black p-2 sm:p-3 space-y-1 sm:space-y-1.5 shadow-[2px_2px_0_#000]">
-            <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-black pb-1">
+          <div className="bg-white border-2 border-black p-2 sm:p-3 space-y-1.5 shadow-[2px_2px_0_#000]">
+            <div className="flex items-center justify-between gap-1.5 border-b border-black pb-1">
               <span className="font-pixel text-[10px] sm:text-[11px] font-black text-black uppercase">
                 {currentChallenge.title}
               </span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[11px] sm:text-xs font-mono font-black text-white bg-black px-1.5 sm:px-2 py-0.5">
-                  {currentChallenge.formula}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowGraphModal(!showGraphModal)}
-                  className="text-[8px] sm:text-[9px] font-pixel bg-white hover:bg-black hover:text-white text-black px-1.5 py-0.5 border border-black transition-colors cursor-pointer"
-                >
-                  {showGraphModal ? 'Ocultar' : 'Gráfico'}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowGraphModal(!showGraphModal)}
+                className="text-[8px] sm:text-[9px] font-pixel bg-white hover:bg-black hover:text-white text-black px-2 py-0.5 border border-black transition-colors cursor-pointer"
+              >
+                {showGraphModal ? 'Ocultar Gráfico' : 'Gráfico'}
+              </button>
             </div>
 
             <p className="text-[11px] sm:text-sm font-pixel text-black font-black leading-relaxed">
               {currentChallenge.question}
             </p>
 
-            {/* Precision & Tolerance indicator */}
-            <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono font-bold text-slate-700 pt-0.5">
-              <span>Precisão 100% = Crítico</span>
-              <span className="border border-black px-1">Tolerância: ±{currentChallenge.tolerance}</span>
+            {/* Formula (Left) & Tolerance indicator (Right) */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-dashed border-black/40 pt-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-sm sm:text-base md:text-lg font-mono font-black text-black bg-slate-100 border-2 border-black px-2.5 py-0.5 shadow-[1px_1px_0_#000] tracking-wide">
+                  {currentChallenge.formula}
+                </span>
+                <span className="hidden sm:inline text-[9px] sm:text-[10px] font-mono text-slate-600 font-bold">
+                  Precisão 100% = Crítico
+                </span>
+              </div>
+              <span className="border border-black px-1.5 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-slate-700 bg-white shadow-[1px_1px_0_#000]">
+                Tolerância: ±{currentChallenge.tolerance}
+              </span>
             </div>
           </div>
 
