@@ -217,7 +217,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#e2e8f0] text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}>
+    <div className={`min-h-screen bg-transparent text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}>
       {/* 1. TOP HEADER & MONOCHROME NAVIGATION */}
       <header className="bg-white border-b-2 sm:border-b-4 border-black px-2 sm:px-3 py-1.5 sm:py-2 sticky top-0 z-40 shadow-[0_2px_0_#000000] sm:shadow-[0_4px_0_#000000]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">

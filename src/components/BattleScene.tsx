@@ -7,6 +7,7 @@ import { generateMathChallenge, generateEnemyDefenseChallenge, calculatePrecisio
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
 import { Flame, X, AlertTriangle, Trophy, Star, Skull, PartyPopper } from 'lucide-react';
+import battleBackground from '../../fundo_do_jogo.png';
 
 interface BattleSceneProps {
   playerCreature: Creature;
@@ -358,7 +359,10 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-between p-1.5 sm:p-3 select-none min-h-[500px] sm:min-h-[580px]">
       {/* 1. RETRO GAME BOY POKÉMON BATTLE SCREEN */}
-      <div className="w-full h-72 min-[420px]:h-80 sm:h-96 bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl relative overflow-hidden shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] p-2 min-[420px]:p-3 sm:p-4 flex flex-col justify-between">
+      <div 
+        className="w-full h-72 min-[420px]:h-80 sm:h-96 bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl relative overflow-hidden shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] p-2 min-[420px]:p-3 sm:p-4 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${battleBackground})` }}
+      >
         
         {/* Classic Ground Lines */}
         <div className="absolute top-32 sm:top-36 right-0 w-44 sm:w-64 h-0.5 bg-black" />
