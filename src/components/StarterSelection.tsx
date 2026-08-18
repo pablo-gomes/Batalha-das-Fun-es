@@ -3,7 +3,7 @@ import { Creature } from '../types';
 import { STARTER_CREATURES } from '../data/creatures';
 import { PixelSprite } from './PixelSprite';
 import { sound } from '../utils/audio';
-import { Cloud, Gamepad2 } from 'lucide-react';
+import { Cloud } from 'lucide-react';
 import { GameIcon } from '../utils/iconMap';
 
 interface StarterSelectionProps {
@@ -19,34 +19,10 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
   const creature = STARTER_CREATURES[selectedIdx] || STARTER_CREATURES[0];
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 select-none space-y-5">
-      {/* Title */}
-      <div className="text-center space-y-2">
-        <h1 className="font-pixel text-lg sm:text-2xl text-amber-300 flex items-center justify-center gap-2">
-          <Gamepad2 size={18} className="text-amber-400" /> Escolha sua Criatura Inicial!
-        </h1>
-        <p className="font-mono text-xs sm:text-sm text-slate-300">
-          Cada criatura é especialista em um fundamento da Função do 2º Grau.
-        </p>
+    <div className="w-full max-w-4xl mx-auto p-1.5 sm:p-5 select-none space-y-3 sm:space-y-4 text-black">
 
-        {onOpenDriveCloud && (
-          <div className="pt-1">
-            <button
-              onClick={() => {
-                sound.playSelect();
-                onOpenDriveCloud();
-              }}
-              className="inline-flex items-center gap-2 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/80 text-cyan-300 px-3.5 py-1.5 rounded-full font-mono text-xs shadow-md transition-all active:scale-95 cursor-pointer"
-            >
-              <Cloud size={14} className="text-cyan-400" />
-              <span>Já tem um save? <strong>Carregar do Google Drive</strong></span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Starter Selector Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {/* Starter Selector Cards Grid */}
+      <div className="grid grid-cols-2 min-[540px]:grid-cols-4 gap-2 sm:gap-2.5">
         {STARTER_CREATURES.map((st, idx) => {
           const isChosen = idx === selectedIdx;
           return (
@@ -56,88 +32,99 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
                 sound.playSelect();
                 setSelectedIdx(idx);
               }}
-              className={`p-3 rounded-2xl border-4 text-center transition-all relative overflow-hidden ${
+              className={`p-2 sm:p-3 border-2 sm:border-4 text-center transition-all relative flex flex-col items-center justify-between cursor-pointer ${
                 isChosen 
-                  ? 'bg-slate-800 border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-105' 
-                  : 'bg-slate-900 border-slate-700 hover:border-slate-500'
+                  ? 'bg-black text-white border-black shadow-[3px_3px_0_#475569] sm:shadow-[4px_4px_0_#475569] scale-[1.01] z-10' 
+                  : 'bg-white text-black border-black hover:bg-slate-100 shadow-[2px_2px_0_#000]'
               }`}
             >
-              <div className="h-28 flex items-center justify-center">
-                <PixelSprite creature={st} size={110} />
+              <div className="h-20 sm:h-24 flex items-center justify-center gb-sprite-mono">
+                <PixelSprite creature={st} size={84} />
               </div>
-              <h3 className="font-pixel text-xs text-white mt-1 truncate">{st.name}</h3>
-              <span 
-                className="text-[9px] font-mono px-2 py-0.5 rounded-full inline-block mt-1 font-bold text-white shadow-sm"
-                style={{ backgroundColor: st.elementColor }}
-              >
-                {st.element}
-              </span>
+              <div className="w-full mt-1 sm:mt-2">
+                <h3 className="font-pixel text-[10px] sm:text-[11px] font-black uppercase truncate">{st.name}</h3>
+                <span className={`text-[8px] sm:text-[9px] font-mono px-1.5 py-0.5 inline-block mt-0.5 font-black border ${
+                  isChosen ? 'border-white text-white' : 'border-black text-black'
+                }`}>
+                  {st.element}
+                </span>
+              </div>
             </button>
           );
         })}
       </div>
 
-      {/* Detailed Selected Creature Sheet */}
-      <div className="bg-slate-900 border-4 border-slate-700 rounded-2xl p-5 grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-        <div className="md:col-span-4 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 pb-4 md:pb-0">
-          <PixelSprite creature={creature} size={160} />
-          <h2 className="font-pixel text-base text-amber-300 mt-2">{creature.name}</h2>
-          <span className="text-xs font-mono text-cyan-300">{creature.species}</span>
+      {/* Selected Creature Detail Sheet */}
+      <div className="bg-white border-3 sm:border-4 border-black p-3 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
+        {/* Left: Creature Preview */}
+        <div className="md:col-span-4 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r-2 border-black pb-2.5 md:pb-0 md:pr-4">
+          <div className="p-2 sm:p-3 bg-white border-2 border-black w-full flex flex-col items-center gb-sprite-mono">
+            <PixelSprite creature={creature} size={120} />
+            <h2 className="font-pixel text-xs sm:text-base text-black font-black mt-1.5 uppercase">{creature.name}</h2>
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-600">{creature.species}</span>
+          </div>
         </div>
 
-        <div className="md:col-span-8 space-y-3">
-          <div className="grid grid-cols-3 gap-2 text-center font-mono text-xs">
-            <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">HP MÁXIMO</span>
-              <strong className="text-emerald-400 text-sm">{creature.maxHp}</strong>
+        {/* Right: Stats, Evolution & Skills */}
+        <div className="md:col-span-8 space-y-2.5 sm:space-y-3">
+          {/* Base Stats */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center font-mono">
+            <div className="bg-white p-1.5 sm:p-2 border-2 border-black">
+              <span className="text-black block text-[8px] sm:text-[9px] font-pixel font-bold">HP</span>
+              <strong className="text-black text-xs sm:text-base font-black">{creature.maxHp}</strong>
             </div>
-            <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">ATAQUE</span>
-              <strong className="text-rose-400 text-sm">{creature.attack}</strong>
+            <div className="bg-white p-1.5 sm:p-2 border-2 border-black">
+              <span className="text-black block text-[8px] sm:text-[9px] font-pixel font-bold">ATAQUE</span>
+              <strong className="text-black text-xs sm:text-base font-black">{creature.attack}</strong>
             </div>
-            <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">DEFESA</span>
-              <strong className="text-blue-400 text-sm">{creature.defense}</strong>
-            </div>
-          </div>
-
-          {/* Evolutions Roadmap */}
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
-            <div className="text-[10px] font-pixel text-amber-300">LINHA EVOLUTIVA:</div>
-            <div className="flex items-center justify-between text-xs font-mono text-slate-300">
-              <span>1. {creature.forms[0]?.name || creature.name}</span>
-              <span className="text-slate-500">➔</span>
-              <span>2. {creature.forms[1]?.name || 'Evolução 2'}</span>
-              <span className="text-slate-500">➔</span>
-              <span className="text-amber-400 font-bold">3. {creature.forms[2]?.name || 'Evolução 3'}</span>
+            <div className="bg-white p-1.5 sm:p-2 border-2 border-black">
+              <span className="text-black block text-[8px] sm:text-[9px] font-pixel font-bold">DEFESA</span>
+              <strong className="text-black text-xs sm:text-base font-black">{creature.defense}</strong>
             </div>
           </div>
 
-          {/* Special skills preview */}
+          {/* Evolution Pathway */}
+          <div className="bg-white p-2 sm:p-2.5 border-2 border-black flex items-center justify-between text-xs font-mono">
+            <span className="text-[8px] sm:text-[9px] font-pixel text-black font-black shrink-0 mr-1.5">EVOLUÇÃO:</span>
+            <div className="flex items-center gap-1 sm:gap-2 text-[11px] sm:text-xs text-black font-bold overflow-x-auto whitespace-nowrap">
+              <span className="border-b border-black">{creature.forms[0]?.name || creature.name}</span>
+              <span>➔</span>
+              <span>{creature.forms[1]?.name || 'Forma 2'}</span>
+              <span>➔</span>
+              <span>{creature.forms[2]?.name || 'Forma 3'}</span>
+            </div>
+          </div>
+
+          {/* Skills preview */}
           <div>
-            <div className="text-[10px] font-pixel text-cyan-300 mb-1">HABILIDADES MATEMÁTICAS:</div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="text-[8px] sm:text-[9px] font-pixel text-black font-black mb-1">HABILIDADES:</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
               {creature.skills.slice(0, 2).map((sk) => (
-                <div key={sk.id} className="bg-slate-950 p-2 rounded border border-slate-800 text-[11px] font-mono">
-                  <span className="text-amber-300 font-bold flex items-center gap-1"><GameIcon name={sk.icon} size={12} /> {sk.name}</span>
-                  <p className="text-slate-400 text-[9px] line-clamp-1">{sk.description}</p>
+                <div key={sk.id} className="bg-white p-1.5 sm:p-2 border-2 border-black text-xs font-mono flex flex-col justify-between">
+                  <div className="flex items-center justify-between font-bold">
+                    <span className="text-black flex items-center gap-1 text-[11px] sm:text-xs">
+                      <GameIcon name={sk.icon} size={11} /> {sk.name}
+                    </span>
+                    <span className="text-[9px] sm:text-[10px] text-black border border-black px-1">{sk.energyCost} MP</span>
+                  </div>
+                  <p className="text-slate-600 text-[9px] sm:text-[10px] line-clamp-1 mt-0.5 font-bold">{sk.description}</p>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Start Journey Button */}
           <button
             onClick={() => {
               sound.playConfirm();
               onSelectStarter(creature);
             }}
-            className="w-full font-pixel text-xs bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black py-3.5 px-6 rounded-xl border-2 border-amber-300 shadow-[0_4px_0_#78350f] active:translate-y-0.5 transition-all mt-2"
+            className="w-full gb-btn-primary py-2.5 sm:py-3 text-[11px] sm:text-sm font-black tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0_#000] border-2 border-black hover:bg-black hover:text-white transition-all"
           >
-            ESCOLHER {creature.name.toUpperCase()} E COMEÇAR ▶
+            ESCOLHER {creature.name.toUpperCase()} E INICIAR ▶
           </button>
         </div>
       </div>
     </div>
   );
 };
-

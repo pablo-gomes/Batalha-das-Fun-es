@@ -11,9 +11,12 @@ import { ChallengeMode } from './components/ChallengeMode';
 import { CodexGrimoire } from './components/CodexGrimoire';
 import { EvolutionModal } from './components/EvolutionModal';
 import { GoogleDriveSaveModal } from './components/GoogleDriveSaveModal';
+import { QuickNotepad } from './components/QuickNotepad';
+import { MiniCalculator } from './components/MiniCalculator';
 import { GameSaveData } from './services/driveStorage';
 import { sound } from './utils/audio';
-import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, Coins } from 'lucide-react';
+import { preloadSprites } from './utils/spritePreloader';
+import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, StickyNote, Calculator, X } from 'lucide-react';
 
 const STORAGE_KEY_PLAYER = 'batalha_funcoes_player_creature';
 
@@ -22,12 +25,32 @@ export default function App() {
   const [playerCreature, setPlayerCreature] = useState<Creature | null>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_PLAYER);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const starterTemplate = STARTER_CREATURES.find(s => s.id === parsed.id);
+        if (starterTemplate) {
+          const currentStage = parsed.stage || 1;
+          const currentForm = starterTemplate.forms[currentStage - 1] || starterTemplate.forms[0];
+          return {
+            ...starterTemplate,
+            ...parsed,
+            name: currentForm ? currentForm.name : parsed.name,
+            imageUrl: currentForm ? currentForm.imageUrl : (parsed.imageUrl || starterTemplate.imageUrl),
+            backImageUrl: currentForm ? currentForm.backImageUrl : (parsed.backImageUrl || starterTemplate.backImageUrl),
+            forms: starterTemplate.forms,
+            skills: starterTemplate.skills,
+            spriteColor: starterTemplate.spriteColor,
+            backSpriteColor: starterTemplate.backSpriteColor
+          };
+        }
+        return parsed;
+      }
     } catch {
       // ignore
     }
     return null;
   });
+
 
   const [regions, setRegions] = useState<Region[]>(GAME_REGIONS);
   const [selectedRegion, setSelectedRegion] = useState<Region>(GAME_REGIONS[0]);
@@ -46,13 +69,48 @@ export default function App() {
     return 'starter';
   });
   
-  // Modals & Extras
+  // Modals, Tools & Extras
   const [showCodex, setShowCodex] = useState<boolean>(false);
   const [showDriveModal, setShowDriveModal] = useState<boolean>(false);
+  const [showNotepad, setShowNotepad] = useState<boolean>(false);
+  const [showCalculator, setShowCalculator] = useState<boolean>(false);
   const [evolvingCreature, setEvolvingCreature] = useState<Creature | null>(null);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [bgmActive, setBgmActive] = useState<boolean>(false);
   const [scanlines, setScanlines] = useState<boolean>(false);
+
+  // Preload all starter and region creature sprites immediately on load
+  useEffect(() => {
+    const urlsToPreload: string[] = [];
+
+    // Starters
+    STARTER_CREATURES.forEach(st => {
+      if (st.imageUrl) urlsToPreload.push(st.imageUrl);
+      if (st.backImageUrl) urlsToPreload.push(st.backImageUrl);
+      st.forms.forEach(f => {
+        if (f.imageUrl) urlsToPreload.push(f.imageUrl);
+        if (f.backImageUrl) urlsToPreload.push(f.backImageUrl);
+      });
+    });
+
+    // Region Enemies
+    GAME_REGIONS.forEach(reg => {
+      reg.stages.forEach(stage => {
+        if (stage.enemyCreature.imageUrl) urlsToPreload.push(stage.enemyCreature.imageUrl);
+        if (stage.enemyCreature.backImageUrl) urlsToPreload.push(stage.enemyCreature.backImageUrl);
+      });
+    });
+
+    preloadSprites(urlsToPreload);
+  }, []);
+
+  // On desktop screens, open notepad and calculator by default
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setShowNotepad(true);
+      setShowCalculator(true);
+    }
+  }, []);
 
   // Persist Player Creature
   useEffect(() => {
@@ -159,43 +217,43 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050811] text-slate-100 flex flex-col justify-between font-mono relative ${scanlines ? 'scanlines' : ''}`}>
-      {/* 1. TOP HEADER & RETRO CONTROLS BAR */}
-      <header className="bg-slate-900/90 border-b-2 border-slate-800 p-2 sm:p-3 sticky top-0 z-40 backdrop-blur">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+    <div className={`min-h-screen bg-[#e2e8f0] text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}>
+      {/* 1. TOP HEADER & MONOCHROME NAVIGATION */}
+      <header className="bg-white border-b-2 sm:border-b-4 border-black px-2 sm:px-3 py-1.5 sm:py-2 sticky top-0 z-40 shadow-[0_2px_0_#000000] sm:shadow-[0_4px_0_#000000]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
           {/* Logo & Title */}
           <div 
             onClick={() => {
               if (playerCreature) setView('map');
             }}
-            className="flex items-center gap-2 cursor-pointer group"
+            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer group shrink-0 min-w-0"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center font-pixel text-slate-950 font-black text-sm shadow-[0_0_12px_rgba(245,158,11,0.5)]">
-              f(x)
-            </div>
-            <div>
-              <h1 className="font-pixel text-xs sm:text-sm text-amber-300 group-hover:text-amber-200 transition-colors">
-                Batalha das Funções
+            <div className="min-w-0">
+              <h1 className="font-pixel text-[10px] min-[400px]:text-xs sm:text-sm text-black font-black truncate">
+                BATALHA DAS FUNÇÕES
               </h1>
-              <span className="text-[9px] text-cyan-400 font-pixel block sm:inline">
-                RPG de Função do 2º Grau
+              <span className="text-[8px] min-[400px]:text-[9px] sm:text-[10px] text-slate-700 font-mono font-bold block truncate">
+                RPG da Função Quadrática
               </span>
             </div>
           </div>
 
-          {/* Navigation & Mode Badges */}
+          {/* Center: Main Navigation Tabs (Visible on sm/md/lg desktop) */}
           {playerCreature && (
-            <div className="flex items-center gap-1 sm:gap-2">
+            <nav className="hidden sm:flex items-center gap-1 sm:gap-1.5">
               <button
                 onClick={() => {
                   sound.playSelect();
                   setView('map');
                 }}
-                className={`font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border flex items-center gap-1 transition-all ${
-                  view === 'map' ? 'bg-amber-500 text-slate-950 border-amber-300 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                  view === 'map' 
+                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
+                    : 'bg-white text-black hover:bg-slate-100'
                 }`}
+                title="Ir para o Mapa de Fases"
               >
-                <Map size={12} /> <span className="hidden md:inline">Mapa</span>
+                <Map size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">MAPA</span>
               </button>
 
               <button
@@ -203,11 +261,14 @@ export default function App() {
                   sound.playSelect();
                   setView('training');
                 }}
-                className={`font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border flex items-center gap-1 transition-all ${
-                  view === 'training' ? 'bg-cyan-500 text-slate-950 border-cyan-300 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                  view === 'training' 
+                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
+                    : 'bg-white text-black hover:bg-slate-100'
                 }`}
+                title="Praticar exercícios por tema"
               >
-                <Target size={12} /> <span className="hidden md:inline">Treino</span>
+                <Target size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">TREINO</span>
               </button>
 
               <button
@@ -215,130 +276,248 @@ export default function App() {
                   sound.playSelect();
                   setView('challenge');
                 }}
-                className={`font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border flex items-center gap-1 transition-all ${
-                  view === 'challenge' ? 'bg-purple-500 text-slate-950 border-purple-300 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                  view === 'challenge' 
+                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
+                    : 'bg-white text-black hover:bg-slate-100'
                 }`}
+                title="Desafio de 60 segundos com combos"
               >
-                <Zap size={12} /> <span className="hidden md:inline">Desafio</span>
+                <Zap size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">DESAFIO</span>
               </button>
-
-              <button
-                onClick={() => {
-                  sound.playSelect();
-                  setShowCodex(true);
-                }}
-                className="font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border border-amber-600/60 bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 flex items-center gap-1 transition-colors"
-              >
-                <BookOpen size={12} /> <span className="hidden md:inline">Grimório</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  sound.playSelect();
-                  setShowDriveModal(true);
-                }}
-                className="font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border border-cyan-500/80 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(6,182,212,0.25)]"
-                title="Sincronizar Savegame com o Google Drive"
-              >
-                <Cloud size={12} className="text-cyan-400" /> <span className="hidden sm:inline">Drive Nuvem</span>
-              </button>
-            </div>
+            </nav>
           )}
 
-          {/* User Currency & Audio Controls */}
-          <div className="flex items-center gap-1 sm:gap-2">
+          {/* Right: Quick Tools & Settings */}
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+            {playerCreature && (
+              <>
+                {/* Notepad Toggle Button */}
+                <button
+                  onClick={() => {
+                    sound.playSelect();
+                    setShowNotepad(!showNotepad);
+                  }}
+                  className={`font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black transition-colors cursor-pointer ${
+                    showNotepad ? 'bg-black text-white' : 'bg-white text-black hover:bg-slate-100'
+                  }`}
+                  title="Exibir/Ocultar Bloco de Notas"
+                >
+                  <StickyNote size={12} className="inline xl:mr-1" /> <span className="hidden xl:inline">NOTAS</span>
+                </button>
+
+                {/* Calculator Toggle Button */}
+                <button
+                  onClick={() => {
+                    sound.playSelect();
+                    setShowCalculator(!showCalculator);
+                  }}
+                  className={`font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black transition-colors cursor-pointer ${
+                    showCalculator ? 'bg-black text-white' : 'bg-white text-black hover:bg-slate-100'
+                  }`}
+                  title="Exibir/Ocultar Mini Calculadora"
+                >
+                  <Calculator size={12} className="inline xl:mr-1" /> <span className="hidden xl:inline">CALC</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    sound.playSelect();
+                    setShowCodex(true);
+                  }}
+                  className="font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black bg-white hover:bg-black hover:text-white text-black transition-colors cursor-pointer"
+                  title="Grimório de Fórmulas e Teoria"
+                >
+                  <BookOpen size={12} className="inline md:mr-1" /> <span className="hidden md:inline">GRIMÓRIO</span>
+                </button>
+
+                
+
+                <div className="flex items-center gap-0.5 font-mono text-[10px] sm:text-xs font-black text-black bg-white px-1 sm:px-2 py-0.5 sm:py-1 border sm:border-2 border-black">
+                  <span>🪙{coins}</span>
+                </div>
+              </>
+            )}
+
             {!playerCreature && (
               <button
                 onClick={() => {
                   sound.playSelect();
                   setShowDriveModal(true);
                 }}
-                className="font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 rounded-lg border border-cyan-500/80 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 flex items-center gap-1 transition-all"
+                className="font-pixel text-[9px] sm:text-[10px] px-2 sm:px-3 py-1 sm:py-1.5 border sm:border-2 border-black bg-black text-white hover:bg-slate-800 flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer font-bold"
               >
-                <Cloud size={12} className="text-cyan-400" /> <span>Google Drive</span>
+                <Cloud size={11} /> <span>SAVE</span>
               </button>
             )}
 
-            {playerCreature && (
-              <div className="hidden sm:flex items-center gap-1 font-pixel text-[10px] text-amber-300 bg-slate-950 px-2 py-1 rounded border border-slate-800">
-                <Coins size={12} className="text-amber-400" /> {coins}
-              </div>
-            )}
+            {/* Quick Audio & CRT Toggles */}
+            <div className="flex items-center bg-white p-0.5 border sm:border-2 border-black gap-0.5">
+              <button
+                onClick={handleToggleSound}
+                title={soundEnabled ? "Desativar Sons" : "Ativar Sons"}
+                className={`p-0.5 sm:p-1 transition-colors cursor-pointer ${
+                  soundEnabled ? 'text-black font-bold' : 'text-slate-400'
+                }`}
+              >
+                {soundEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
+              </button>
 
-            <button
-              onClick={handleToggleSound}
-              title="Alternar Efeitos Sonoros"
-              className={`p-1.5 rounded-lg border transition-colors ${
-                soundEnabled ? 'bg-slate-800 border-slate-700 text-cyan-300' : 'bg-slate-950 border-slate-800 text-slate-600'
-              }`}
-            >
-              {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-            </button>
-
-            <button
-              onClick={handleToggleBgm}
-              title="Alternar Música 8-bit"
-              className={`p-1.5 rounded-lg border transition-colors ${
-                bgmActive ? 'bg-cyan-950 border-cyan-500 text-cyan-300 animate-pulse' : 'bg-slate-950 border-slate-800 text-slate-600'
-              }`}
-            >
-              <Music size={15} />
-            </button>
-
-            <button
-              onClick={() => setScanlines(!scanlines)}
-              title="Alternar Linhas CRT Retro"
-              className={`text-[8px] font-pixel px-1.5 py-1 rounded border ${
-                scanlines ? 'bg-purple-950 border-purple-500 text-purple-300' : 'bg-slate-950 border-slate-800 text-slate-600'
-              }`}
-            >
-              CRT
-            </button>
+              <button
+                onClick={handleToggleBgm}
+                title={bgmActive ? "Desativar Música BGM" : "Ativar Música BGM"}
+                className={`p-0.5 sm:p-1 transition-colors cursor-pointer ${
+                  bgmActive ? 'bg-black text-white' : 'text-slate-400'
+                }`}
+              >
+                <Music size={12} />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* 2. MAIN ACTIVE VIEW ROUTER */}
-      <main className="flex-1 flex items-center justify-center p-2 sm:p-4 max-w-6xl w-full mx-auto">
-        {view === 'starter' && (
-          <StarterSelection
-            onSelectStarter={handleSelectStarter}
-            onOpenDriveCloud={() => setShowDriveModal(true)}
-          />
+      {/* 2. WORKSPACE: DESKTOP 3-COLUMNS / MOBILE CENTERED SCREEN */}
+      <div className="w-full max-w-[1440px] mx-auto flex-1 flex flex-col lg:flex-row items-start justify-center gap-2 sm:gap-3 p-1.5 sm:p-3">
+        {/* LATERAL ESQUERDA: BLOCO DE NOTAS (Desktop view) */}
+        {showNotepad && (
+          <aside className="hidden lg:flex w-[240px] xl:w-[260px] shrink-0 sticky top-14 z-20 justify-center">
+            <QuickNotepad className="w-full" onClose={() => setShowNotepad(false)} />
+          </aside>
         )}
 
-        {view === 'map' && (
-          <MapView
-            regions={regions}
-            selectedRegion={selectedRegion}
-            onSelectRegion={setSelectedRegion}
-            onStartStage={handleStartStage}
-            onBackToMenu={() => setView('starter')}
-          />
-        )}
+        {/* CENTRO: JOGO PRINCIPAL */}
+        <main className="flex-1 w-full max-w-4xl flex items-center justify-center">
+          {view === 'starter' && (
+            <StarterSelection
+              onSelectStarter={handleSelectStarter}
+              onOpenDriveCloud={() => setShowDriveModal(true)}
+            />
+          )}
 
-        {view === 'battle' && playerCreature && currentStage && (
-          <BattleScene
-            playerCreature={playerCreature}
-            enemyCreature={currentStage.enemyCreature}
-            items={items}
-            onVictory={handleVictory}
-            onDefeat={handleDefeat}
-            onOpenCodex={() => setShowCodex(true)}
-            onTriggerEvolution={(creat) => setEvolvingCreature(creat)}
-          />
-        )}
+          {view === 'map' && (
+            <MapView
+              regions={regions}
+              selectedRegion={selectedRegion}
+              onSelectRegion={setSelectedRegion}
+              onStartStage={handleStartStage}
+              onBackToMenu={() => setView('starter')}
+            />
+          )}
 
-        {view === 'training' && (
-          <TrainingMode onBack={() => setView('map')} />
-        )}
+          {view === 'battle' && playerCreature && currentStage && (
+            <BattleScene
+              playerCreature={playerCreature}
+              enemyCreature={currentStage.enemyCreature}
+              items={items}
+              onVictory={handleVictory}
+              onDefeat={handleDefeat}
+              onOpenCodex={() => setShowCodex(true)}
+              onTriggerEvolution={(creat) => setEvolvingCreature(creat)}
+            />
+          )}
 
-        {view === 'challenge' && (
-          <ChallengeMode onBack={() => setView('map')} />
-        )}
-      </main>
+          {view === 'training' && (
+            <TrainingMode onBack={() => setView('map')} />
+          )}
 
-      {/* 3. MODALS (Grimório das Fórmulas & Evolução & Google Drive Nuvem) */}
+          {view === 'challenge' && (
+            <ChallengeMode onBack={() => setView('map')} />
+          )}
+        </main>
+
+        {/* LATERAL DIREITA: MINI CALCULADORA (Desktop view) */}
+        {showCalculator && (
+          <aside className="hidden lg:flex w-[240px] xl:w-[260px] shrink-0 sticky top-14 z-20 justify-center">
+            <MiniCalculator className="w-full" onClose={() => setShowCalculator(false)} />
+          </aside>
+        )}
+      </div>
+
+      {/* MOBILE OVERLAY DRAWERS / MODALS FOR NOTEPAD & CALCULATOR (when opened on screens < lg) */}
+      {showNotepad && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3">
+          <div className="w-full max-w-xs animate-in fade-in zoom-in-95">
+            <QuickNotepad className="w-full shadow-2xl" onClose={() => setShowNotepad(false)} />
+          </div>
+        </div>
+      )}
+
+      {showCalculator && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3">
+          <div className="w-full max-w-xs animate-in fade-in zoom-in-95">
+            <MiniCalculator className="w-full shadow-2xl" onClose={() => setShowCalculator(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* 3. MOBILE BOTTOM NAVIGATION BAR FOR TOUCH DEVICES */}
+      {playerCreature && (
+        <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-3 border-black px-2 py-1.5 flex items-center justify-around shadow-[0_-2px_6px_rgba(0,0,0,0.15)] safe-bottom">
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setView('map');
+            }}
+            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
+              view === 'map' ? 'text-black font-black underline' : 'text-slate-600'
+            }`}
+          >
+            <Map size={16} />
+            <span>MAPA</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setView('training');
+            }}
+            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
+              view === 'training' ? 'text-black font-black underline' : 'text-slate-600'
+            }`}
+          >
+            <Target size={16} />
+            <span>TREINO</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setView('challenge');
+            }}
+            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
+              view === 'challenge' ? 'text-black font-black underline' : 'text-slate-600'
+            }`}
+          >
+            <Zap size={16} />
+            <span>DESAFIO</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setShowNotepad(true);
+            }}
+            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-black"
+          >
+            <StickyNote size={16} />
+            <span>NOTAS</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setShowCalculator(true);
+            }}
+            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-black"
+          >
+            <Calculator size={16} />
+            <span>CALC</span>
+          </button>
+        </nav>
+      )}
+
+      {/* 4. MODALS (Grimório das Fórmulas & Evolução & Google Drive Nuvem) */}
       {showCodex && (
         <CodexGrimoire onClose={() => setShowCodex(false)} />
       )}
@@ -383,11 +562,10 @@ export default function App() {
         />
       )}
 
-      {/* 4. RETRO FOOTER */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 p-2 text-center text-[10px] font-mono text-slate-500">
-        Batalha das Funções — f(x) = ax² + bx + c • Sistema de Precisão & Turnos Matemáticos
+      {/* 5. RETRO FOOTER */}
+      <footer className="border-t border-slate-900 bg-slate-950/80 p-2 text-center text-[9px] sm:text-[10px] font-mono text-slate-500">
+        Batalha das Funções — f(x) = ax² + bx + c • RPG Matemático Responsivo
       </footer>
     </div>
   );
 }
-

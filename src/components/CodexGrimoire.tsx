@@ -17,45 +17,45 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
   const yv = -delta / (4 * sliderA);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 select-none">
-      <div className="bg-[#0b1120] border-4 border-amber-500 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-[0_0_40px_rgba(245,158,11,0.3)] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-5 select-none">
+      <div className="bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl w-full max-w-4xl max-h-[94vh] sm:max-h-[90vh] flex flex-col shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] overflow-hidden text-black">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-amber-950 border-b-2 border-amber-500/50 p-3 sm:p-4 flex items-center justify-between">
+        <div className="bg-white border-b-2 border-black p-2.5 sm:p-4 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">📖</span>
+            <span className="text-xl sm:text-2xl">📖</span>
             <div>
-              <h2 className="font-pixel text-sm sm:text-base text-amber-300">
-                Grimório das Funções do 2º Grau
+              <h2 className="font-pixel text-[11px] sm:text-sm text-black font-black uppercase">
+                Grimório das Funções
               </h2>
-              <p className="text-[10px] font-mono text-amber-200/70">
-                O manual sagrado dos Mestres da Parábola e Álgebra
+              <p className="text-[9px] sm:text-[10px] font-mono text-slate-700 font-bold">
+                Guia de consulta rápida e laboratório
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex border-2 border-black gap-0.5 p-0.5">
               <button
                 onClick={() => {
                   sound.playSelect();
                   setActiveTab('codex');
                 }}
-                className={`text-[10px] font-pixel px-3 py-1 rounded transition-colors ${
-                  activeTab === 'codex' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                className={`text-[9px] sm:text-[10px] font-pixel px-2 sm:px-3 py-1 transition-colors cursor-pointer ${
+                  activeTab === 'codex' ? 'bg-black text-white font-bold' : 'text-black hover:bg-slate-100'
                 }`}
               >
-                Fórmulas
+                FÓRMULAS
               </button>
               <button
                 onClick={() => {
                   sound.playSelect();
                   setActiveTab('sandbox');
                 }}
-                className={`text-[10px] font-pixel px-3 py-1 rounded transition-colors ${
-                  activeTab === 'sandbox' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                className={`text-[9px] sm:text-[10px] font-pixel px-2 sm:px-3 py-1 transition-colors cursor-pointer ${
+                  activeTab === 'sandbox' ? 'bg-black text-white font-bold' : 'text-black hover:bg-slate-100'
                 }`}
               >
-                Laboratório Live
+                LAB
               </button>
             </div>
 
@@ -64,96 +64,95 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
                 sound.playCancel();
                 onClose();
               }}
-              className="bg-rose-950 hover:bg-rose-900 text-rose-300 font-pixel text-xs px-3 py-1.5 rounded border border-rose-600 transition-colors"
+              className="bg-white hover:bg-black hover:text-white text-black font-pixel text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 border-2 border-black transition-colors cursor-pointer font-bold"
             >
-              ✕ Fechar
+              ✕ FECHAR
             </button>
           </div>
         </div>
 
         {/* Content Body */}
-        <div className="p-4 overflow-y-auto flex-1 text-slate-200">
+        <div className="p-3 sm:p-4 overflow-y-auto flex-1 text-black custom-scrollbar">
           {activeTab === 'codex' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5">
               {/* Card 1: Forma Geral */}
-              <div className="bg-slate-900 border-2 border-slate-700 rounded-xl p-3.5 shadow-md">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-pixel text-xs text-amber-300">📐 Forma Geral Quadrática</h3>
-                  <span className="text-[10px] font-mono text-cyan-400">a ≠ 0</span>
+              <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 shadow-[2px_2px_0_#000] space-y-1.5 sm:space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">📐 Forma Geral</h3>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-white bg-black px-1.5 sm:px-2 py-0.5 font-bold">a ≠ 0</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 font-mono text-center text-lg text-cyan-300 font-bold mb-2">
+                <div className="bg-white p-2 sm:p-2.5 border-2 border-black font-mono text-center text-sm sm:text-base text-black font-black">
                   f(x) = ax² + bx + c
                 </div>
-                <ul className="text-[11px] font-mono space-y-1 text-slate-300">
-                  <li>• <strong>a (coeficiente quadrático):</strong> define abertura e concavidade.</li>
-                  <li>• <strong>b (coeficiente linear):</strong> inclinação ao cruzar o eixo Y.</li>
-                  <li>• <strong>c (termo independente):</strong> ponto exato onde cruza o eixo Y: <code>(0, c)</code>.</li>
+                <ul className="text-[11px] sm:text-xs font-mono space-y-1 text-black font-bold">
+                  <li>• <strong>a:</strong> concavidade (a &gt; 0 cima ∪, a &lt; 0 baixo ∩).</li>
+                  <li>• <strong>b:</strong> inclinação ao cruzar o eixo Y.</li>
+                  <li>• <strong>c:</strong> corte exato em Y: <code>(0, c)</code>.</li>
                 </ul>
               </div>
 
               {/* Card 2: Discriminante Delta */}
-              <div className="bg-slate-900 border-2 border-slate-700 rounded-xl p-3.5 shadow-md">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-pixel text-xs text-rose-300">🔥 O Discriminante (Δ)</h3>
-                  <span className="text-[10px] font-mono text-amber-400">Número de Raízes</span>
+              <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 shadow-[2px_2px_0_#000] space-y-1.5 sm:space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">🔥 Discriminante (Δ)</h3>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-white bg-black px-1.5 sm:px-2 py-0.5 font-bold">Raízes</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 font-mono text-center text-lg text-rose-400 font-bold mb-2">
+                <div className="bg-white p-2 sm:p-2.5 border-2 border-black font-mono text-center text-sm sm:text-base text-black font-black">
                   Δ = b² - 4·a·c
                 </div>
-                <ul className="text-[11px] font-mono space-y-1 text-slate-300">
-                  <li>• <strong>Δ &gt; 0:</strong> Corta o eixo X em <span className="text-emerald-400 font-bold">2 raízes reais distintas</span> (x₁ ≠ x₂).</li>
-                  <li>• <strong>Δ = 0:</strong> Toca o eixo X em <span className="text-amber-400 font-bold">1 única raiz real dupla</span> (x₁ = x₂ = Vértice).</li>
-                  <li>• <strong>Δ &lt; 0:</strong> <span className="text-rose-400 font-bold">Não possui raízes reais</span> (não toca o eixo X).</li>
+                <ul className="text-[11px] sm:text-xs font-mono space-y-1 text-black font-bold">
+                  <li>• <strong>Δ &gt; 0:</strong> 2 raízes reais distintas (x₁ ≠ x₂).</li>
+                  <li>• <strong>Δ = 0:</strong> 1 raiz real dupla (x₁ = x₂).</li>
+                  <li>• <strong>Δ &lt; 0:</strong> sem raízes reais (não toca X).</li>
                 </ul>
               </div>
 
               {/* Card 3: Fórmula de Bhaskara */}
-              <div className="bg-slate-900 border-2 border-slate-700 rounded-xl p-3.5 shadow-md">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-pixel text-xs text-emerald-300">⚡ Fórmula de Bhaskara</h3>
-                  <span className="text-[10px] font-mono text-emerald-400">Raízes f(x)=0</span>
+              <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 shadow-[2px_2px_0_#000] space-y-1.5 sm:space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">⚡ Bhaskara</h3>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-white bg-black px-1.5 sm:px-2 py-0.5 font-bold">f(x) = 0</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 font-mono text-center text-lg text-emerald-300 font-bold mb-2">
+                <div className="bg-white p-2 sm:p-2.5 border-2 border-black font-mono text-center text-sm sm:text-base text-black font-black">
                   x = (-b ± √Δ) / 2a
                 </div>
-                <p className="text-[11px] font-mono text-slate-300">
-                  Soma das raízes: <code className="text-amber-300">S = -b/a</code> | Produto: <code className="text-amber-300">P = c/a</code>
+                <p className="text-[11px] sm:text-xs font-mono text-black font-bold">
+                  Soma: <code>S = -b/a</code> | Produto: <code>P = c/a</code>
                 </p>
               </div>
 
               {/* Card 4: Coordenadas do Vértice */}
-              <div className="bg-slate-900 border-2 border-slate-700 rounded-xl p-3.5 shadow-md">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-pixel text-xs text-blue-300">🌀 Vértice da Parábola V(Xᵥ, Yᵥ)</h3>
-                  <span className="text-[10px] font-mono text-blue-400">Ponto Extremo</span>
+              <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 shadow-[2px_2px_0_#000] space-y-1.5 sm:space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">🌀 Vértice V(Xᵥ, Yᵥ)</h3>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-white bg-black px-1.5 sm:px-2 py-0.5 font-bold">Extremo</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div className="bg-slate-950 p-2 rounded border border-slate-800 text-center font-mono font-bold text-cyan-300 text-sm">
+                <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                  <div className="bg-white p-1.5 sm:p-2 border-2 border-black text-center font-mono font-black text-black text-[11px] sm:text-xs">
                     Xᵥ = -b / 2a
                   </div>
-                  <div className="bg-slate-950 p-2 rounded border border-slate-800 text-center font-mono font-bold text-cyan-300 text-sm">
-                    Yᵥ = -Δ / 4a = f(Xᵥ)
+                  <div className="bg-white p-1.5 sm:p-2 border-2 border-black text-center font-mono font-black text-black text-[11px] sm:text-xs">
+                    Yᵥ = -Δ / 4a
                   </div>
                 </div>
-                <ul className="text-[11px] font-mono space-y-1 text-slate-300">
-                  <li>• <strong>a &gt; 0:</strong> Vértice é ponto de <span className="text-emerald-400 font-bold">MÍNIMO</span>.</li>
-                  <li>• <strong>a &lt; 0:</strong> Vértice é ponto de <span className="text-rose-400 font-bold">MÁXIMO</span>.</li>
-                  <li>• <strong>Eixo de Simetria:</strong> reta vertical <code>x = Xᵥ</code>.</li>
+                <ul className="text-[11px] sm:text-xs font-mono space-y-1 text-black font-bold">
+                  <li>• <strong>a &gt; 0:</strong> Ponto de MÍNIMO.</li>
+                  <li>• <strong>a &lt; 0:</strong> Ponto de MÁXIMO.</li>
                 </ul>
               </div>
             </div>
           ) : (
             /* Tab: Interactive Live Sandbox */
-            <div className="flex flex-col md:flex-row gap-5 items-center">
+            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center">
               {/* Sliders Control */}
-              <div className="w-full md:w-1/2 bg-slate-900 p-4 rounded-xl border-2 border-slate-700 space-y-4">
-                <h3 className="font-pixel text-xs text-amber-300 mb-2">🎛️ Manipular Coeficientes da Função:</h3>
+              <div className="w-full md:w-1/2 bg-slate-50 p-3 sm:p-4 border-2 border-black space-y-2.5 sm:space-y-3.5 shadow-[2px_2px_0_#000]">
+                <h3 className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase mb-1">🎛️ Ajustar Coeficientes:</h3>
 
                 {/* Slider A */}
                 <div>
-                  <div className="flex justify-between font-mono text-xs mb-1">
-                    <span className="text-cyan-300 font-bold">Coeficiente a: {sliderA}</span>
-                    <span className="text-slate-400">{sliderA > 0 ? '∪ Concavidade Cima' : '∩ Concavidade Baixo'}</span>
+                  <div className="flex justify-between font-mono text-xs mb-1 font-bold">
+                    <span>a = {sliderA}</span>
+                    <span className="text-slate-600">{sliderA > 0 ? '∪ Cima' : '∩ Baixo'}</span>
                   </div>
                   <input
                     type="range"
@@ -165,15 +164,15 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
                       const val = parseInt(e.target.value);
                       setSliderA(val === 0 ? 1 : val);
                     }}
-                    className="w-full accent-cyan-400 cursor-pointer"
+                    className="w-full accent-black cursor-pointer"
                   />
                 </div>
 
                 {/* Slider B */}
                 <div>
-                  <div className="flex justify-between font-mono text-xs mb-1">
-                    <span className="text-emerald-300 font-bold">Coeficiente b: {sliderB}</span>
-                    <span className="text-slate-400">Xᵥ = {xv.toFixed(1)}</span>
+                  <div className="flex justify-between font-mono text-xs mb-1 font-bold">
+                    <span>b = {sliderB}</span>
+                    <span className="text-slate-600">Xᵥ = {xv.toFixed(1)}</span>
                   </div>
                   <input
                     type="range"
@@ -182,15 +181,15 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
                     step="1"
                     value={sliderB}
                     onChange={(e) => setSliderB(parseInt(e.target.value))}
-                    className="w-full accent-emerald-400 cursor-pointer"
+                    className="w-full accent-black cursor-pointer"
                   />
                 </div>
 
                 {/* Slider C */}
                 <div>
-                  <div className="flex justify-between font-mono text-xs mb-1">
-                    <span className="text-pink-300 font-bold">Coeficiente c: {sliderC}</span>
-                    <span className="text-slate-400">Corte Y em (0, {sliderC})</span>
+                  <div className="flex justify-between font-mono text-xs mb-1 font-bold">
+                    <span>c = {sliderC}</span>
+                    <span className="text-slate-600">Corte Y: (0, {sliderC})</span>
                   </div>
                   <input
                     type="range"
@@ -199,33 +198,33 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
                     step="1"
                     value={sliderC}
                     onChange={(e) => setSliderC(parseInt(e.target.value))}
-                    className="w-full accent-pink-400 cursor-pointer"
+                    className="w-full accent-black cursor-pointer"
                   />
                 </div>
 
                 {/* Live Stats */}
-                <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1">
-                  <div className="text-amber-300 font-bold">
+                <div className="bg-white p-2.5 sm:p-3 border-2 border-black font-mono text-xs space-y-1 font-bold">
+                  <div>
                     Δ = ({sliderB})² - 4·({sliderA})·({sliderC}) = {delta}
                   </div>
-                  <div className="text-blue-300">
+                  <div>
                     Vértice V = ({xv.toFixed(1)}, {yv.toFixed(1)})
                   </div>
-                  <div className="text-slate-400">
-                    {delta > 0 ? '✓ 2 Raízes reais distintas' : delta === 0 ? '✓ 1 Raiz real dupla' : '✗ Nenhuma raiz real'}
+                  <div className="text-slate-600 text-[11px]">
+                    {delta > 0 ? '✓ 2 Raízes reais' : delta === 0 ? '✓ 1 Raiz dupla' : '✗ Nenhuma raiz real'}
                   </div>
                 </div>
               </div>
 
               {/* Real-time Rendered Parabola */}
-              <div className="w-full md:w-1/2 flex justify-center">
+              <div className="w-full md:w-1/2 flex justify-center bg-white p-2 sm:p-3 border-2 border-black shadow-[2px_2px_0_#000] gb-sprite-mono">
                 <ParabolaGraph 
                   a={sliderA} 
                   b={sliderB} 
                   c={sliderC} 
-                  width={340} 
-                  height={240} 
-                  className="w-full"
+                  width={300} 
+                  height={200} 
+                  className="w-full max-w-full"
                 />
               </div>
             </div>
@@ -235,3 +234,4 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
     </div>
   );
 };
+

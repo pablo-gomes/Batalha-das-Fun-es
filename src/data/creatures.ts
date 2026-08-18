@@ -409,6 +409,10 @@ export const STARTER_CREATURES: Creature[] = [
 // PNG Sprite dictionary for all game enemies and bosses
 export const ENEMY_SPRITE_REGISTRY: Record<string, { front: string; back?: string }> = {
   // Floresta das Raízes
+  'Raiz Silvestre': {
+    front: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/43.gif',
+    back: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/43.gif'
+  },
   'Raíz Silvestre': {
     front: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/43.gif',
     back: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/43.gif'
@@ -497,7 +501,44 @@ export function createEnemyCreature(
     Geral: { primary: '#f59e0b', secondary: '#b45309', accent: '#fde68a', aura: 'rgba(245,158,11,0.3)' }
   }[element];
 
-  const spriteData = ENEMY_SPRITE_REGISTRY[name];
+  const spriteData = ENEMY_SPRITE_REGISTRY[name] || ENEMY_SPRITE_REGISTRY[name.replace('í', 'i')] || ENEMY_SPRITE_REGISTRY[name.replace('i', 'í')];
+
+  // Specific skills tailored to the enemy's elemental concept
+  const elementalSkills = {
+    Raízes: [
+      ALL_SKILLS.golpe_raizes,
+      ALL_SKILLS.precisao_fx,
+      ALL_SKILLS.barreira_concavidade,
+      ...(isBoss ? [ALL_SKILLS.ataque_supremo_bhaskara] : [ALL_SKILLS.explosao_delta])
+    ],
+    Vértice: [
+      ALL_SKILLS.vortice_vertice,
+      ALL_SKILLS.precisao_fx,
+      ALL_SKILLS.eixo_simetria,
+      ALL_SKILLS.barreira_concavidade,
+      ...(isBoss ? [ALL_SKILLS.ataque_supremo_bhaskara] : [])
+    ],
+    Delta: [
+      ALL_SKILLS.explosao_delta,
+      ALL_SKILLS.precisao_fx,
+      ALL_SKILLS.corte_eixo_y,
+      ALL_SKILLS.golpe_raizes,
+      ...(isBoss ? [ALL_SKILLS.ataque_supremo_bhaskara] : [])
+    ],
+    Parábola: [
+      ALL_SKILLS.corte_eixo_y,
+      ALL_SKILLS.precisao_fx,
+      ALL_SKILLS.barreira_concavidade,
+      ALL_SKILLS.vortice_vertice,
+      ...(isBoss ? [ALL_SKILLS.ataque_supremo_bhaskara] : [])
+    ],
+    Geral: [
+      ALL_SKILLS.precisao_fx,
+      ALL_SKILLS.vortice_vertice,
+      ALL_SKILLS.explosao_delta,
+      ALL_SKILLS.ataque_supremo_bhaskara
+    ]
+  }[element];
 
   return {
     id: `enemy_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -520,11 +561,8 @@ export function createEnemyCreature(
     forms: [],
     imageUrl: spriteData?.front,
     backImageUrl: spriteData?.back || spriteData?.front,
-    skills: [
-      ALL_SKILLS.precisao_fx,
-      ALL_SKILLS.golpe_raizes,
-      ALL_SKILLS.explosao_delta
-    ],
+    skills: elementalSkills,
     spriteColor: colors
   };
 }
+

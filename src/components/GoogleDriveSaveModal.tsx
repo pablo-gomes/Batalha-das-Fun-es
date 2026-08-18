@@ -206,18 +206,18 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-slate-900 border-2 border-cyan-500 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl text-slate-100 relative max-h-[90vh] flex flex-col space-y-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl max-w-2xl w-full p-3 sm:p-5 shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] text-black relative max-h-[94vh] sm:max-h-[90vh] flex flex-col space-y-2.5 sm:space-y-3.5">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyan-950 border border-cyan-500/50 rounded-xl text-cyan-400">
-              <Cloud size={24} />
+        <div className="flex items-center justify-between border-b-2 border-black pb-2 sm:pb-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <div className="p-1.5 sm:p-2 bg-white border-2 border-black text-black">
+              <Cloud size={20} />
             </div>
             <div>
-              <h2 className="font-pixel text-base sm:text-lg text-cyan-300">Nuvem Google Drive</h2>
-              <p className="font-mono text-xs text-slate-400">Sincronize seu savegame em qualquer computador ou dispositivo</p>
+              <h2 className="font-pixel text-xs sm:text-base text-black font-black uppercase">Nuvem Drive</h2>
+              <p className="font-mono text-[10px] sm:text-xs text-slate-700 font-bold">Sincronize seu save na nuvem</p>
             </div>
           </div>
           <button
@@ -225,106 +225,100 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
               sound.playSelect();
               onClose();
             }}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            className="p-1 sm:p-1.5 bg-white hover:bg-black hover:text-white border-2 border-black text-black transition-colors cursor-pointer font-bold"
           >
-            <X size={20} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Status Alerts */}
         {statusMessage && (
           <div
-            className={`p-3 rounded-xl flex items-center gap-2.5 text-xs font-mono border ${
+            className={`p-2 sm:p-2.5 border-2 text-[11px] sm:text-xs font-mono font-bold flex items-center gap-2 ${
               statusMessage.type === 'success'
-                ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-300'
+                ? 'bg-slate-100 border-black text-black'
                 : statusMessage.type === 'error'
-                ? 'bg-rose-950/80 border-rose-500/80 text-rose-300'
-                : 'bg-cyan-950/80 border-cyan-500/80 text-cyan-300'
+                ? 'bg-black border-black text-white'
+                : 'bg-white border-black text-black'
             }`}
           >
-            {statusMessage.type === 'success' && <CheckCircle2 size={16} className="shrink-0" />}
-            {statusMessage.type === 'error' && <AlertCircle size={16} className="shrink-0" />}
-            {statusMessage.type === 'info' && <ShieldCheck size={16} className="shrink-0" />}
-            <span className="flex-1">{statusMessage.text}</span>
+            {statusMessage.type === 'success' && <CheckCircle2 size={14} className="shrink-0" />}
+            {statusMessage.type === 'error' && <AlertCircle size={14} className="shrink-0" />}
+            {statusMessage.type === 'info' && <ShieldCheck size={14} className="shrink-0" />}
+            <span className="flex-1 line-clamp-2">{statusMessage.text}</span>
           </div>
         )}
 
         {/* Auth Box */}
-        <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-3 shadow-[2px_2px_0_#000]">
           {user ? (
             <>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 w-full sm:w-auto">
                 {user.photoURL ? (
                   <img
                     src={user.photoURL}
                     alt={user.displayName || 'Google User'}
-                    className="w-10 h-10 rounded-full border border-cyan-500"
+                    className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-black gb-sprite-mono shrink-0"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-cyan-900 border border-cyan-500 flex items-center justify-center font-pixel text-cyan-300">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 bg-black text-white border-2 border-black flex items-center justify-center font-pixel text-xs shrink-0">
                     {user.displayName?.charAt(0) || 'G'}
                   </div>
                 )}
-                <div>
-                  <div className="font-pixel text-xs text-cyan-300">{user.displayName || 'Jogador Conectado'}</div>
-                  <div className="font-mono text-[11px] text-slate-400">{user.email}</div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-pixel text-[10px] sm:text-[11px] text-black font-black uppercase truncate">{user.displayName || 'Jogador'}</div>
+                  <div className="font-mono text-[10px] sm:text-xs text-slate-700 font-bold truncate">{user.email}</div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-300 flex items-center gap-1.5 transition-colors border border-slate-700"
+                  className="px-2.5 sm:px-3 py-1 bg-white hover:bg-black hover:text-white text-[11px] sm:text-xs font-mono text-black font-bold flex items-center gap-1.5 transition-colors border-2 border-black cursor-pointer shadow-[1px_1px_0_#000]"
                 >
-                  <LogOut size={13} /> Sair
+                  <LogOut size={12} /> Sair
                 </button>
               </div>
             </>
           ) : (
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 w-full">
               <div className="space-y-0.5 text-center sm:text-left">
-                <div className="font-pixel text-xs text-amber-300">Google Drive não conectado</div>
-                <div className="font-mono text-xs text-slate-400">
-                  Faça login para salvar na nuvem e carregar seus dados em qualquer lugar.
+                <div className="font-pixel text-[10px] sm:text-[11px] text-black font-black uppercase">Google Drive Desconectado</div>
+                <div className="font-mono text-[11px] sm:text-xs text-slate-700 font-bold">
+                  Conecte para salvar e restaurar dados na nuvem.
                 </div>
               </div>
 
-              {/* Official styled Google Sign-in button */}
+              {/* Google Sign-in button */}
               <button
                 onClick={handleLogin}
                 disabled={loading}
-                className="bg-white hover:bg-slate-100 text-slate-800 font-sans font-medium text-xs px-4 py-2 rounded-lg flex items-center gap-2.5 transition-all shadow-md active:scale-95 shrink-0 border border-slate-300 disabled:opacity-50 cursor-pointer"
+                className="w-full sm:w-auto bg-white hover:bg-black hover:text-white text-black font-pixel text-[10px] sm:text-xs px-3 py-2 flex items-center justify-center gap-2 transition-all shadow-[2px_2px_0_#000] border-2 border-black disabled:opacity-50 cursor-pointer font-black"
               >
-                <svg className="w-4 h-4" viewBox="0 0 48 48">
-                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-                  <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-                  <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-                  <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-                </svg>
-                <span>Entrar com Google</span>
+                <span>ENTRAR COM GOOGLE</span>
               </button>
             </div>
           )}
         </div>
 
         {/* Cloud Actions and Save List */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar min-h-[220px]">
+        <div className="flex-1 overflow-y-auto space-y-2.5 sm:space-y-3 pr-1 custom-scrollbar min-h-[160px]">
           {user ? (
             <>
               {/* Quick Save Card */}
-              <div className="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-cyan-950/40 border border-cyan-500/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="space-y-1 text-center sm:text-left">
-                  <div className="font-pixel text-xs text-cyan-300 flex items-center justify-center sm:justify-start gap-1.5">
-                    <Sparkles size={14} className="text-amber-400" /> Salvar Progresso Atual
+              <div className="bg-slate-50 border-2 border-black p-2.5 sm:p-3.5 flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-[2px_2px_0_#000]">
+                <div className="space-y-0.5 text-center sm:text-left">
+                  <div className="font-pixel text-[10px] sm:text-[11px] text-black font-black flex items-center justify-center sm:justify-start gap-1.5 uppercase">
+                    <Sparkles size={12} /> Salvar Progresso Atual
                   </div>
-                  <div className="font-mono text-[11px] text-slate-300">
+                  <div className="font-mono text-[11px] sm:text-xs text-slate-700 font-bold">
                     {playerCreature ? (
                       <span>
-                        Criatura: <strong>{playerCreature.name}</strong> (Lv {playerCreature.level}) • Moedas: {userCoins}🪙
+                        {playerCreature.name} (Nv {playerCreature.level}) • {userCoins}🪙
                       </span>
                     ) : (
-                      <span>Nenhum personagem ativo selecionado</span>
+                      <span className="text-slate-500">Nenhum monstro selecionado</span>
                     )}
                   </div>
                 </div>
@@ -332,65 +326,65 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
                 <button
                   onClick={handleSaveToDrive}
                   disabled={loading || !playerCreature}
-                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-pixel text-xs flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto gb-btn-primary px-3 py-2 text-[10px] sm:text-[11px] flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-[2px_2px_0_#000]"
                 >
-                  <CloudUpload size={16} /> Salvar no Google Drive
+                  <CloudUpload size={13} /> SALVAR NO DRIVE
                 </button>
               </div>
 
               {/* Drive File List */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono text-slate-400 px-1">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono text-black font-bold px-1">
                   <span className="flex items-center gap-1.5">
-                    <HardDrive size={14} /> Saves no Google Drive ({driveFiles.length})
+                    <HardDrive size={12} /> Saves na Nuvem ({driveFiles.length})
                   </span>
                   <button
                     onClick={loadFiles}
                     disabled={loading}
-                    className="hover:text-cyan-300 flex items-center gap-1 transition-colors"
+                    className="hover:text-slate-600 flex items-center gap-1 transition-colors cursor-pointer"
                   >
-                    <RefreshCw size={12} className={loading ? 'animate-spin' : ''} /> Atualizar
+                    <RefreshCw size={11} className={loading ? 'animate-spin' : ''} /> Atualizar
                   </button>
                 </div>
 
                 {driveFiles.length === 0 ? (
-                  <div className="bg-slate-950/60 border border-dashed border-slate-800 rounded-xl p-8 text-center font-mono text-xs text-slate-500 space-y-2">
-                    <Cloud size={32} className="mx-auto text-slate-600 opacity-60" />
-                    <div>Nenhum arquivo de save encontrado na sua pasta do Google Drive.</div>
-                    <div className="text-[11px] text-slate-600">Clique no botão "Salvar no Google Drive" acima para criar seu primeiro save em nuvem!</div>
+                  <div className="bg-slate-50 border-2 border-dashed border-black p-4 sm:p-6 text-center font-mono text-xs text-slate-600 space-y-1 font-bold">
+                    <Cloud size={24} className="mx-auto opacity-60" />
+                    <div>Nenhum save encontrado no seu Google Drive.</div>
+                    <div className="text-[10px]">Clique em "Salvar no Drive" para criar um backup.</div>
                   </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 sm:space-y-2">
                     {driveFiles.map((file) => (
                       <div
                         key={file.id}
-                        className="bg-slate-950 border border-slate-800 hover:border-cyan-500/50 rounded-xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all"
+                        className="bg-white border-2 border-black p-2.5 sm:p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-[2px_2px_0_#000]"
                       >
-                        <div className="space-y-1">
-                          <div className="font-pixel text-xs text-amber-300 flex items-center gap-2">
-                            <span>{file.name}</span>
+                        <div className="space-y-0.5 min-w-0">
+                          <div className="font-pixel text-[10px] sm:text-[11px] text-black font-black uppercase truncate">
+                            {file.name}
                           </div>
-                          <div className="flex items-center gap-3 font-mono text-[10px] text-slate-400">
+                          <div className="flex flex-wrap items-center gap-1.5 font-mono text-[10px] sm:text-xs text-slate-600 font-bold">
                             <span className="flex items-center gap-1">
-                              <Clock size={11} /> {new Date(file.modifiedTime).toLocaleString()}
+                              <Clock size={10} /> {new Date(file.modifiedTime).toLocaleDateString()}
                             </span>
-                            {file.description && <span className="text-slate-500">| {file.description}</span>}
+                            {file.description && <span className="truncate">| {file.description}</span>}
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <div className="flex items-center gap-1.5 w-full sm:w-auto justify-end">
                           <button
                             onClick={() => setFileToLoad(file)}
-                            className="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/80 text-cyan-300 font-pixel text-[10px] flex items-center gap-1.5 transition-colors"
+                            className="flex-1 sm:flex-none px-2.5 py-1 bg-white hover:bg-black hover:text-white border-2 border-black text-black font-pixel text-[9px] sm:text-[10px] flex items-center justify-center gap-1 transition-colors cursor-pointer font-bold"
                           >
-                            <CloudDownload size={13} /> Carregar
+                            <CloudDownload size={11} /> CARREGAR
                           </button>
                           <button
                             onClick={() => setFileToDelete(file)}
-                            className="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 border border-rose-500/60 text-rose-300 transition-colors"
+                            className="p-1 bg-white hover:bg-black hover:text-white border-2 border-black text-black transition-colors cursor-pointer shrink-0"
                             title="Excluir save do Google Drive"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={12} />
                           </button>
                         </div>
                       </div>
@@ -400,93 +394,93 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
               </div>
             </>
           ) : (
-            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-8 text-center space-y-4">
-              <Cloud size={40} className="mx-auto text-cyan-400 animate-pulse" />
+            <div className="bg-slate-50 border-2 border-black p-4 sm:p-6 text-center space-y-2.5 shadow-[2px_2px_0_#000]">
+              <Cloud size={30} className="mx-auto" />
               <div className="space-y-1">
-                <h3 className="font-pixel text-sm text-cyan-300">Conecte sua conta do Google</h3>
-                <p className="font-mono text-xs text-slate-400 max-w-md mx-auto">
-                  Com o Google Drive integrado, você nunca perderá o nível da sua criatura, moedas conquistadas e chefes derrotados, podendo jogar em qualquer lugar!
+                <h3 className="font-pixel text-[11px] sm:text-xs text-black font-black uppercase">Conecte sua conta do Google</h3>
+                <p className="font-mono text-[11px] sm:text-xs text-slate-700 max-w-sm mx-auto font-bold">
+                  Guarde seus monstros, níveis, fases desbloqueadas e moedas com segurança na nuvem.
                 </p>
               </div>
               <button
                 onClick={handleLogin}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-pixel text-xs shadow-lg transition-all active:scale-95"
+                className="gb-btn-primary inline-flex items-center gap-1.5 px-3.5 py-2 font-pixel text-[10px] sm:text-[11px] cursor-pointer shadow-[2px_2px_0_#000]"
               >
-                Conectar com Google Drive Agora
+                CONECTAR COM GOOGLE ▶
               </button>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-slate-800 pt-3 flex items-center justify-between text-[11px] font-mono text-slate-400">
-          <span>Pasta de destino: <strong>/Batalha das Funções - Saves</strong></span>
+        <div className="border-t-2 border-black pt-2 flex items-center justify-between text-[11px] sm:text-xs font-mono text-slate-700 font-bold">
+          <span className="truncate">Pasta: <strong>/Batalha das Funções</strong></span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-mono"
+            className="px-2.5 py-1 bg-white hover:bg-black hover:text-white border-2 border-black text-black text-xs font-mono font-bold cursor-pointer shrink-0 ml-2"
           >
             Fechar
           </button>
         </div>
 
-        {/* Explicit Confirmation Modal for Loading Save (Overwriting data) */}
+        {/* Modal Confirmação Carregar */}
         {fileToLoad && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
-            <div className="bg-slate-900 border-2 border-cyan-500 rounded-2xl max-w-md w-full p-5 space-y-4 text-center shadow-2xl">
-              <div className="p-3 bg-cyan-950 text-cyan-300 w-12 h-12 rounded-full mx-auto flex items-center justify-center border border-cyan-500">
-                <CloudDownload size={24} />
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm">
+            <div className="bg-white border-3 sm:border-4 border-black max-w-md w-full p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 text-center shadow-[4px_4px_0_#000] sm:shadow-[6px_6px_0_#000] text-black">
+              <div className="p-2 bg-black text-white w-9 h-9 mx-auto flex items-center justify-center border-2 border-black">
+                <CloudDownload size={18} />
               </div>
               <div className="space-y-1">
-                <h3 className="font-pixel text-sm text-cyan-300">Carregar Progresso da Nuvem?</h3>
-                <p className="font-mono text-xs text-slate-300">
-                  Deseja carregar o save <strong>"{fileToLoad.name}"</strong>? O progresso não salvo da sessão atual será substituído pelos dados do arquivo.
+                <h3 className="font-pixel text-[11px] sm:text-xs text-black font-black uppercase">Carregar Progresso?</h3>
+                <p className="font-mono text-xs text-slate-800 font-bold">
+                  Carregar o save <strong>"{fileToLoad.name}"</strong> substituirá os dados da sessão atual.
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="flex items-center justify-center gap-2 pt-1">
                 <button
                   onClick={() => setFileToLoad(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs"
+                  className="px-3 py-1.5 bg-white hover:bg-black hover:text-white border-2 border-black text-black font-mono text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={confirmLoadFile}
                   disabled={loading}
-                  className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-pixel text-xs flex items-center gap-2"
+                  className="gb-btn-primary px-3 py-1.5 text-[10px] sm:text-[11px] flex items-center gap-1.5 cursor-pointer font-black"
                 >
-                  Confirmar e Carregar
+                  Confirmar
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Explicit Confirmation Modal for Deleting Save (Destructive operation mandated by rules) */}
+        {/* Modal Confirmação Excluir */}
         {fileToDelete && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
-            <div className="bg-slate-900 border-2 border-rose-500 rounded-2xl max-w-md w-full p-5 space-y-4 text-center shadow-2xl">
-              <div className="p-3 bg-rose-950 text-rose-400 w-12 h-12 rounded-full mx-auto flex items-center justify-center border border-rose-500">
-                <AlertTriangle size={24} />
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm">
+            <div className="bg-white border-3 sm:border-4 border-black max-w-md w-full p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 text-center shadow-[4px_4px_0_#000] sm:shadow-[6px_6px_0_#000] text-black">
+              <div className="p-2 bg-black text-white w-9 h-9 mx-auto flex items-center justify-center border-2 border-black">
+                <AlertTriangle size={18} />
               </div>
               <div className="space-y-1">
-                <h3 className="font-pixel text-sm text-rose-300">Excluir Save do Google Drive?</h3>
-                <p className="font-mono text-xs text-slate-300">
-                  Tem certeza que deseja excluir permanentemente o arquivo <strong>"{fileToDelete.name}"</strong> da sua conta Google Drive? Esta ação não pode ser desfeita.
+                <h3 className="font-pixel text-[11px] sm:text-xs text-black font-black uppercase">Excluir Save?</h3>
+                <p className="font-mono text-xs text-slate-800 font-bold">
+                  Excluir permanentemente <strong>"{fileToDelete.name}"</strong> da nuvem?
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="flex items-center justify-center gap-2 pt-1">
                 <button
                   onClick={() => setFileToDelete(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs"
+                  className="px-3 py-1.5 bg-white hover:bg-black hover:text-white border-2 border-black text-black font-mono text-xs font-bold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={confirmDeleteFile}
                   disabled={loading}
-                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-pixel text-xs flex items-center gap-2"
+                  className="gb-btn-primary px-3 py-1.5 text-[10px] sm:text-[11px] flex items-center gap-1.5 cursor-pointer font-black"
                 >
-                  Confirmar Exclusão
+                  Excluir
                 </button>
               </div>
             </div>

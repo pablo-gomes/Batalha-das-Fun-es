@@ -3,7 +3,7 @@ import { Creature, MathChallenge, Skill, InventoryItem } from '../types';
 import { ParabolaGraph } from './ParabolaGraph';
 import { sound } from '../utils/audio';
 import { GameIcon } from '../utils/iconMap';
-import { Shield, Zap, Gamepad2, BookOpen, ArrowLeft, Swords, ShieldCheck, Package, BarChart2, Crosshair, Lightbulb, BarChart3 } from 'lucide-react';
+import { BookOpen, ArrowLeft, Swords, ShieldCheck, Package, BarChart2, Delete } from 'lucide-react';
 
 interface MathDialogueBoxProps {
   playerCreature: Creature;
@@ -70,31 +70,37 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
     setHintLevel(0);
   };
 
+  const handleCycleHint = () => {
+    sound.playSelect();
+    setHintLevel(prev => (prev >= 3 ? 0 : prev + 1));
+  };
+
   return (
-    <div className="w-full bg-[#090d16] border-4 border-[#38bdf8] rounded-xl p-3 sm:p-4 text-slate-100 shadow-[0_8px_0_#020617,0_0_24px_rgba(56,189,248,0.3)] relative min-h-[210px] flex flex-col justify-between">
+    <div className="w-full bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl p-2.5 sm:p-4 text-black shadow-[3px_3px_0_#000000] sm:shadow-[4px_4px_0_#000000] relative min-h-[180px] sm:min-h-[200px] flex flex-col justify-between">
       {/* Dialogue Header bar */}
-      <div className="flex items-center justify-between border-b-2 border-slate-800 pb-2 mb-2">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
-          <span className="text-[10px] sm:text-xs font-pixel text-cyan-300 uppercase tracking-wider">
+      <div className="flex items-center justify-between border-b sm:border-b-2 border-black pb-1.5 sm:pb-2 mb-1.5 sm:mb-2 gap-1.5">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-black shrink-0" />
+          <span className="text-[9px] sm:text-xs font-pixel font-bold text-black uppercase tracking-tight truncate">
             {isDefenseTurn 
-              ? <><Shield size={10} className="inline mr-1" />FASE DE DEFESA: BLOQUEIE O GOLPE!</>
+              ? <>DEFESA: BLOQUEIE!</>
               : activeMenu === 'challenge' 
-                ? <><Zap size={10} className="inline mr-1" />DESAFIO MATEMÁTICO: {selectedSkill?.name || 'Ataque'}</>
-                : <><Gamepad2 size={10} className="inline mr-1" />TURNO DE {playerCreature.name.toUpperCase()}</>
+                ? <>{selectedSkill?.name || 'ATAQUE'}</>
+                : <>TURNO: {playerCreature.name.toUpperCase()}</>
             }
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => {
               sound.playSelect();
               onOpenCodex();
             }}
-            className="text-[9px] font-pixel bg-slate-800 hover:bg-slate-700 text-amber-300 px-2 py-1 rounded border border-amber-500/40 flex items-center gap-1 transition-colors"
+            className="text-[8px] sm:text-[9px] font-pixel bg-white hover:bg-black hover:text-white text-black px-1.5 sm:px-2 py-1 border border-black sm:border-2 transition-colors cursor-pointer"
+            title="Abrir o Grimório de Fórmulas"
           >
-            <BookOpen size={10} /> Grimório
+            <BookOpen size={10} className="inline mr-0.5" /> <span className="hidden min-[380px]:inline">Grimório</span>
           </button>
           {activeMenu !== 'main' && !isDefenseTurn && (
             <button
@@ -103,37 +109,38 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 setActiveMenu('main');
                 setHintLevel(0);
               }}
-              className="text-[9px] font-pixel bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded border border-slate-600 flex items-center gap-1"
+              className="text-[8px] sm:text-[9px] font-pixel bg-white hover:bg-black hover:text-white text-black px-1.5 sm:px-2 py-1 border border-black sm:border-2 transition-colors cursor-pointer"
             >
-              <ArrowLeft size={9} /> Voltar
+              <ArrowLeft size={10} className="inline mr-0.5" /> Voltar
             </button>
           )}
         </div>
       </div>
 
-      {/* VIEW 1: Main Battle Action Menu */}
+      {/* VIEW 1: Main Battle Action Menu (Classic Pokémon GBA/Game Boy 2x2 Grid) */}
       {activeMenu === 'main' && !isDefenseTurn && (
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 items-center flex-1">
           {/* Left: Dialogue / Story message */}
-          <div className="md:col-span-5 bg-slate-900/80 p-3 rounded-lg border-2 border-slate-700 flex flex-col justify-center">
-            <p className="font-pixel text-[11px] sm:text-xs text-slate-200 leading-relaxed">
+          <div className="md:col-span-6 bg-slate-50 p-2 sm:p-3 border-2 border-black flex flex-col justify-center">
+            <p className="font-pixel text-[10px] sm:text-xs text-black leading-relaxed font-bold">
               {turnMessage || `O que ${playerCreature.name} deve fazer contra ${enemyCreature.name}?`}
             </p>
-            <div className="mt-2 flex items-center gap-2 text-[10px] font-mono text-cyan-400">
-              <span>Energia: {playerCreature.currentEnergy}/{playerCreature.maxEnergy} MP</span>
+            <div className="mt-1.5 sm:mt-2 flex items-center justify-between text-[11px] sm:text-xs font-mono font-bold text-black border-t border-dashed border-black pt-1">
+              <span>ENERGIA: {playerCreature.currentEnergy}/{playerCreature.maxEnergy} MP</span>
+              <span className="text-[10px] text-slate-600">ATQ:{playerCreature.attack} DEF:{playerCreature.defense}</span>
             </div>
           </div>
 
-          {/* Right: GBA 4-button Action Grid */}
-          <div className="md:col-span-7 grid grid-cols-2 gap-2 sm:gap-2.5">
+          {/* Right: 4-button Action Grid */}
+          <div className="md:col-span-6 grid grid-cols-2 gap-1.5 sm:gap-2">
             <button
               onClick={() => {
                 sound.playSelect();
                 setActiveMenu('skills');
               }}
-              className="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-red-300 shadow-[2px_2px_0_#450a0a] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
+              className="gb-btn py-2.5 sm:py-3.5 px-2 text-[10px] sm:text-[11px] font-black flex items-center justify-center gap-1 sm:gap-1.5"
             >
-              <Swords size={12} /> ATACAR
+              <Swords size={12} className="shrink-0" /> ATACAR
             </button>
 
             <button
@@ -141,9 +148,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 sound.playSelect();
                 onSelectAction('defend');
               }}
-              className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-blue-300 shadow-[2px_2px_0_#172554] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
+              className="gb-btn py-2.5 sm:py-3.5 px-2 text-[10px] sm:text-[11px] font-black flex items-center justify-center gap-1 sm:gap-1.5"
             >
-              <ShieldCheck size={12} /> DEFENDER
+              <ShieldCheck size={12} className="shrink-0" /> DEFENDER
             </button>
 
             <button
@@ -151,9 +158,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 sound.playSelect();
                 setActiveMenu('items');
               }}
-              className="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-emerald-300 shadow-[2px_2px_0_#064e3b] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
+              className="gb-btn py-2.5 sm:py-3.5 px-2 text-[10px] sm:text-[11px] font-black flex items-center justify-center gap-1 sm:gap-1.5"
             >
-              <Package size={12} /> ITENS
+              <Package size={12} className="shrink-0" /> MOCHILA
             </button>
 
             <button
@@ -161,9 +168,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                 sound.playSelect();
                 setActiveMenu('graph_inspect');
               }}
-              className="bg-gradient-to-r from-purple-600 to-fuchsia-700 hover:from-purple-500 hover:to-fuchsia-600 text-white font-pixel text-[11px] sm:text-xs py-3 px-3 rounded-lg border-2 border-purple-300 shadow-[2px_2px_0_#3b0764] flex items-center justify-center gap-2 active:translate-y-0.5 transition-all"
+              className="gb-btn py-2.5 sm:py-3.5 px-2 text-[10px] sm:text-[11px] font-black flex items-center justify-center gap-1 sm:gap-1.5"
             >
-              <BarChart2 size={12} /> GRÁFICO
+              <BarChart2 size={12} className="shrink-0" /> GRÁFICO
             </button>
           </div>
         </div>
@@ -171,9 +178,12 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
       {/* VIEW 2: Skills / Math Attack Selection */}
       {activeMenu === 'skills' && !isDefenseTurn && (
-        <div className="flex-1">
-          <p className="text-[10px] font-pixel text-slate-400 mb-2">Escolha uma habilidade matemática:</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className="flex-1 space-y-1.5 sm:space-y-2">
+          <div className="flex items-center justify-between font-mono font-bold text-[11px] sm:text-xs">
+            <span className="font-pixel text-[9px] sm:text-[10px] text-black">ESCOLHA UMA HABILIDADE:</span>
+            <span>MP: {playerCreature.currentEnergy}/{playerCreature.maxEnergy}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
             {playerCreature.skills.map((skill) => {
               const hasEnergy = playerCreature.currentEnergy >= skill.energyCost;
               return (
@@ -184,30 +194,23 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                     sound.playSelect();
                     onSelectSkill(skill);
                   }}
-                  className={`p-2.5 rounded-lg border-2 text-left flex items-center justify-between transition-all ${
+                  className={`p-2 sm:p-2.5 border-2 border-black text-left flex items-center justify-between transition-all ${
                     hasEnergy 
-                      ? 'bg-slate-900 hover:bg-slate-800 border-slate-700 hover:border-cyan-400 active:scale-[0.98]' 
-                      : 'bg-slate-950/60 border-slate-800 opacity-50 cursor-not-allowed'
+                      ? 'bg-white hover:bg-black hover:text-white cursor-pointer shadow-[2px_2px_0_#000]' 
+                      : 'bg-slate-200 border-slate-400 opacity-50 cursor-not-allowed text-slate-500'
                   }`}
                 >
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1.5">
-                    <GameIcon name={skill.icon} size={14} />
-                      <span className="font-pixel text-[10px] sm:text-[11px] text-white">
-                        {skill.name}
-                      </span>
-                    </div>
-                    <span className="text-[9px] font-mono text-slate-400 line-clamp-1 mt-0.5">
+                  <div className="flex flex-col pr-1 min-w-0">
+                    <span className="font-pixel text-[9px] sm:text-[10px] font-bold truncate">
+                      {skill.name}
+                    </span>
+                    <span className="text-[9px] sm:text-[10px] font-mono line-clamp-1 mt-0.5">
                       {skill.description}
                     </span>
                   </div>
-                  <div className="flex flex-col items-end shrink-0 pl-2">
-                    <span className="text-[10px] font-mono font-bold text-cyan-300">
-                      {skill.energyCost} MP
-                    </span>
-                    <span className="text-[8px] font-mono text-amber-400">
-                      Pwr: {skill.basePower}
-                    </span>
+                  <div className="flex flex-col items-end shrink-0 pl-1.5 font-mono font-bold text-xs">
+                    <span className="text-[10px] sm:text-xs">{skill.energyCost} MP</span>
+                    <span className="text-[8px] sm:text-[9px]">Pwr {skill.basePower}</span>
                   </div>
                 </button>
               );
@@ -218,9 +221,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
       {/* VIEW 3: Inventory Items Selection */}
       {activeMenu === 'items' && !isDefenseTurn && (
-        <div className="flex-1">
-          <p className="text-[10px] font-pixel text-slate-400 mb-2">Mochila de Itens Matemáticos:</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className="flex-1 space-y-1.5 sm:space-y-2">
+          <p className="font-pixel text-[9px] sm:text-[10px] text-black">ITENS DA MOCHILA:</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
             {items.map((item) => {
               const canUse = item.amount > 0;
               return (
@@ -231,20 +234,20 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                     sound.playConfirm();
                     onUseItem(item);
                   }}
-                  className={`p-2 rounded-lg border-2 text-left flex items-center justify-between ${
+                  className={`p-2 sm:p-2.5 border-2 border-black text-left flex items-center justify-between transition-all ${
                     canUse 
-                      ? 'bg-slate-900 hover:bg-slate-800 border-slate-700 hover:border-emerald-400' 
-                      : 'bg-slate-950 border-slate-800 opacity-40 cursor-not-allowed'
+                      ? 'bg-white hover:bg-black hover:text-white cursor-pointer shadow-[2px_2px_0_#000]' 
+                      : 'bg-slate-200 opacity-40 cursor-not-allowed'
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <GameIcon name={item.icon} size={18} />
-                    <div>
-                      <div className="font-pixel text-[10px] text-white">{item.name}</div>
-                      <div className="text-[9px] font-mono text-slate-400">{item.description}</div>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <GameIcon name={item.icon} size={16} />
+                    <div className="min-w-0">
+                      <div className="font-pixel text-[9px] sm:text-[10px] font-bold truncate">{item.name}</div>
+                      <div className="text-[9px] sm:text-[10px] font-mono line-clamp-1">{item.description}</div>
                     </div>
                   </div>
-                  <span className="font-pixel text-[11px] text-emerald-400 shrink-0 ml-2">
+                  <span className="font-pixel text-[10px] sm:text-xs shrink-0 ml-1.5 font-black">
                     x{item.amount}
                   </span>
                 </button>
@@ -256,182 +259,181 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
       {/* VIEW 4: Graph Inspection */}
       {activeMenu === 'graph_inspect' && !isDefenseTurn && (
-        <div className="flex-1 flex flex-col md:flex-row gap-3 items-center">
-          <div className="w-full md:w-1/2">
+        <div className="flex-1 flex flex-col md:flex-row gap-2 sm:gap-3 items-center">
+          <div className="w-full md:w-1/2 flex justify-center gb-sprite-mono">
             <ParabolaGraph 
               a={1} 
               b={-4} 
               c={3} 
               width={260} 
-              height={140} 
-              className="bg-slate-900 border-slate-700" 
+              height={130} 
+              className="bg-white border-2 border-black w-full max-w-[280px]" 
             />
           </div>
-          <div className="w-full md:w-1/2 text-left text-[10px] font-mono text-slate-300 space-y-1 bg-slate-900 p-2.5 rounded border border-slate-800">
-            <p className="font-pixel text-[10px] text-purple-300 mb-1"><BarChart2 size={10} className="inline mr-1" /> Como ler a Parábola:</p>
-            <p>• <strong>Raízes (x₁, x₂):</strong> onde f(x) = 0 toca o eixo X horizontal.</p>
-            <p>• <strong>Vértice V(Xᵥ, Yᵥ):</strong> ponto de pico máx ou fundo mín.</p>
-            <p>• <strong>Corte Y (0, c):</strong> onde cruza a linha vertical Y.</p>
-            <p>• <strong>Concavidade:</strong> a &gt; 0 (∪ sorri) / a &lt; 0 (∩ triste).</p>
+          <div className="w-full md:w-1/2 text-left text-xs font-mono text-black space-y-1 bg-slate-50 p-2 sm:p-2.5 border-2 border-black">
+            <p className="font-pixel text-[9px] sm:text-[10px] font-bold mb-1">LEITURA DA PARÁBOLA:</p>
+            <p>• <strong>Raízes (x₁, x₂):</strong> onde f(x) = 0 cruza X.</p>
+            <p>• <strong>Vértice V(Xᵥ, Yᵥ):</strong> ponto extremo.</p>
+            <p>• <strong>Corte Y (0, c):</strong> interseção vertical.</p>
+            <p>• <strong>Concavidade:</strong> a &gt; 0 (cima) | a &lt; 0 (baixo).</p>
           </div>
         </div>
       )}
 
-      {/* VIEW 5: THE CORE MATH BATTLE CHALLENGE SCREEN (Math question in place of dialogue!) */}
+      {/* VIEW 5: THE CORE MATH BATTLE CHALLENGE SCREEN */}
       {(activeMenu === 'challenge' || isDefenseTurn) && currentChallenge && (
-        <div className="flex-1 flex flex-col justify-between">
-          {/* Top Formula & Question Banner */}
-          <div className="bg-slate-900/90 border-2 border-cyan-500/60 rounded-lg p-2.5 mb-2 shadow-inner">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1.5">
-              <span className="font-pixel text-[11px] text-amber-300">
+        <div className="flex-1 flex flex-col justify-between space-y-2">
+          {/* Formula & Question Banner */}
+          <div className="bg-white border-2 border-black p-2 sm:p-3 space-y-1 sm:space-y-1.5 shadow-[2px_2px_0_#000]">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-black pb-1">
+              <span className="font-pixel text-[10px] sm:text-[11px] font-black text-black uppercase">
                 {currentChallenge.title}
               </span>
-              <div className="flex items-center gap-2">
-                <span className="text-[12px] font-mono font-black text-cyan-300 bg-slate-950 px-2 py-0.5 rounded border border-cyan-700/50">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] sm:text-xs font-mono font-black text-white bg-black px-1.5 sm:px-2 py-0.5">
                   {currentChallenge.formula}
                 </span>
                 <button
                   type="button"
                   onClick={() => setShowGraphModal(!showGraphModal)}
-                  className="text-[9px] font-pixel bg-indigo-900 hover:bg-indigo-800 text-indigo-200 px-2 py-1 rounded border border-indigo-500 transition-colors"
+                  className="text-[8px] sm:text-[9px] font-pixel bg-white hover:bg-black hover:text-white text-black px-1.5 py-0.5 border border-black transition-colors cursor-pointer"
                 >
-                  {showGraphModal ? 'Ocultar Gráfico' : <><BarChart3 size={9} className="inline mr-1" />Ver Gráfico</>}
+                  {showGraphModal ? 'Ocultar' : 'Gráfico'}
                 </button>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm font-pixel text-slate-100 mt-1 leading-snug">
+            <p className="text-[11px] sm:text-sm font-pixel text-black font-black leading-relaxed">
               {currentChallenge.question}
             </p>
 
-            {/* Precision hint */}
-            <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mt-1">
-              <span><Crosshair size={9} className="inline mr-0.5" /> Sistema de Precisão: 100% Exato = Golpe Crítico Máximo!</span>
-              <span className="text-amber-400">Tolerância: ±{currentChallenge.tolerance}</span>
+            {/* Precision & Tolerance indicator */}
+            <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono font-bold text-slate-700 pt-0.5">
+              <span>Precisão 100% = Crítico</span>
+              <span className="border border-black px-1">Tolerância: ±{currentChallenge.tolerance}</span>
             </div>
           </div>
 
           {/* Optional Inline Parabola Graph Viewer */}
           {showGraphModal && (
-            <div className="mb-2">
+            <div className="flex justify-center p-1.5 bg-white border-2 border-black gb-sprite-mono">
               <ParabolaGraph 
                 a={currentChallenge.a} 
                 b={currentChallenge.b} 
                 c={currentChallenge.c} 
-                width={320} 
-                height={150} 
+                width={280} 
+                height={120} 
+                className="w-full max-w-[300px]"
               />
             </div>
           )}
 
-          {/* Hints Accordion (Dica 1, 2, 3) */}
-          <div className="flex flex-wrap items-center gap-1.5 mb-2">
+          {/* Progressive Hint Button & Box */}
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onClick={() => {
-                sound.playSelect();
-                setHintLevel(1);
-              }}
-              className={`text-[9px] font-pixel px-2 py-1 rounded border ${
-                hintLevel >= 1 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
-              }`}
+              onClick={handleCycleHint}
+              className="text-[8px] sm:text-[9px] font-pixel px-2 py-1 border sm:border-2 border-black bg-white hover:bg-black hover:text-white text-black font-bold transition-all shrink-0 cursor-pointer shadow-[1px_1px_0_#000]"
             >
-              <Lightbulb size={9} className="inline mr-1" /> Dica 1: Fórmula
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                sound.playSelect();
-                setHintLevel(2);
-              }}
-              className={`text-[9px] font-pixel px-2 py-1 rounded border ${
-                hintLevel >= 2 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
-              }`}
-            >
-              <Lightbulb size={9} className="inline mr-1" /> Dica 2: Valores
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                sound.playSelect();
-                setHintLevel(3);
-              }}
-              className={`text-[9px] font-pixel px-2 py-1 rounded border ${
-                hintLevel >= 3 ? 'bg-amber-950 text-amber-300 border-amber-600' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
-              }`}
-            >
-              <Lightbulb size={9} className="inline mr-1" /> Dica 3: Resolução
+              💡 {hintLevel === 0 ? 'DICA' : `DICA (${hintLevel}/3)`}
             </button>
 
-            {hintLevel > 0 && (
-              <span className="text-[10px] font-mono text-amber-200 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60 flex-1 truncate">
-                {hintLevel === 1 && currentChallenge.hint1}
-                {hintLevel === 2 && currentChallenge.hint2}
-                {hintLevel === 3 && currentChallenge.hint3}
+            {hintLevel > 0 ? (
+              <div className="bg-slate-100 border border-black px-2 py-0.5 sm:py-1 text-[11px] sm:text-xs font-mono font-bold text-black flex-1 truncate">
+                {hintLevel === 1 && `Fórmula: ${currentChallenge.hint1}`}
+                {hintLevel === 2 && `Valores: ${currentChallenge.hint2}`}
+                {hintLevel === 3 && `Resolução: ${currentChallenge.hint3}`}
+              </div>
+            ) : (
+              <span className="text-[9px] sm:text-[10px] font-mono text-slate-600 font-bold truncate">
+                (Clique em Dica para ajuda passo a passo)
               </span>
             )}
           </div>
 
-          {/* INPUT FORM: Either Multiple Choice or Numeric Input + Keypad */}
+          {/* INPUT FORM */}
           {currentChallenge.inputType === 'choice' && currentChallenge.choices ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
               {currentChallenge.choices.map((choice, idx) => (
                 <button
                   key={`choice_${idx}`}
                   type="button"
                   onClick={() => handleChoiceClick(choice.value)}
-                  className="bg-slate-900 hover:bg-cyan-950 border-2 border-slate-700 hover:border-cyan-400 text-white font-mono font-bold text-xs sm:text-sm py-2.5 px-3 rounded-lg text-left shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 transition-all flex items-center justify-between"
+                  className="bg-white hover:bg-black hover:text-white border-2 border-black text-black font-mono font-black text-xs sm:text-sm py-2 sm:py-2.5 px-3 text-left shadow-[2px_2px_0_#000] active:translate-y-0.5 transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span>{choice.label}</span>
-                  <span className="text-[10px] font-pixel text-cyan-400">▶</span>
+                  <span className="font-pixel text-[9px] sm:text-[10px]">▶</span>
                 </button>
               ))}
             </div>
           ) : (
-            <form onSubmit={handleFormSubmit} className="flex flex-col sm:flex-row gap-2 items-stretch">
-              <div className="flex-1 flex gap-2">
-                <input
-                  type="text"
-                  autoFocus
-                  placeholder="Digite sua resposta matemática..."
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-1 bg-slate-950 border-2 border-cyan-400 rounded-lg px-3 py-2 text-white font-mono text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-cyan-300 shadow-inner"
-                />
+            <div className="space-y-2">
+              {/* Form Input + Main Action Button */}
+              <form onSubmit={handleFormSubmit} className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 items-stretch">
+                <div className="flex-1 flex gap-1">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="Digite sua resposta..."
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="flex-1 bg-white border-2 sm:border-3 border-black px-2.5 py-1.5 sm:py-2 text-black font-mono font-bold text-sm sm:text-base focus:outline-none shadow-inner"
+                  />
 
-                {/* Quick keypad toggles on mobile */}
-                <div className="flex gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleNumClick('-')}
-                    className="bg-slate-800 hover:bg-slate-700 text-cyan-300 font-pixel text-xs px-2.5 rounded border border-slate-600"
-                  >
-                    ±
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleNumClick('CLEAR')}
-                    className="bg-slate-800 hover:bg-slate-700 text-rose-300 font-pixel text-[9px] px-2 rounded border border-slate-600"
-                  >
-                    C
-                  </button>
+                  <div className="flex gap-1 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleNumClick('-')}
+                      title="Alternar sinal"
+                      className="bg-white hover:bg-black hover:text-white text-black font-pixel text-xs px-2 border border-black font-bold cursor-pointer"
+                    >
+                      ±
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleNumClick('BACK')}
+                      title="Apagar"
+                      className="bg-white hover:bg-black hover:text-white text-black font-pixel text-[9px] px-2 border border-black font-bold cursor-pointer"
+                    >
+                      ⌫
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleNumClick('CLEAR')}
+                      title="Limpar"
+                      className="bg-white hover:bg-black hover:text-white text-black font-pixel text-[9px] px-2 border border-black font-bold cursor-pointer"
+                    >
+                      C
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <button
-                type="submit"
-                className={`font-pixel text-[11px] sm:text-xs py-2.5 px-5 rounded-lg border-2 shadow-[2px_2px_0_#020617] active:translate-y-0.5 transition-all shrink-0 ${
-                  isDefenseTurn
-                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white border-cyan-300'
-                    : 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black border-amber-300'
-                }`}
-              >
-                {isDefenseTurn ? <><Shield size={11} className="inline mr-1" />ERGUER DEFESA!</> : <><Zap size={11} className="inline mr-1" />LANÇAR ATAQUE!</> }
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="gb-btn-primary text-[10px] sm:text-xs py-2 sm:py-2.5 px-4 shrink-0"
+                >
+                  {isDefenseTurn ? 'DEFENDER ▶' : 'CONFIRMAR ▶'}
+                </button>
+              </form>
+
+              {/* Mobile Quick On-Screen Number Keypad for Touch Convenience */}
+              <div className="grid grid-cols-6 sm:hidden gap-1 pt-0.5 font-mono font-black text-xs">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '-'].map((digit) => (
+                  <button
+                    key={digit}
+                    type="button"
+                    onClick={() => handleNumClick(digit)}
+                    className="bg-slate-100 active:bg-black active:text-white border border-black py-1.5 text-center cursor-pointer font-bold text-xs"
+                  >
+                    {digit}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}
     </div>
   );
 };
+

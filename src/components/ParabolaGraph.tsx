@@ -82,20 +82,20 @@ export const ParabolaGraph: React.FC<ParabolaGraphProps> = ({
   const hoverY = hoverX !== null ? a * hoverX * hoverX + b * hoverX + c : null;
 
   return (
-    <div className={`relative bg-slate-950 border-2 border-slate-700 rounded p-2 select-none ${className}`}>
+    <div className={`relative bg-slate-950 border-2 border-slate-700 rounded p-1.5 sm:p-2 select-none ${className}`}>
       {/* Mini Title & Function representation */}
-      <div className="flex items-center justify-between mb-1 px-1">
-        <span className="text-[11px] font-mono font-bold text-amber-400">
+      <div className="flex items-center justify-between mb-1 px-1 gap-1">
+        <span className="text-[10px] sm:text-[11px] font-mono font-bold text-amber-400 truncate">
           f(x) = {a === 1 ? '' : a === -1 ? '-' : a}x² {b !== 0 ? (b > 0 ? `+ ${b === 1 ? '' : b}x` : `- ${Math.abs(b) === 1 ? '' : Math.abs(b)}x`) : ''} {c !== 0 ? (c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`) : ''}
         </span>
-        <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${a > 0 ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
-          a {a > 0 ? '> 0 (∪ Mín)' : '< 0 (∩ Máx)'}
+        <span className={`text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded font-mono shrink-0 ${a > 0 ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+          a {a > 0 ? '> 0 (∪)' : '< 0 (∩)'}
         </span>
       </div>
 
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-auto overflow-visible cursor-crosshair"
+        className="w-full h-auto overflow-visible cursor-crosshair touch-none"
         onMouseMove={(e) => {
           if (!interactive) return;
           const rect = e.currentTarget.getBoundingClientRect();
@@ -103,7 +103,16 @@ export const ParabolaGraph: React.FC<ParabolaGraphProps> = ({
           const mathX = minX + ((clickX - padding) / graphW) * (maxX - minX);
           setHoverX(Math.round(mathX * 2) / 2);
         }}
+        onTouchMove={(e) => {
+          if (!interactive || !e.touches[0]) return;
+          const touch = e.touches[0];
+          const rect = e.currentTarget.getBoundingClientRect();
+          const clickX = ((touch.clientX - rect.left) / rect.width) * width;
+          const mathX = minX + ((clickX - padding) / graphW) * (maxX - minX);
+          setHoverX(Math.round(mathX * 2) / 2);
+        }}
         onMouseLeave={() => setHoverX(null)}
+        onTouchEnd={() => setHoverX(null)}
       >
         {/* Background Grid */}
         {Array.from({ length: maxX - minX + 1 }).map((_, i) => {

@@ -73,102 +73,102 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
 
       const pts = 100 * newCombo;
       setScore((prev) => prev + pts);
-      setTimeLeft((prev) => Math.min(90, prev + 3)); // +3 seconds bonus!
-      setLastFeedback(`🔥 100% EXATO! +${pts} pts (+3s) Combo x${newCombo}`);
+      setTimeLeft((prev) => Math.min(90, prev + 3)); // +3s bonus
+      setLastFeedback(`🔥 EXATO (+${pts} pts) • +3s! x${newCombo}`);
     } else if (res.rating === 'ALTA') {
       sound.playCorrect(false);
       const pts = 60 * (combo + 1);
       setScore((prev) => prev + pts);
-      setLastFeedback(`⚡ ALTA PRECISÃO! +${pts} pts`);
+      setLastFeedback(`⚡ ALTA PRECISÃO (+${pts} pts)`);
     } else {
       sound.playWrong();
       setCombo(0);
-      setLastFeedback('❌ RESPOSTA INCORRETA! Combo perdido.');
+      setLastFeedback('❌ INCORRETO! Combo zerado.');
     }
 
     generateNextQuestion();
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 select-none space-y-4">
+    <div className="w-full max-w-4xl mx-auto p-1.5 sm:p-5 select-none space-y-3 sm:space-y-4 text-black">
       {/* Header */}
-      <div className="flex items-center justify-between bg-slate-900 border-2 border-slate-700 p-3 rounded-xl">
+      <div className="flex items-center justify-between bg-white border-3 sm:border-4 border-black p-2.5 sm:p-3 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
         <button
           onClick={() => {
             sound.playCancel();
             onBack();
           }}
-          className="bg-slate-800 hover:bg-slate-700 text-slate-300 font-pixel text-xs px-3 py-2 rounded border border-slate-600"
+          className="bg-white hover:bg-black hover:text-white text-black font-pixel text-[9px] sm:text-xs px-2 sm:px-2.5 py-1 sm:py-1.5 border-2 border-black transition-colors cursor-pointer font-bold"
         >
-          ⬅ Voltar
+          ⬅ VOLTAR
         </button>
-        <h1 className="font-pixel text-sm sm:text-base text-amber-300">
-          ⚡ Desafio Contrarrelógio (60 Segundos)
+        <h1 className="font-pixel text-[11px] sm:text-sm text-black font-black flex items-center gap-1.5 uppercase truncate">
+          ⚡ DESAFIO (60S)
         </h1>
-        <div className="font-pixel text-xs text-cyan-300">
-          Recorde Atual: {score}
+        <div className="font-pixel text-[9px] sm:text-[11px] text-black bg-white px-2 sm:px-2.5 py-1 border-2 border-black font-bold">
+          PTS: <strong className="text-black">{score}</strong>
         </div>
       </div>
 
       {!isPlaying && !gameOver ? (
-        <div className="bg-slate-900 border-4 border-amber-400 p-8 rounded-2xl text-center space-y-6">
-          <div className="text-5xl">⏱️</div>
-          <h2 className="font-pixel text-lg text-white">Pronto para testar sua agilidade?</h2>
-          <p className="font-mono text-sm text-slate-300 max-w-md mx-auto">
-            Resolva o máximo de funções do 2º grau que conseguir antes que o tempo acabe. Acertos perfeitos concedem <strong>+3 segundos</strong> e combos gigantescos!
+        <div className="bg-white border-3 sm:border-4 border-black p-4 sm:p-8 text-center space-y-4 sm:space-y-5 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
+          <div className="text-3xl sm:text-5xl">⏱️</div>
+          <h2 className="font-pixel text-xs sm:text-base text-black font-black uppercase">Teste sua agilidade e precisão!</h2>
+          <p className="font-mono text-xs sm:text-sm text-slate-700 max-w-md mx-auto leading-relaxed font-bold">
+            Resolva o máximo de problemas em 60 segundos. Respostas perfeitas concedem <strong>+3 segundos</strong> e combos!
           </p>
           <button
             onClick={startChallenge}
-            className="font-pixel text-sm bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black py-4 px-10 rounded-xl border-2 border-amber-300 shadow-[0_6px_0_#78350f] active:translate-y-1"
+            className="gb-btn-primary font-pixel text-[11px] sm:text-xs py-3 px-6 sm:px-8 font-black cursor-pointer shadow-[3px_3px_0_#000]"
           >
-            ▶ INICIAR DESAFIO!
+            ▶ INICIAR DESAFIO
           </button>
         </div>
       ) : gameOver ? (
-        <div className="bg-slate-900 border-4 border-emerald-400 p-8 rounded-2xl text-center space-y-5">
-          <div className="text-5xl">🏆</div>
-          <h2 className="font-pixel text-xl text-amber-300">TEMPO ESGOTADO!</h2>
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-lg space-y-2 max-w-sm mx-auto">
-            <div className="text-cyan-300">Pontuação Total: <strong>{score} pts</strong></div>
-            <div className="text-amber-400">Maior Combo: <strong>x{highestCombo}</strong></div>
+        <div className="bg-white border-3 sm:border-4 border-black p-4 sm:p-8 text-center space-y-4 sm:space-y-5 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
+          <div className="text-3xl sm:text-5xl">🏆</div>
+          <h2 className="font-pixel text-sm sm:text-lg text-black font-black">TEMPO ESGOTADO!</h2>
+          <div className="bg-slate-50 p-3 sm:p-4 border-2 border-black font-mono text-sm sm:text-base space-y-1 max-w-xs mx-auto font-bold">
+            <div>Pontuação: <strong className="text-black">{score} pts</strong></div>
+            <div>Maior Combo: <strong className="text-black">x{highestCombo}</strong></div>
           </div>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
             <button
               onClick={startChallenge}
-              className="font-pixel text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 px-6 rounded-lg"
+              className="gb-btn-primary font-pixel text-[10px] sm:text-xs py-2.5 px-4 sm:px-5 cursor-pointer"
             >
-              Jogar Novamente
+              JOGAR DE NOVO ▶
             </button>
             <button
               onClick={onBack}
-              className="font-pixel text-xs bg-slate-800 hover:bg-slate-700 text-white py-3 px-6 rounded-lg"
+              className="gb-btn font-pixel text-[10px] sm:text-xs py-2.5 px-4 sm:px-5 cursor-pointer font-bold"
             >
-              Menu Principal
+              MENU
             </button>
           </div>
         </div>
       ) : (
         /* Active Game */
-        <div className="space-y-4">
+        <div className="space-y-2.5 sm:space-y-3">
           {/* Status Bar */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-slate-900 border-2 border-cyan-500 p-3 rounded-xl text-center">
-              <div className="text-[10px] font-pixel text-slate-400">TEMPO RESTANTE</div>
-              <div className={`font-pixel text-2xl mt-1 ${timeLeft <= 10 ? 'text-rose-500 animate-ping' : 'text-cyan-300'}`}>
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+            <div className="bg-white border-2 sm:border-3 border-black p-1.5 sm:p-2.5 text-center shadow-[2px_2px_0_#000]">
+              <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">TEMPO</div>
+              <div className={`font-pixel text-base sm:text-2xl mt-0.5 font-black ${timeLeft <= 10 ? 'text-black animate-ping' : 'text-black'}`}>
                 {timeLeft}s
               </div>
             </div>
 
-            <div className="bg-slate-900 border-2 border-amber-500 p-3 rounded-xl text-center">
-              <div className="text-[10px] font-pixel text-slate-400">PONTUAÇÃO</div>
-              <div className="font-pixel text-2xl text-amber-400 mt-1">
+            <div className="bg-white border-2 sm:border-3 border-black p-1.5 sm:p-2.5 text-center shadow-[2px_2px_0_#000]">
+              <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">PONTOS</div>
+              <div className="font-pixel text-base sm:text-2xl text-black font-black mt-0.5">
                 {score}
               </div>
             </div>
 
-            <div className="bg-slate-900 border-2 border-purple-500 p-3 rounded-xl text-center">
-              <div className="text-[10px] font-pixel text-slate-400">COMBO ATUAL</div>
-              <div className="font-pixel text-2xl text-purple-400 mt-1">
+            <div className="bg-white border-2 sm:border-3 border-black p-1.5 sm:p-2.5 text-center shadow-[2px_2px_0_#000]">
+              <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">COMBO</div>
+              <div className="font-pixel text-base sm:text-2xl text-black font-black mt-0.5">
                 x{combo}
               </div>
             </div>
@@ -176,53 +176,54 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
 
           {/* Feedback banner */}
           {lastFeedback && (
-            <div className="bg-slate-950 border border-slate-800 p-2 rounded text-center font-mono text-xs text-amber-300 animate-bounce">
+            <div className="bg-white border-2 border-black py-1 px-2.5 text-center font-mono text-[11px] sm:text-xs font-black text-black">
               {lastFeedback}
             </div>
           )}
 
           {/* Question Card */}
           {challenge && (
-            <div className="bg-slate-900 border-4 border-slate-700 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <span className="font-pixel text-xs text-amber-300">{challenge.title}</span>
-                <span className="font-mono text-base font-bold text-cyan-300 bg-slate-950 px-3 py-1 rounded border border-cyan-800">
+            <div className="bg-white border-3 sm:border-4 border-black p-3 sm:p-5 space-y-2.5 sm:space-y-3 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
+              <div className="flex flex-wrap items-center justify-between gap-1.5 border-b-2 border-black pb-2">
+                <span className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">{challenge.title}</span>
+                <span className="font-mono text-xs sm:text-sm font-black text-white bg-black px-2 sm:px-2.5 py-0.5">
                   {challenge.formula}
                 </span>
               </div>
 
-              <p className="font-pixel text-sm sm:text-base text-white">
+              <p className="font-pixel text-[11px] sm:text-sm text-black leading-relaxed font-bold">
                 {challenge.question}
               </p>
 
               {challenge.inputType === 'choice' && challenge.choices ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 pt-1">
                   {challenge.choices.map((ch, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleSubmit(ch.value)}
-                      className="bg-slate-950 hover:bg-slate-800 border-2 border-slate-700 hover:border-cyan-400 text-left p-3 rounded-xl font-mono text-sm text-white transition-all active:scale-95"
+                      className="bg-white hover:bg-black hover:text-white border-2 border-black text-left p-2.5 sm:p-3 font-mono text-xs font-black text-black transition-all cursor-pointer shadow-[2px_2px_0_#000]"
                     >
                       {ch.label}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="flex gap-2 pt-2">
+                <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 pt-1">
                   <input
                     type="text"
+                    inputMode="decimal"
                     autoFocus
                     value={userAnswer}
-                    placeholder="Digite a resposta e pressione Enter..."
+                    placeholder="Digite e confirme..."
                     onChange={(e) => setUserAnswer(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                    className="flex-1 bg-slate-950 border-2 border-cyan-400 rounded-xl px-4 py-3 text-white font-mono text-lg focus:outline-none"
+                    className="flex-1 bg-white border-2 sm:border-3 border-black px-3 py-1.5 sm:py-2 text-black font-mono font-bold text-sm sm:text-base focus:outline-none shadow-inner"
                   />
                   <button
                     onClick={() => handleSubmit()}
-                    className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-pixel text-xs px-6 py-3 rounded-xl font-black"
+                    className="gb-btn-primary font-pixel text-[10px] sm:text-xs px-4 sm:px-5 py-2 font-bold cursor-pointer shrink-0"
                   >
-                    Enviar ▶
+                    ENVIAR ▶
                   </button>
                 </div>
               )}
@@ -233,3 +234,4 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
     </div>
   );
 };
+
