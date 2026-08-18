@@ -59,6 +59,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
     e.preventDefault();
     if (!inputValue.trim()) return;
     sound.playConfirm();
+    if (isDefenseTurn) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     onSubmitAnswer(inputValue.trim());
     setInputValue('');
     setHintLevel(0);
@@ -66,6 +69,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
   const handleChoiceClick = (choiceVal: string | number) => {
     sound.playConfirm();
+    if (isDefenseTurn) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     onSubmitAnswer(choiceVal);
     setHintLevel(0);
   };

@@ -261,6 +261,8 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
   const handleDefensiveAnswer = (answer: string | number) => {
     if (!currentChallenge) return;
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     const precision = calculatePrecision(currentChallenge, answer);
     setIsEnemyAttacking(true);
     sound.playAttack(enemy.element);
