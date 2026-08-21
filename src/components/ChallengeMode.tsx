@@ -3,31 +3,37 @@ import { MathChallenge, MathConcept } from '../types';
 import { generateMathChallenge, calculatePrecision } from '../utils/mathEngine';
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
+import { ParabolaGraph } from './ParabolaGraph';
 
 interface ChallengeModeProps {
   onBack: () => void;
+  onEarnCoins?: (earned: number) => void;
 }
 
-export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
+export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoins }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(60);
   const [score, setScore] = useState<number>(0);
+  const [earnedCoins, setEarnedCoins] = useState<number>(0);
   const [combo, setCombo] = useState<number>(0);
   const [highestCombo, setHighestCombo] = useState<number>(0);
   const [challenge, setChallenge] = useState<MathChallenge | null>(null);
   const [userAnswer, setUserAnswer] = useState<string>('');
   const [lastFeedback, setLastFeedback] = useState<string>('');
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [showGraph, setShowGraph] = useState<boolean>(false);
 
   const startChallenge = () => {
     sound.playConfirm();
     setTimeLeft(60);
     setScore(0);
+    setEarnedCoins(0);
     setCombo(0);
     setHighestCombo(0);
     setGameOver(false);
     setIsPlaying(true);
     setLastFeedback('');
+    setShowGraph(false);
     generateNextQuestion();
   };
 
@@ -36,6 +42,13 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
     const randomConcept = pool[Math.floor(Math.random() * pool.length)];
     setChallenge(generateMathChallenge(randomConcept, 'medio'));
     setUserAnswer('');
+  };
+
+  const handleSkipQuestion = () => {
+    sound.playCancel();
+    setCombo(0);
+    setLastFeedback('⏭️ Pergunta pulada! Combo zerado.');
+    generateNextQuestion();
   };
 
   useEffect(() => {
@@ -72,14 +85,24 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
       if (newCombo > highestCombo) setHighestCombo(newCombo);
 
       const pts = 100 * newCombo;
+      const coinsGained = 10 + (2 * newCombo); // Moedas por resposta perfeita + bônus combo
+
       setScore((prev) => prev + pts);
+      setEarnedCoins((prev) => prev + coinsGained);
+      if (onEarnCoins) onEarnCoins(coinsGained);
+
       setTimeLeft((prev) => Math.min(90, prev + 3)); // +3s bonus
-      setLastFeedback(`🔥 EXATO (+${pts} pts) • +3s! x${newCombo}`);
+      setLastFeedback(`🔥 EXATO (+${pts} pts | 🪙+${coinsGained}) • +3s! x${newCombo}`);
     } else if (res.rating === 'ALTA') {
       sound.playCorrect(false);
       const pts = 60 * (combo + 1);
+      const coinsGained = 5; // Moedas por alta precisão
+
       setScore((prev) => prev + pts);
-      setLastFeedback(`⚡ ALTA PRECISÃO (+${pts} pts)`);
+      setEarnedCoins((prev) => prev + coinsGained);
+      if (onEarnCoins) onEarnCoins(coinsGained);
+
+      setLastFeedback(`⚡ ALTA PRECISÃO (+${pts} pts | 🪙+${coinsGained})`);
     } else {
       sound.playWrong();
       setCombo(0);
@@ -131,6 +154,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
           <div className="bg-slate-50 p-3 sm:p-4 border-2 border-black font-mono text-sm sm:text-base space-y-1 max-w-xs mx-auto font-bold">
             <div>Pontuação: <strong className="text-black">{score} pts</strong></div>
             <div>Maior Combo: <strong className="text-black">x{highestCombo}</strong></div>
+            {earnedCoins > 0 && <div className="text-emerald-700">Moedas Ganhas: <strong>🪙+{earnedCoins}</strong></div>}
           </div>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
             <button
@@ -151,7 +175,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
         /* Active Game */
         <div className="space-y-2.5 sm:space-y-3">
           {/* Status Bar */}
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-3">
             <div className="bg-white border-2 sm:border-3 border-black p-1.5 sm:p-2.5 text-center shadow-[2px_2px_0_#000]">
               <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">TEMPO</div>
               <div className={`font-pixel text-base sm:text-2xl mt-0.5 font-black ${timeLeft <= 10 ? 'text-black animate-ping' : 'text-black'}`}>
@@ -163,6 +187,13 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
               <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">PONTOS</div>
               <div className="font-pixel text-base sm:text-2xl text-black font-black mt-0.5">
                 {score}
+              </div>
+            </div>
+
+            <div className="bg-white border-2 sm:border-3 border-black p-1.5 sm:p-2.5 text-center shadow-[2px_2px_0_#000]">
+              <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-700">MOEDAS</div>
+              <div className="font-pixel text-base sm:text-2xl text-black font-black mt-0.5">
+                🪙{earnedCoins}
               </div>
             </div>
 
@@ -184,12 +215,51 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack }) => {
           {/* Question Card */}
           {challenge && (
             <div className="bg-white border-3 sm:border-4 border-black p-3 sm:p-5 space-y-2.5 sm:space-y-3 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
-              <div className="flex flex-wrap items-center justify-between gap-1.5 border-b-2 border-black pb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-black pb-2">
                 <span className="font-pixel text-[10px] sm:text-xs text-black font-black uppercase">{challenge.title}</span>
+                
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      sound.playSelect();
+                      setShowGraph(!showGraph);
+                    }}
+                    className={`font-pixel text-[9px] sm:text-[10px] px-2 py-1 border-2 border-black transition-colors cursor-pointer font-bold ${
+                      showGraph ? 'bg-black text-white' : 'bg-slate-100 text-black hover:bg-slate-200'
+                    }`}
+                    title="Exibir ou ocultar o gráfico da parábola"
+                  >
+                    {showGraph ? '🙈 OCULTAR GRÁFICO' : '📈 VER GRÁFICO'}
+                  </button>
+
+                  <button
+                    onClick={handleSkipQuestion}
+                    className="font-pixel text-[9px] sm:text-[10px] px-2 py-1 border-2 border-black bg-white hover:bg-black hover:text-white text-black transition-colors cursor-pointer font-bold"
+                    title="Pular esta pergunta e ir para a próxima"
+                  >
+                    ⏭️ PULAR
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-1.5">
                 <span className="font-mono text-xs sm:text-sm font-black text-white bg-black px-2 sm:px-2.5 py-0.5">
                   {challenge.formula}
                 </span>
               </div>
+
+              {/* Toggleable Parabola Graph */}
+              {showGraph && (
+                <div className="flex justify-center p-2 bg-slate-50 border-2 border-black my-2">
+                  <ParabolaGraph 
+                    a={challenge.a} 
+                    b={challenge.b} 
+                    c={challenge.c} 
+                    width={300} 
+                    height={190} 
+                  />
+                </div>
+              )}
 
               <p className="font-pixel text-[11px] sm:text-sm text-black leading-relaxed font-bold">
                 {challenge.question}

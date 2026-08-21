@@ -102,7 +102,7 @@ export const ALL_SKILLS: Record<string, Skill> = {
 export const STARTER_CREATURES: Creature[] = [
   {
     id: 'radicoide',
-    name: 'Radicóide',
+    name: 'Raizmon',
     species: 'Criatura das Raízes',
     element: 'Raízes',
     elementColor: '#10b981',
@@ -123,7 +123,7 @@ export const STARTER_CREATURES: Creature[] = [
     forms: [
       {
         stage: 1,
-        name: 'Radicóide',
+        name: 'Raizmon',
         spriteKey: 'radicoide_1',
         title: 'Brotinho Fatorador',
         hpBonus: 0,
@@ -135,7 +135,7 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 2,
-        name: 'Bhaskarion',
+        name: 'Raizel',
         spriteKey: 'radicoide_2',
         title: 'Guerreiro de Bhaskara',
         hpBonus: 25,
@@ -147,7 +147,7 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 3,
-        name: 'Lorde das Raízes',
+        name: 'Radimax',
         spriteKey: 'radicoide_3',
         title: 'Arquimago das Fatorações',
         hpBonus: 55,
@@ -177,8 +177,8 @@ export const STARTER_CREATURES: Creature[] = [
     }
   },
   {
-    id: 'verticetus',
-    name: 'Verticetus',
+    id: 'Vertix',
+    name: 'Vertix',
     species: 'Criatura do Vértice',
     element: 'Vértice',
     elementColor: '#3b82f6',
@@ -199,8 +199,8 @@ export const STARTER_CREATURES: Creature[] = [
     forms: [
       {
         stage: 1,
-        name: 'Verticetus',
-        spriteKey: 'verticetus_1',
+        name: 'Vertix',
+        spriteKey: 'Vertix_1',
         title: 'Sentinela do Apogeu',
         hpBonus: 0,
         atkBonus: 0,
@@ -211,8 +211,8 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 2,
-        name: 'Parabolon',
-        spriteKey: 'verticetus_2',
+        name: 'Vertigonix',
+        spriteKey: 'Vertix_2',
         title: 'Guardião do Extremo',
         hpBonus: 30,
         atkBonus: 9,
@@ -223,8 +223,8 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 3,
-        name: 'Titã do Vértice',
-        spriteKey: 'verticetus_3',
+        name: 'Vertexar',
+        spriteKey: 'Vertix_3',
         title: 'Mestre da Curvatura',
         hpBonus: 65,
         atkBonus: 20,
@@ -253,8 +253,8 @@ export const STARTER_CREATURES: Creature[] = [
     }
   },
   {
-    id: 'deltor',
-    name: 'Deltor',
+    id: 'X-mander',
+    name: 'X-mander',
     species: 'Criatura do Delta',
     element: 'Delta',
     elementColor: '#ef4444',
@@ -275,8 +275,8 @@ export const STARTER_CREATURES: Creature[] = [
     forms: [
       {
         stage: 1,
-        name: 'Deltor',
-        spriteKey: 'deltor_1',
+        name: 'X-mander',
+        spriteKey: 'X-mander_1',
         title: 'Chama Discriminante',
         hpBonus: 0,
         atkBonus: 0,
@@ -287,8 +287,8 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 2,
-        name: 'Ignis Delta',
-        spriteKey: 'deltor_2',
+        name: 'X-meleon',
+        spriteKey: 'X-mander_2',
         title: 'Salamandra Quadrática',
         hpBonus: 22,
         atkBonus: 15,
@@ -299,8 +299,8 @@ export const STARTER_CREATURES: Creature[] = [
       },
       {
         stage: 3,
-        name: 'Primordial Δ',
-        spriteKey: 'deltor_3',
+        name: 'X-lizard',
+        spriteKey: 'X-mander_3',
         title: 'Dragão do Discriminante',
         hpBonus: 50,
         atkBonus: 32,
