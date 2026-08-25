@@ -13,12 +13,15 @@ import { EvolutionModal } from './components/EvolutionModal';
 import { GoogleDriveSaveModal } from './components/GoogleDriveSaveModal';
 import { QuickNotepad } from './components/QuickNotepad';
 import { MiniCalculator } from './components/MiniCalculator';
+import { ShopView } from './components/ShopView';
 import { GameSaveData } from './services/driveStorage';
 import { sound } from './utils/audio';
 import { preloadSprites } from './utils/spritePreloader';
-import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, StickyNote, Calculator, X } from 'lucide-react';
+import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, StickyNote, Calculator, X, ShoppingBag } from 'lucide-react';
 
 const STORAGE_KEY_PLAYER = 'batalha_funcoes_player_creature';
+const STORAGE_KEY_COINS = 'batalha_funcoes_player_coins';
+const STORAGE_KEY_ITEMS = 'batalha_funcoes_player_items';
 
 export default function App() {
   // Game States
@@ -55,11 +58,29 @@ export default function App() {
   const [regions, setRegions] = useState<Region[]>(GAME_REGIONS);
   const [selectedRegion, setSelectedRegion] = useState<Region>(GAME_REGIONS[0]);
   const [currentStage, setCurrentStage] = useState<Region['stages'][0] | null>(null);
-  const [items, setItems] = useState<InventoryItem[]>(INITIAL_ITEMS);
-  const [coins, setCoins] = useState<number>(150);
+  
+  const [items, setItems] = useState<InventoryItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_ITEMS);
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return INITIAL_ITEMS;
+  });
+
+  const [coins, setCoins] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_COINS);
+      if (saved !== null) return Number(saved);
+    } catch {
+      // ignore
+    }
+    return 150;
+  });
 
   // Active View Screen
-  const [view, setView] = useState<'starter' | 'map' | 'battle' | 'training' | 'challenge'>(() => {
+  const [view, setView] = useState<'starter' | 'map' | 'battle' | 'training' | 'challenge' | 'shop'>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_PLAYER);
       if (saved) return 'map';
@@ -123,6 +144,32 @@ export default function App() {
     }
   }, [playerCreature]);
 
+  // Persist Coins
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY_COINS, coins.toString());
+    } catch {
+      // ignore
+    }
+  }, [coins]);
+
+  // Persist Items
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY_ITEMS, JSON.stringify(items));
+    } catch {
+      // ignore
+    }
+  }, [items]);
+
+  // Buy Item Handler
+  const handleBuyItem = (itemId: string, quantity: number, totalCost: number) => {
+    setCoins(prev => Math.max(0, prev - totalCost));
+    setItems(prev => prev.map(item => 
+      item.id === itemId ? { ...item, amount: item.amount + quantity } : item
+    ));
+  };
+
   // Handle Starter Selection
   const handleSelectStarter = (chosen: Creature) => {
     setPlayerCreature(chosen);
@@ -157,9 +204,12 @@ export default function App() {
   };
 
   // Victory Handler
-  const handleVictory = (updatedPlayer: Creature, earnedXp: number, earnedCoins: number) => {
+  const handleVictory = (updatedPlayer: Creature, earnedXp: number, earnedCoins: number, updatedItems?: InventoryItem[]) => {
     setPlayerCreature(updatedPlayer);
     setCoins(prev => prev + earnedCoins);
+    if (updatedItems) {
+      setItems(updatedItems);
+    }
 
     // Update Stage status
     if (currentStage) {
@@ -191,7 +241,7 @@ export default function App() {
   };
 
   // Defeat Handler
-  const handleDefeat = () => {
+  const handleDefeat = (updatedItems?: InventoryItem[]) => {
     // Restore partial HP
     if (playerCreature) {
       setPlayerCreature({
@@ -201,6 +251,9 @@ export default function App() {
         comboCount: 0,
         statusCondition: null
       });
+    }
+    if (updatedItems) {
+      setItems(updatedItems);
     }
     setView('map');
   };
@@ -284,6 +337,21 @@ export default function App() {
                 title="Desafio de 60 segundos com combos"
               >
                 <Zap size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">DESAFIO</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  sound.playSelect();
+                  setView('shop');
+                }}
+                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                  view === 'shop' 
+                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
+                    : 'bg-white text-black hover:bg-slate-100'
+                }`}
+                title="Comprar itens e poções na Loja"
+              >
+                <ShoppingBag size={12} className="inline mr-1 text-amber-500" /> <span className="hidden min-[480px]:inline">LOJA</span>
               </button>
             </nav>
           )}
@@ -422,7 +490,19 @@ export default function App() {
           )}
 
           {view === 'challenge' && (
-            <ChallengeMode onBack={() => setView('map')} />
+            <ChallengeMode 
+              onBack={() => setView('map')} 
+              onEarnCoins={(earned) => setCoins(prev => prev + earned)}
+            />
+          )}
+
+          {view === 'shop' && (
+            <ShopView
+              coins={coins}
+              items={items}
+              onBuyItem={handleBuyItem}
+              onBack={() => setView('map')}
+            />
           )}
         </main>
 
@@ -491,6 +571,19 @@ export default function App() {
           >
             <Zap size={16} />
             <span>DESAFIO</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setView('shop');
+            }}
+            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
+              view === 'shop' ? 'text-black font-black underline' : 'text-slate-600'
+            }`}
+          >
+            <ShoppingBag size={16} className="text-amber-500" />
+            <span>LOJA</span>
           </button>
 
           <button

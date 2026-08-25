@@ -13,8 +13,8 @@ interface BattleSceneProps {
   playerCreature: Creature;
   enemyCreature: Creature;
   items: InventoryItem[];
-  onVictory: (updatedPlayer: Creature, earnedXp: number, earnedCoins: number) => void;
-  onDefeat: () => void;
+  onVictory: (updatedPlayer: Creature, earnedXp: number, earnedCoins: number, updatedItems: InventoryItem[]) => void;
+  onDefeat: (updatedItems: InventoryItem[]) => void;
   onOpenCodex: () => void;
   onTriggerEvolution: (creature: Creature) => void;
 }
@@ -345,7 +345,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
     }
 
     setTimeout(() => {
-      onVictory(updatedPlayer, earnedXp, earnedCoins);
+      onVictory(updatedPlayer, earnedXp, earnedCoins, items);
     }, 2800);
   };
 
@@ -354,7 +354,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
     sound.playWrong();
     setTurnMessage(`${player.name} não resistiu aos cálculos do adversário...`);
     setTimeout(() => {
-      onDefeat();
+      onDefeat(items);
     }, 2200);
   };
 

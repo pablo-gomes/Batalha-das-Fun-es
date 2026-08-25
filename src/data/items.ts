@@ -52,13 +52,23 @@ export const INITIAL_ITEMS: InventoryItem[] = [
     cost: 100
   },
   {
-    id: 'formula_codex',
-    name: 'Livro de Bhaskara',
-    icon: 'BookOpen',
-    description: 'Mostra todas as fórmulas da função quadrática durante a batalha.',
-    type: 'formula_book',
-    amount: 1,
-    value: 1,
-    cost: 120
+    id: 'potion_hp_max',
+    name: 'Super Poção Quadrática',
+    icon: 'Sparkles',
+    description: 'Restaura 70 pontos de Vida (HP) da sua criatura instantaneamente.',
+    type: 'heal_hp',
+    amount: 0,
+    value: 70,
+    cost: 100
+  },
+  {
+    id: 'potion_energy_max',
+    name: 'Éter Supremo',
+    icon: 'Zap',
+    description: 'Restaura 100 pontos de Energia para usar habilidades matemáticas.',
+    type: 'restore_energy',
+    amount: 0,
+    value: 100,
+    cost: 90
   }
 ];
