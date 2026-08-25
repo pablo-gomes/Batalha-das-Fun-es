@@ -57,7 +57,11 @@ export const INITIAL_ITEMS: InventoryItem[] = [
     icon: 'Sparkles',
     description: 'Restaura 70 pontos de Vida (HP) da sua criatura instantaneamente.',
     type: 'heal_hp',
+<<<<<<< HEAD
     amount: 0,
+=======
+    amount: 3,
+>>>>>>> 4df5fa45540b9deace28cf8390f5260653d062e6
     value: 70,
     cost: 100
   },
@@ -67,7 +71,11 @@ export const INITIAL_ITEMS: InventoryItem[] = [
     icon: 'Zap',
     description: 'Restaura 100 pontos de Energia para usar habilidades matemáticas.',
     type: 'restore_energy',
+<<<<<<< HEAD
     amount: 0,
+=======
+    amount: 3,
+>>>>>>> 4df5fa45540b9deace28cf8390f5260653d062e6
     value: 100,
     cost: 90
   }
