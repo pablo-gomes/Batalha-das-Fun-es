@@ -360,23 +360,18 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-between p-1.5 sm:p-3 select-none min-h-[500px] sm:min-h-[580px]">
-      {/* 1. RETRO GAME BOY POKÉMON BATTLE SCREEN */}
+      {/* 1. RETRO GBA POKÉMON BATTLE SCREEN */}
       <div 
-        className="w-full h-72 min-[420px]:h-80 sm:h-96 bg-white border-3 sm:border-4 border-black rounded-lg sm:rounded-xl relative overflow-hidden shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] p-2 min-[420px]:p-3 sm:p-4 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
+        className="w-full h-72 min-[420px]:h-80 sm:h-96 bg-[#dcfce7] border-3 sm:border-4 border-[#1b3b2b] rounded-xl relative overflow-hidden shadow-[4px_4px_0px_#122b1e] sm:shadow-[6px_6px_0px_#122b1e] p-2 min-[420px]:p-3 sm:p-4 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${battleBackground})` }}
       >
-        
-        {/* Classic Ground Lines */}
-        <div className="absolute top-32 sm:top-36 right-0 w-44 sm:w-64 h-0.5 bg-black" />
-        <div className="absolute bottom-14 sm:bottom-16 left-0 w-48 sm:w-72 h-0.5 bg-black" />
-
         {/* TOP ROW: Opponent HUD (Left) & Opponent Sprite (Right) */}
         <div className="w-full flex items-start justify-between z-10 gap-1">
           <div className="pt-0.5">
             <CombatHUD creature={enemy} isPlayer={false} />
           </div>
 
-          <div className="relative pr-1 sm:pr-8 pt-0.5 gb-sprite-mono shrink-0">
+          <div className="relative pr-1 sm:pr-8 pt-0.5 gba-sprite shrink-0">
             {/* Responsive Sprite Container */}
             <div className="w-24 h-24 min-[420px]:w-28 min-[420px]:h-28 sm:w-36 sm:h-36 flex items-center justify-center">
               <PixelSprite 
@@ -390,8 +385,10 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
 
             {/* Floating Damage Popup on Enemy */}
             {floatingDamage && floatingDamage.target === 'enemy' && (
-              <div className={`absolute top-0 right-1 sm:right-6 z-30 font-pixel text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border-2 border-black shadow-[2px_2px_0_#000] animate-bounce whitespace-nowrap ${
-                floatingDamage.type === 'crit' ? 'bg-black text-white font-black' : 'bg-white text-black font-bold'
+              <div className={`absolute top-0 right-1 sm:right-6 z-30 font-pixel text-[10px] sm:text-xs px-2.5 py-1 rounded border-2 shadow-[2px_2px_0_rgba(0,0,0,0.5)] animate-bounce whitespace-nowrap ${
+                floatingDamage.type === 'crit' 
+                  ? 'bg-red-600 text-white border-red-900 font-black' 
+                  : 'bg-amber-400 text-amber-950 border-amber-800 font-black'
               }`}>
                 {floatingDamage.text}
               </div>
@@ -401,7 +398,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
 
         {/* BOTTOM ROW: Player Back Sprite (Left) & Player HUD (Right) */}
         <div className="w-full flex items-end justify-between z-10 pb-0.5 gap-1">
-          <div className="relative pl-1 sm:pl-8 gb-sprite-mono shrink-0">
+          <div className="relative pl-1 sm:pl-8 gba-sprite shrink-0">
             {/* Responsive Sprite Container */}
             <div className="w-24 h-24 min-[420px]:w-32 min-[420px]:h-32 sm:w-40 sm:h-40 flex items-center justify-center">
               <PixelSprite 
@@ -416,8 +413,10 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
 
             {/* Floating Damage Popup on Player */}
             {floatingDamage && floatingDamage.target === 'player' && (
-              <div className={`absolute top-0 left-1 sm:left-6 z-30 font-pixel text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border-2 border-black shadow-[2px_2px_0_#000] animate-bounce whitespace-nowrap ${
-                floatingDamage.type === 'heal' ? 'bg-white text-black font-bold' : 'bg-black text-white font-bold'
+              <div className={`absolute top-0 left-1 sm:left-6 z-30 font-pixel text-[10px] sm:text-xs px-2.5 py-1 rounded border-2 shadow-[2px_2px_0_rgba(0,0,0,0.5)] animate-bounce whitespace-nowrap ${
+                floatingDamage.type === 'heal' 
+                  ? 'bg-emerald-500 text-white border-emerald-900 font-black' 
+                  : 'bg-red-600 text-white border-red-900 font-bold'
               }`}>
                 {floatingDamage.text}
               </div>

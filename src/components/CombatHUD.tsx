@@ -11,102 +11,88 @@ export const CombatHUD: React.FC<CombatHUDProps> = ({ creature, isPlayer = false
   const energyPercent = Math.max(0, Math.min(100, (creature.currentEnergy / creature.maxEnergy) * 100));
   const xpPercent = Math.max(0, Math.min(100, (creature.xp / creature.xpToNextLevel) * 100));
 
+  const getHpBarColor = (percent: number) => {
+    if (percent > 50) return 'from-emerald-400 to-green-500';
+    if (percent > 20) return 'from-yellow-400 to-amber-500';
+    return 'from-rose-400 to-red-500 animate-pulse';
+  };
+
   return (
     <div 
-      className={`relative select-none ${
+      className={`select-none ${
         isPlayer 
-          ? 'w-[180px] min-[380px]:w-[210px] sm:w-72 bg-white text-black border-2 sm:border-4 border-black shadow-[2px_2px_0px_#000000] sm:shadow-[4px_4px_0px_#000000]' 
-          : 'w-[170px] min-[380px]:w-[195px] sm:w-68 bg-white text-black border-2 sm:border-4 border-black shadow-[2px_2px_0px_#000000] sm:shadow-[4px_4px_0px_#000000]'
-      } p-1.5 min-[380px]:p-2 sm:p-2.5 font-pixel`}
+          ? 'w-[170px] min-[380px]:w-[195px] sm:w-68' 
+          : 'w-[160px] min-[380px]:w-[185px] sm:w-64'
+      } bg-white border-2 sm:border-3 border-[#1b3b2b] rounded-lg shadow-[2px_2px_0px_#122b1e] p-2 font-pixel`}
     >
-      {/* Top row: Name & Level (:L5 style) */}
-      <div className="flex items-center justify-between border-b sm:border-b-2 border-black pb-0.5 sm:pb-1 mb-1 sm:mb-1.5 gap-1">
-        <div className="flex items-center gap-1 overflow-hidden min-w-0">
-          <span className="text-[9px] min-[380px]:text-[10px] sm:text-xs font-black tracking-tight text-black uppercase truncate">
-            {creature.name}
-          </span>
-          <span className="text-[7px] sm:text-[8px] font-mono font-bold bg-black text-white px-1 py-0.2 rounded-xs shrink-0">
-            {creature.element}
-          </span>
-        </div>
-        <div className="flex items-center text-[8px] min-[380px]:text-[9px] sm:text-[10px] font-black text-black shrink-0 font-pixel">
-          <span className="text-[7px] sm:text-[9px] mr-0.5">:L</span>
-          {creature.level}
-        </div>
+      {/* Top row: Name & Level */}
+      <div className="flex items-center justify-between border-b border-[#2d5a42]/20 pb-1 mb-1 gap-1">
+        <span className="text-[9px] sm:text-[11px] font-black tracking-tight text-[#143021] uppercase truncate">
+          {creature.name}
+        </span>
+        
+        <span className="text-[8px] sm:text-[9px] font-black text-[#1b3b2b] shrink-0">
+          <span className="text-[#2d6a4f] mr-0.5">:L</span>{creature.level}
+        </span>
       </div>
 
-      {/* HP Bar Container (Game Boy Style) */}
-      <div className="space-y-1 sm:space-y-1.5">
-        <div className="flex items-center gap-1 sm:gap-1.5">
-          <span className="text-[8px] sm:text-[9px] font-black tracking-tighter text-black shrink-0">
-            HP:
+      {/* HP Bar */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-1.5 bg-[#f0f7f2] p-1 rounded">
+          <span className="text-[7px] sm:text-[8px] font-black text-[#c53030] shrink-0">
+            HP
           </span>
-          <div className="flex-1 bg-white h-2 sm:h-3 border sm:border-2 border-black p-0.5 overflow-hidden rounded-full">
+          <div className="flex-1 bg-[#102a1c]/15 h-2.5 sm:h-3 border border-[#1b3b2b]/60 overflow-hidden rounded-full p-[1px]">
             <div 
-              className="h-full bg-black transition-all duration-500 rounded-full"
+              className={`h-full bg-gradient-to-r ${getHpBarColor(hpPercent)} transition-all duration-300 rounded-full`}
               style={{ width: `${hpPercent}%` }}
             />
           </div>
         </div>
 
-        {/* Player specific: Numeric HP, Energy MP bar & EXP */}
-        {isPlayer ? (
+        {/* Player: Clean numeric HP, MP & EXP */}
+        {isPlayer && (
           <>
-            {/* Numeric HP readout like original Game Boy Pokémon */}
-            <div className="flex items-center justify-between text-[9px] min-[380px]:text-[10px] sm:text-xs font-mono font-black text-black px-0.5">
-              <div className="flex items-center gap-0.5 sm:gap-1">
-                {creature.comboCount > 0 && (
-                  <span className="bg-black text-white px-1 py-0.2 font-pixel text-[7px] sm:text-[8px]">
+            <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono font-bold text-[#143021] px-0.5">
+              <div className="flex items-center gap-1">
+                {creature.comboCount > 1 && (
+                  <span className="bg-amber-500 text-white px-1 rounded text-[7px]">
                     x{creature.comboCount}
                   </span>
                 )}
-                {creature.statusCondition && (
-                  <span className="border border-black px-0.5 text-[7px] sm:text-[8px] font-pixel">
-                    {creature.statusCondition.slice(0, 4).toUpperCase()}
-                  </span>
-                )}
               </div>
-              <span className="tracking-tighter sm:tracking-wider">
+              <span>
                 {Math.round(creature.currentHp)}/{creature.maxHp}
               </span>
             </div>
 
-            {/* MP Bar */}
-            <div className="flex items-center gap-1 sm:gap-1.5 pt-0.5">
-              <span className="text-[7px] sm:text-[8px] font-bold text-black shrink-0 font-pixel">
-                MP:
-              </span>
-              <div className="flex-1 bg-slate-200 h-1.5 sm:h-2 border border-black p-0.2 overflow-hidden">
+            {/* MP & EXP combined slim bar */}
+            <div className="flex items-center gap-1.5 pt-0.5">
+              <span className="text-[6px] sm:text-[7px] text-[#0284c7] font-bold shrink-0">MP</span>
+              <div className="flex-1 bg-[#0c4a6e]/15 h-1.5 border border-[#0369a1]/60 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-slate-800 transition-all duration-300"
+                  className="h-full bg-cyan-500 transition-all duration-300 rounded-full"
                   style={{ width: `${energyPercent}%` }}
                 />
               </div>
-              <span className="text-[8px] sm:text-[9px] font-mono font-bold text-black shrink-0">
-                {Math.round(creature.currentEnergy)}/{creature.maxEnergy}
+              <span className="text-[7px] font-mono text-slate-600">
+                {Math.round(creature.currentEnergy)}
               </span>
             </div>
 
             {/* EXP Bar */}
-            <div className="flex items-center gap-1">
-              <span className="text-[6px] sm:text-[7px] text-slate-700 font-bold font-mono">EXP</span>
-              <div className="flex-1 bg-slate-200 h-1 sm:h-1.5 border border-black overflow-hidden">
+            <div className="flex items-center gap-1.5 pt-0.2">
+              <span className="text-[6px] text-[#7c3aed] font-bold shrink-0 font-mono">XP</span>
+              <div className="flex-1 bg-[#3b0764]/10 h-1 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-black transition-all duration-500"
+                  className="h-full bg-indigo-500 transition-all duration-300 rounded-full"
                   style={{ width: `${xpPercent}%` }}
                 />
               </div>
             </div>
           </>
-        ) : (
-          creature.stage > 1 && (
-            <div className="flex items-center justify-end text-[7px] sm:text-[9px] font-mono text-black font-bold">
-              <span>★ FORMA {creature.stage}</span>
-            </div>
-          )
         )}
       </div>
     </div>
   );
 };
-

@@ -110,11 +110,9 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
         result = prevValue - current;
         break;
       case '×':
-      case '*':
         result = prevValue * current;
         break;
       case '÷':
-      case '/':
         result = current !== 0 ? prevValue / current : 0;
         break;
       default:
@@ -134,12 +132,12 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
   };
 
   return (
-    <div className={`w-full max-w-[280px] bg-white border-3 sm:border-4 border-black shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000] p-2.5 flex flex-col justify-between select-none text-black transition-all ${className}`}>
+    <div className={`w-full max-w-[280px] bg-[#fbfdfa] border-3 sm:border-4 border-[#1b3b2b] rounded-xl shadow-[4px_4px_0_#122b1e] p-2.5 flex flex-col justify-between select-none text-[#163323] transition-all ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between border-b-2 border-black pb-1.5 mb-1.5">
+      <div className="flex items-center justify-between border-b-2 border-[#2d5a42]/30 pb-1.5 mb-1.5">
         <div className="flex items-center gap-1.5">
-          <Calculator size={14} />
-          <span className="font-pixel text-[10px] font-black uppercase">
+          <Calculator size={15} className="text-emerald-700" />
+          <span className="font-pixel text-[10px] font-black uppercase text-[#143021]">
             CALCULADORA
           </span>
         </div>
@@ -148,7 +146,7 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             title={isCollapsed ? 'Expandir' : 'Minimizar'}
-            className="p-1 bg-white hover:bg-black hover:text-white border border-black transition-colors cursor-pointer sm:hidden"
+            className="p-1 bg-white hover:bg-[#edf7f1] text-[#1b3b2b] border border-[#1b3b2b] rounded transition-colors cursor-pointer sm:hidden"
           >
             {isCollapsed ? <Maximize2 size={11} /> : <Minimize2 size={11} />}
           </button>
@@ -156,7 +154,7 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
             <button
               onClick={onClose}
               title="Fechar"
-              className="p-1 bg-white hover:bg-black hover:text-white border border-black transition-colors cursor-pointer lg:hidden"
+              className="p-1 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 rounded transition-colors cursor-pointer lg:hidden"
             >
               <X size={11} />
             </button>
@@ -166,40 +164,40 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
 
       {!isCollapsed && (
         <>
-          {/* Calculator Screen */}
-          <div className="bg-slate-100 border-2 border-black p-2 text-right mb-2 shadow-inner">
-            <div className="text-[9px] font-mono text-slate-500 font-bold h-3 truncate">
-              {prevValue !== null ? `${prevValue} ${operation}` : ''}
+          {/* LCD Display */}
+          <div className="bg-[#e8f5e9] border-2 border-[#1b3b2b] rounded-lg p-2 mb-2 text-right shadow-inner flex flex-col justify-between min-h-[50px]">
+            <div className="text-[10px] font-mono text-emerald-800 font-bold h-4">
+              {prevValue !== null && `${prevValue} ${operation || ''}`}
             </div>
-            <div className="font-mono text-base sm:text-lg font-black text-black truncate tracking-wider">
+            <div className="text-xl font-mono font-black text-emerald-950 truncate tracking-wider">
               {display}
             </div>
           </div>
 
-          {/* Keypad Grid (4x5) */}
+          {/* Keypad Grid */}
           <div className="grid grid-cols-4 gap-1 font-mono font-black text-xs">
-            {/* Row 1: Special Operations */}
+            {/* Row 1: C, x², √, ÷ */}
             <button
               onClick={handleClear}
-              className="bg-black text-white hover:bg-slate-800 border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-400 rounded py-1.5 cursor-pointer font-bold active:scale-95"
             >
               C
             </button>
             <button
-              onClick={handleSqrt}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
-            >
-              √
-            </button>
-            <button
               onClick={handleSquare}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 rounded py-1.5 cursor-pointer active:scale-95"
             >
               x²
             </button>
             <button
+              onClick={handleSqrt}
+              className="bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 rounded py-1.5 cursor-pointer active:scale-95"
+            >
+              √
+            </button>
+            <button
               onClick={() => handleOp('÷')}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer text-sm active:scale-95"
+              className="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-400 rounded py-1.5 cursor-pointer text-sm active:scale-95"
             >
               ÷
             </button>
@@ -207,25 +205,25 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
             {/* Row 2: 7, 8, 9, * */}
             <button
               onClick={() => handleDigit('7')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               7
             </button>
             <button
               onClick={() => handleDigit('8')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               8
             </button>
             <button
               onClick={() => handleDigit('9')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               9
             </button>
             <button
               onClick={() => handleOp('×')}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer text-sm active:scale-95"
+              className="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-400 rounded py-1.5 cursor-pointer text-sm active:scale-95"
             >
               ×
             </button>
@@ -233,25 +231,25 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
             {/* Row 3: 4, 5, 6, - */}
             <button
               onClick={() => handleDigit('4')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               4
             </button>
             <button
               onClick={() => handleDigit('5')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               5
             </button>
             <button
               onClick={() => handleDigit('6')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               6
             </button>
             <button
               onClick={() => handleOp('-')}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer text-sm active:scale-95"
+              className="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-400 rounded py-1.5 cursor-pointer text-sm active:scale-95"
             >
               -
             </button>
@@ -259,25 +257,25 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
             {/* Row 4: 1, 2, 3, + */}
             <button
               onClick={() => handleDigit('1')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               1
             </button>
             <button
               onClick={() => handleDigit('2')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               2
             </button>
             <button
               onClick={() => handleDigit('3')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               3
             </button>
             <button
               onClick={() => handleOp('+')}
-              className="bg-slate-100 hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer text-sm active:scale-95"
+              className="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-400 rounded py-1.5 cursor-pointer text-sm active:scale-95"
             >
               +
             </button>
@@ -285,25 +283,25 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
             {/* Row 5: ±, 0, ., = */}
             <button
               onClick={handleToggleSign}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-slate-100 hover:bg-slate-200 text-[#1b3b2b] border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               ±
             </button>
             <button
               onClick={() => handleDigit('0')}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               0
             </button>
             <button
               onClick={handleDecimal}
-              className="bg-white hover:bg-black hover:text-white border-2 border-black py-1.5 cursor-pointer active:scale-95"
+              className="bg-white hover:bg-emerald-50 border border-[#1b3b2b] rounded py-1.5 cursor-pointer active:scale-95 shadow-xs"
             >
               .
             </button>
             <button
               onClick={handleEquals}
-              className="bg-black text-white hover:bg-slate-800 border-2 border-black py-1.5 cursor-pointer font-bold active:scale-95"
+              className="gba-btn-primary rounded py-1.5 cursor-pointer font-black active:scale-95 shadow-xs text-white"
             >
               =
             </button>
@@ -313,4 +311,3 @@ export const MiniCalculator: React.FC<MiniCalculatorProps> = ({ className = '', 
     </div>
   );
 };
-

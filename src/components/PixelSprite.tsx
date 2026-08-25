@@ -91,14 +91,8 @@ export const PixelSprite: React.FC<PixelSpriteProps> = ({
       `}
       style={{ width: size, height: size }}
     >
-      {/* Platform Shadow / Battle Circle */}
-      <div 
-        className={`absolute bottom-0 w-3/4 h-6 sm:h-7 rounded-[100%] ${
-          isPlayerBackView 
-            ? 'bg-emerald-950/60 border-2 border-emerald-700/40' 
-            : 'bg-slate-800/80 border-2 border-slate-600/50'
-        } blur-[1px] shadow-inner`}
-      />
+      
+    
 
       {/* Stage Aura for higher levels */}
       {stage > 1 && (

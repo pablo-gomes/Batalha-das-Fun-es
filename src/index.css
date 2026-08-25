@@ -7,13 +7,10 @@
   }
   body {
     font-family: 'JetBrains Mono', monospace;
-    background-color: #0f172a;
-    background-image: url('../background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #84cb9c;
+    background-image: linear-gradient(180deg, #78c291 0%, #8dd1a5 50%, #7dbf94 100%);
     background-attachment: fixed;
-    color: #000000;
+    color: #1a3325;
     overflow-x: hidden;
     min-height: 100vh;
     min-height: 100dvh;
@@ -22,111 +19,167 @@
 
 .font-pixel {
   font-family: 'Press Start 2P', monospace;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
 }
 
 .font-retro {
   font-family: 'VT323', monospace;
 }
 
-/* Authentic Game Boy Monochrome Boxes */
+/* =========================================================
+   CLEAN POKÉMON GBA UI SYSTEM (CLEAN, MINIMAL & VIBRANT)
+   ========================================================= */
+
+/* Clean GBA Window */
+.gba-window,
 .gb-box {
   background-color: #ffffff;
-  border: 4px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
-  color: #000000;
+  border: 2px solid #1a3c2c;
+  box-shadow: 3px 3px 0px #122b1e;
+  color: #1a3325;
 }
 
+.gba-window-subtle,
 .gb-box-subtle {
-  background-color: #f8fafc;
-  border: 2px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
-  color: #000000;
+  background-color: #f7faf8;
+  border: 2px solid #234b37;
+  box-shadow: 2px 2px 0px rgba(18, 43, 30, 0.4);
+  color: #193325;
 }
 
-.gb-box-dark {
-  background-color: #000000;
-  border: 3px solid #000000;
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.4);
-  color: #ffffff;
-}
+/* =========================================================
+   GBA BUTTONS - CLEAN TACTILE PIXEL ART
+   ========================================================= */
 
+.gba-btn,
 .gb-btn {
-  background-color: #ffffff;
-  color: #000000;
-  border: 3px solid #000000;
-  box-shadow: 3px 3px 0px #000000;
+  background: #ffffff;
+  color: #193325;
+  border: 2px solid #1e3a2b;
+  box-shadow: 2px 2px 0px #122b1e;
   font-family: 'Press Start 2P', monospace;
-  transition: all 0.1s ease-in-out;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
   cursor: pointer;
   touch-action: manipulation;
 }
 
+.gba-btn:hover,
 .gb-btn:hover {
-  background-color: #000000;
-  color: #ffffff;
+  background: #f0fdf4;
+  color: #0f291e;
 }
 
+.gba-btn:active,
 .gb-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px #000000;
+  box-shadow: 0px 0px 0px #122b1e;
 }
 
+/* Primary Emerald GBA Button */
+.gba-btn-primary,
 .gb-btn-primary {
-  background-color: #000000;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
   color: #ffffff;
-  border: 3px solid #000000;
-  box-shadow: 3px 3px 0px #475569;
+  border: 2px solid #064e3b;
+  box-shadow: 2px 2px 0px #022c22;
   font-family: 'Press Start 2P', monospace;
-  transition: all 0.1s ease-in-out;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
   cursor: pointer;
   touch-action: manipulation;
 }
 
+.gba-btn-primary:hover,
 .gb-btn-primary:hover {
-  background-color: #1e293b;
-  color: #ffffff;
+  filter: brightness(1.05);
 }
 
+.gba-btn-primary:active,
 .gb-btn-primary:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px #000000;
+  box-shadow: 0px 0px 0px #022c22;
 }
 
-/* Classic Game Boy Pokémon Battle HUD Bracket */
-.gb-hud-bracket {
-  background-color: #ffffff;
-  border-top: 3px solid #000000;
-  border-left: 3px solid #000000;
-  border-bottom: 3px solid #000000;
-  position: relative;
+/* Fire Red / Fight Action Button */
+.gba-btn-red {
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+  color: #ffffff;
+  border: 2px solid #7f1d1d;
+  box-shadow: 2px 2px 0px #450a0a;
+  font-family: 'Press Start 2P', monospace;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+.gba-btn-red:hover {
+  filter: brightness(1.06);
+}
+.gba-btn-red:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px #450a0a;
 }
 
-.gb-hud-bracket-player {
-  background-color: #ffffff;
-  border-top: 3px solid #000000;
-  border-right: 3px solid #000000;
-  border-bottom: 3px solid #000000;
-  position: relative;
+/* Water / Sky Blue Skill Button */
+.gba-btn-blue {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  color: #ffffff;
+  border: 2px solid #0c4a6e;
+  box-shadow: 2px 2px 0px #082f49;
+  font-family: 'Press Start 2P', monospace;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+.gba-btn-blue:hover {
+  filter: brightness(1.06);
+}
+.gba-btn-blue:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px #082f49;
 }
 
-/* Authentic Monochrome Game Boy Grayscale Filter for Sprites */
-.gb-sprite-mono {
-  filter: grayscale(100%) contrast(145%) brightness(95%);
+/* Leaf Green / Bag Button */
+.gba-btn-green {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+  color: #ffffff;
+  border: 2px solid #14532d;
+  box-shadow: 2px 2px 0px #052e16;
+  font-family: 'Press Start 2P', monospace;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+.gba-btn-green:hover {
+  filter: brightness(1.06);
+}
+.gba-btn-green:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px #052e16;
+}
+
+/* Thunder Gold / Defend Button */
+.gba-btn-yellow {
+  background: linear-gradient(180deg, #facc15 0%, #d97706 100%);
+  color: #451a03;
+  border: 2px solid #78350f;
+  box-shadow: 2px 2px 0px #451a03;
+  font-family: 'Press Start 2P', monospace;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+.gba-btn-yellow:hover {
+  filter: brightness(1.06);
+}
+.gba-btn-yellow:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px #451a03;
+}
+
+/* Crisp full-color pixel art rendering for all Pokemon and move effects */
+.gb-sprite-mono,
+.gba-sprite {
   image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
-/* Scanlines effect (optional Game Boy LCD grid) */
-.scanlines {
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.15) 50%
-  );
-  background-size: 100% 4px;
-  pointer-events: none;
-}
-
-/* Custom Scrollbar Monochrome */
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar,
 ::-webkit-scrollbar {
   width: 6px;
@@ -134,16 +187,13 @@
 }
 .custom-scrollbar::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border: 1px solid #000000;
+  background: #e2f5e8;
+  border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
-  background: #000000;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover,
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #2d6a4f;
+  border-radius: 4px;
 }
 
 /* Safe area for notch phones */
@@ -152,5 +202,3 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
-
-

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Region } from '../types';
 import { sound } from '../utils/audio';
 import { GameIcon } from '../utils/iconMap';
@@ -18,34 +19,51 @@ export const MapView: React.FC<MapViewProps> = ({
   onStartStage,
   onBackToMenu
 }) => {
+  const getRegionThemeColor = (regionId: string) => {
+    switch (regionId) {
+      case 'regiao_raizes':
+        return { activeBg: 'from-emerald-500 to-green-600', border: 'border-emerald-900', btnClass: 'gba-btn-green' };
+      case 'regiao_delta':
+        return { activeBg: 'from-orange-500 to-red-600', border: 'border-orange-900', btnClass: 'gba-btn-red' };
+      case 'regiao_vertice':
+        return { activeBg: 'from-sky-500 to-blue-600', border: 'border-blue-900', btnClass: 'gba-btn-blue' };
+      case 'regiao_graficos':
+        return { activeBg: 'from-amber-400 to-yellow-500', border: 'border-amber-900', btnClass: 'gba-btn-yellow' };
+      default:
+        return { activeBg: 'from-purple-500 to-indigo-600', border: 'border-purple-900', btnClass: 'gba-btn-purple' };
+    }
+  };
+
   return (
-    <div className="w-full max-w-5xl mx-auto p-1.5 sm:p-4 select-none space-y-2.5 sm:space-y-3.5 text-black">
+    <div className="w-full max-w-4xl mx-auto p-1.5 sm:p-4 select-none space-y-3 text-[#163323]">
       {/* Top Breadcrumb / Title Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white border-3 sm:border-4 border-black p-2.5 sm:p-3 gap-1.5 sm:gap-2 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000]">
-        <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center justify-between bg-white border-2 sm:border-3 border-[#1b3b2b] rounded-xl p-2.5 sm:p-3 shadow-[2px_2px_0_#122b1e]">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => {
               sound.playCancel();
               onBackToMenu();
             }}
-            className="bg-white hover:bg-black hover:text-white text-black font-pixel text-[9px] sm:text-xs px-2 sm:px-2.5 py-1 sm:py-1.5 border-2 border-black transition-colors flex items-center gap-1 cursor-pointer font-bold"
+            className="bg-slate-100 hover:bg-slate-200 text-[#1b3b2b] font-pixel text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-[#1b3b2b]/50 transition-colors cursor-pointer font-bold"
           >
             ⬅ INÍCIO
           </button>
-          <h1 className="font-pixel text-[11px] sm:text-sm text-black font-black flex items-center gap-1.5 uppercase">
-            <Map size={14} /> MAPA DE REGIÕES
+          <h1 className="font-pixel text-[11px] sm:text-xs text-[#143021] font-black flex items-center gap-1.5 uppercase">
+            <Map size={14} className="text-emerald-700" /> MAPA DE REGIÕES
           </h1>
         </div>
 
-        <div className="text-[11px] sm:text-xs font-mono text-slate-700 font-bold">
-          Selecione a região e enfrente as fases
-        </div>
+        <span className="text-[10px] sm:text-xs font-mono font-bold text-emerald-800 bg-[#edf7f1] px-2 py-0.5 rounded">
+          {selectedRegion.name}
+        </span>
       </div>
 
-      {/* Regions Horizontal / Responsive Selector */}
-      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 md:grid-cols-5 gap-1.5 sm:gap-2">
+      {/* Regions Horizontal Selector */}
+      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 md:grid-cols-5 gap-2">
         {regions.map((region) => {
           const isSelected = region.id === selectedRegion.id;
+          const regTheme = getRegionThemeColor(region.id);
+
           return (
             <button
               key={region.id}
@@ -54,12 +72,12 @@ export const MapView: React.FC<MapViewProps> = ({
                 sound.playSelect();
                 onSelectRegion(region);
               }}
-              className={`p-2 sm:p-2.5 border-2 sm:border-4 text-left transition-all relative flex flex-col justify-between cursor-pointer ${
+              className={`p-2.5 border-2 rounded-xl text-left transition-all relative flex flex-col justify-between cursor-pointer ${
                 isSelected 
-                  ? 'bg-black text-white border-black shadow-[3px_3px_0_#475569] sm:shadow-[4px_4px_0_#475569] scale-[1.01] z-10' 
+                  ? `bg-gradient-to-b ${regTheme.activeBg} text-white ${regTheme.border} shadow-[3px_3px_0_#122b1e] scale-[1.02] z-10` 
                   : region.unlocked 
-                    ? 'bg-white text-black border-black hover:bg-slate-100 shadow-[2px_2px_0_#000]' 
-                    : 'bg-slate-200 border-slate-400 opacity-40 cursor-not-allowed text-slate-500'
+                    ? 'bg-white text-[#143021] border-[#1b3b2b] hover:bg-[#edf7f1] shadow-xs' 
+                    : 'bg-slate-200/60 border-slate-300 opacity-40 cursor-not-allowed text-slate-500'
               }`}
             >
               <div className="text-lg sm:text-xl mb-1 flex items-center justify-center">
@@ -71,11 +89,11 @@ export const MapView: React.FC<MapViewProps> = ({
                 </div>
                 <div className="text-[8px] sm:text-[9px] font-mono font-bold truncate mt-0.5">
                   {region.unlocked ? (region.bossDefeated ? (
-                    <span className="flex items-center gap-0.5 text-emerald-600"><CheckCircle2 size={9} /> Concluído</span>
+                    <span className="flex items-center gap-0.5 text-amber-300 font-bold"><CheckCircle2 size={9} /> Concluído</span>
                   ) : (
-                    <span>Disponível</span>
+                    <span className={isSelected ? 'text-emerald-100' : 'text-emerald-700'}>Disponível</span>
                   )) : (
-                    <span className="flex items-center gap-0.5"><Lock size={9} /> Bloqueado</span>
+                    <span className="flex items-center gap-0.5 text-slate-500"><Lock size={9} /> Bloqueado</span>
                   )}
                 </div>
               </div>
@@ -84,68 +102,54 @@ export const MapView: React.FC<MapViewProps> = ({
         })}
       </div>
 
-      {/* Selected Region Details & Stages Grid */}
-      <div className="bg-white border-3 sm:border-4 border-black p-3 sm:p-5 shadow-[3px_3px_0_#000] sm:shadow-[4px_4px_0_#000] space-y-3 sm:space-y-4">
-        {/* Region Banner */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-black pb-2.5 sm:pb-3 gap-2.5">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="p-2 sm:p-2.5 bg-white border-2 border-black text-xl sm:text-2xl flex items-center justify-center shrink-0">
-              <GameIcon name={selectedRegion.icon} size={22} />
-            </div>
-            <div className="min-w-0">
-              <h2 className="font-pixel text-xs sm:text-base text-black font-black uppercase truncate">
+      {/* Selected Region Stages Grid */}
+      <div className="bg-white border-2 sm:border-3 border-[#1b3b2b] rounded-2xl p-3 sm:p-4 shadow-[3px_3px_0_#122b1e] space-y-3">
+        <div className="flex items-center justify-between border-b border-[#2d5a42]/20 pb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-lg sm:text-xl"><GameIcon name={selectedRegion.icon} size={20} /></span>
+            <div>
+              <h2 className="font-pixel text-xs sm:text-sm text-[#143021] font-black uppercase">
                 {selectedRegion.name}
               </h2>
-              <p className="text-[11px] sm:text-xs font-mono text-slate-700 font-bold mt-0.5 line-clamp-1">
+              <p className="text-[10px] sm:text-[11px] font-mono text-slate-600 font-bold">
                 {selectedRegion.subtitle}
               </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono text-black font-bold">
-            <span className="text-[10px] sm:text-[11px]">Tema:</span>
-            <div className="flex flex-wrap gap-1">
-              {selectedRegion.conceptFocus.map((c) => (
-                <span key={c} className="bg-black text-white px-1.5 py-0.5 border border-black text-[9px] sm:text-[10px] font-black">
-                  {c === 'roots' ? 'Raízes' : c === 'delta' ? 'Δ' : c === 'vertex_x' ? 'Vértice' : 'Gráficos'}
-                </span>
-              ))}
             </div>
           </div>
         </div>
 
         {/* Stages Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
           {selectedRegion.stages.map((stage, idx) => (
             <div
               key={stage.id}
-              className={`p-3 sm:p-3.5 border-3 sm:border-4 flex flex-col justify-between space-y-2.5 sm:space-y-3 transition-all ${
+              className={`p-3 border-2 rounded-xl flex flex-col justify-between space-y-2.5 transition-all ${
                 stage.isBoss 
-                  ? 'bg-slate-50 border-black shadow-[3px_3px_0_#000]' 
-                  : 'bg-white border-black shadow-[2px_2px_0_#000]'
+                  ? 'bg-amber-50/70 border-amber-800 shadow-xs' 
+                  : 'bg-[#fbfdfa] border-[#1b3b2b] shadow-xs'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-600">
+                  <span className="text-[8px] font-pixel font-bold text-slate-500">
                     FASE {idx + 1}
                   </span>
                   {stage.isBoss ? (
-                    <span className="bg-black text-white text-[7px] sm:text-[8px] font-pixel px-1.5 py-0.5 flex items-center gap-1 font-black">
+                    <span className="bg-amber-500 text-white text-[7px] font-pixel px-1.5 py-0.5 rounded flex items-center gap-0.5 font-black">
                       <Crown size={8} /> CHEFE
                     </span>
                   ) : stage.completed ? (
-                    <span className="text-black text-[8px] sm:text-[9px] font-pixel font-bold flex items-center gap-1">
+                    <span className="text-emerald-700 text-[8px] font-pixel font-bold flex items-center gap-0.5">
                       <CheckCircle2 size={9} /> Concluída
                     </span>
                   ) : null}
                 </div>
 
-                <h3 className="font-pixel text-[11px] sm:text-xs text-black font-black uppercase">
+                <h3 className="font-pixel text-[10px] sm:text-[11px] text-[#143021] font-black uppercase truncate">
                   {stage.name}
                 </h3>
-                <p className="text-[11px] sm:text-xs font-mono text-slate-700 font-bold mt-1">
-                  Inimigo: <strong className="text-black">{stage.enemyCreature.name}</strong> <span className="text-slate-500">(Nv. {stage.enemyCreature.level})</span>
+                <p className="text-[10px] sm:text-[11px] font-mono text-slate-600 font-bold mt-0.5">
+                  {stage.enemyCreature.name} <span className="text-slate-400">(Nv.{stage.enemyCreature.level})</span>
                 </p>
               </div>
 
@@ -154,9 +158,11 @@ export const MapView: React.FC<MapViewProps> = ({
                   sound.playConfirm();
                   onStartStage(stage);
                 }}
-                className="w-full bg-white hover:bg-black hover:text-white font-pixel text-[10px] sm:text-[11px] py-2.5 px-3 border-2 border-black flex items-center justify-center gap-1.5 cursor-pointer shadow-[2px_2px_0_#000] font-bold"
+                className={`w-full ${
+                  stage.isBoss ? 'gba-btn-red' : 'gba-btn-primary'
+                } font-pixel text-[9px] sm:text-[10px] py-2 px-2.5 rounded-lg flex items-center justify-center gap-1 cursor-pointer font-bold shadow-xs`}
               >
-                <Swords size={12} /> {stage.isBoss ? 'DESAFIAR CHEFE ▶' : 'BATALHAR ▶'}
+                <Swords size={11} /> {stage.isBoss ? 'DESAFIAR CHEFE ▶' : 'BATALHAR ▶'}
               </button>
             </div>
           ))}

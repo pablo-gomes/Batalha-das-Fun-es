@@ -125,14 +125,6 @@ export default function App() {
     preloadSprites(urlsToPreload);
   }, []);
 
-  // On desktop screens, open notepad and calculator by default
-  useEffect(() => {
-    if (window.innerWidth >= 1024) {
-      setShowNotepad(true);
-      setShowCalculator(true);
-    }
-  }, []);
-
   // Persist Player Creature
   useEffect(() => {
     if (playerCreature) {
@@ -271,21 +263,24 @@ export default function App() {
 
   return (
     <div className={`min-h-screen bg-transparent text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}>
-      {/* 1. TOP HEADER & MONOCHROME NAVIGATION */}
-      <header className="bg-white border-b-2 sm:border-b-4 border-black px-2 sm:px-3 py-1.5 sm:py-2 sticky top-0 z-40 shadow-[0_2px_0_#000000] sm:shadow-[0_4px_0_#000000]">
+      {/* 1. TOP HEADER & GBA RETRO NAVIGATION */}
+      <header className="bg-[#fbfdfa] border-b-3 sm:border-b-4 border-[#1b3b2b] px-2 sm:px-4 py-2 sticky top-0 z-40 shadow-[0_3px_0_#122b1e]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
           {/* Logo & Title */}
           <div 
             onClick={() => {
               if (playerCreature) setView('map');
             }}
-            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer group shrink-0 min-w-0"
+            className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0"
           >
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-rose-500 via-red-500 to-amber-400 border-2 border-[#1b3b2b] flex items-center justify-center shadow-xs">
+              <span className="font-pixel text-[9px] text-white font-black">f(x)</span>
+            </div>
             <div className="min-w-0">
-              <h1 className="font-pixel text-[10px] min-[400px]:text-xs sm:text-sm text-black font-black truncate">
+              <h1 className="font-pixel text-[10px] min-[400px]:text-xs sm:text-sm text-[#143021] font-black truncate drop-shadow-xs">
                 BATALHA DAS FUNÇÕES
               </h1>
-              <span className="text-[8px] min-[400px]:text-[9px] sm:text-[10px] text-slate-700 font-mono font-bold block truncate">
+              <span className="text-[8px] min-[400px]:text-[9px] sm:text-[10px] text-emerald-800 font-mono font-bold block truncate">
                 RPG da Função Quadrática
               </span>
             </div>
@@ -293,20 +288,20 @@ export default function App() {
 
           {/* Center: Main Navigation Tabs (Visible on sm/md/lg desktop) */}
           {playerCreature && (
-            <nav className="hidden sm:flex items-center gap-1 sm:gap-1.5">
+            <nav className="hidden sm:flex items-center gap-1.5">
               <button
                 onClick={() => {
                   sound.playSelect();
                   setView('map');
                 }}
-                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                className={`font-pixel text-[10px] sm:text-[11px] px-3 py-1.5 rounded-lg border-2 border-[#1b3b2b] transition-all cursor-pointer ${
                   view === 'map' 
-                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
-                    : 'bg-white text-black hover:bg-slate-100'
+                    ? 'gba-btn-primary shadow-[2px_2px_0_#022c22]' 
+                    : 'bg-white text-[#193325] hover:bg-[#edf7f1]'
                 }`}
                 title="Ir para o Mapa de Fases"
               >
-                <Map size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">MAPA</span>
+                <Map size={13} className="inline mr-1 text-emerald-700" /> <span className="hidden min-[480px]:inline">MAPA</span>
               </button>
 
               <button
@@ -314,14 +309,14 @@ export default function App() {
                   sound.playSelect();
                   setView('training');
                 }}
-                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                className={`font-pixel text-[10px] sm:text-[11px] px-3 py-1.5 rounded-lg border-2 border-[#1b3b2b] transition-all cursor-pointer ${
                   view === 'training' 
-                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
-                    : 'bg-white text-black hover:bg-slate-100'
+                    ? 'gba-btn-blue shadow-[2px_2px_0_#082f49]' 
+                    : 'bg-white text-[#193325] hover:bg-[#edf7f1]'
                 }`}
                 title="Praticar exercícios por tema"
               >
-                <Target size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">TREINO</span>
+                <Target size={13} className="inline mr-1 text-sky-600" /> <span className="hidden min-[480px]:inline">TREINO</span>
               </button>
 
               <button
@@ -329,14 +324,14 @@ export default function App() {
                   sound.playSelect();
                   setView('challenge');
                 }}
-                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                className={`font-pixel text-[10px] sm:text-[11px] px-3 py-1.5 rounded-lg border-2 border-[#1b3b2b] transition-all cursor-pointer ${
                   view === 'challenge' 
-                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
-                    : 'bg-white text-black hover:bg-slate-100'
+                    ? 'gba-btn-yellow shadow-[2px_2px_0_#451a03]' 
+                    : 'bg-white text-[#193325] hover:bg-[#edf7f1]'
                 }`}
                 title="Desafio de 60 segundos com combos"
               >
-                <Zap size={12} className="inline mr-1" /> <span className="hidden min-[480px]:inline">DESAFIO</span>
+                <Zap size={13} className="inline mr-1 text-amber-600" /> <span className="hidden min-[480px]:inline">DESAFIO</span>
               </button>
 
               <button
@@ -344,20 +339,20 @@ export default function App() {
                   sound.playSelect();
                   setView('shop');
                 }}
-                className={`font-pixel text-[10px] sm:text-[11px] px-2 sm:px-3 py-1.5 border-2 border-black transition-all cursor-pointer ${
+                className={`font-pixel text-[10px] sm:text-[11px] px-3 py-1.5 rounded-lg border-2 border-[#1b3b2b] transition-all cursor-pointer ${
                   view === 'shop' 
-                    ? 'bg-black text-white font-black shadow-[2px_2px_0_#000]' 
-                    : 'bg-white text-black hover:bg-slate-100'
+                    ? 'gba-btn-red shadow-[2px_2px_0_#450a0a]' 
+                    : 'bg-white text-[#193325] hover:bg-[#edf7f1]'
                 }`}
                 title="Comprar itens e poções na Loja"
               >
-                <ShoppingBag size={12} className="inline mr-1 text-amber-500" /> <span className="hidden min-[480px]:inline">LOJA</span>
+                <ShoppingBag size={13} className="inline mr-1 text-rose-500" /> <span className="hidden min-[480px]:inline">LOJA</span>
               </button>
             </nav>
           )}
 
           {/* Right: Quick Tools & Settings */}
-          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {playerCreature && (
               <>
                 {/* Notepad Toggle Button */}
@@ -366,12 +361,12 @@ export default function App() {
                     sound.playSelect();
                     setShowNotepad(!showNotepad);
                   }}
-                  className={`font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black transition-colors cursor-pointer ${
-                    showNotepad ? 'bg-black text-white' : 'bg-white text-black hover:bg-slate-100'
+                  className={`font-pixel text-[9px] sm:text-[10px] px-2 py-1.5 border-2 border-[#1b3b2b] rounded-lg transition-colors cursor-pointer ${
+                    showNotepad ? 'bg-[#1b3b2b] text-white' : 'bg-white text-[#1b3b2b] hover:bg-[#edf7f1]'
                   }`}
                   title="Exibir/Ocultar Bloco de Notas"
                 >
-                  <StickyNote size={12} className="inline xl:mr-1" /> <span className="hidden xl:inline">NOTAS</span>
+                  <StickyNote size={13} className="inline xl:mr-1 text-amber-600" /> <span className="hidden xl:inline">NOTAS</span>
                 </button>
 
                 {/* Calculator Toggle Button */}
@@ -380,12 +375,12 @@ export default function App() {
                     sound.playSelect();
                     setShowCalculator(!showCalculator);
                   }}
-                  className={`font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black transition-colors cursor-pointer ${
-                    showCalculator ? 'bg-black text-white' : 'bg-white text-black hover:bg-slate-100'
+                  className={`font-pixel text-[9px] sm:text-[10px] px-2 py-1.5 border-2 border-[#1b3b2b] rounded-lg transition-colors cursor-pointer ${
+                    showCalculator ? 'bg-[#1b3b2b] text-white' : 'bg-white text-[#1b3b2b] hover:bg-[#edf7f1]'
                   }`}
                   title="Exibir/Ocultar Mini Calculadora"
                 >
-                  <Calculator size={12} className="inline xl:mr-1" /> <span className="hidden xl:inline">CALC</span>
+                  <Calculator size={13} className="inline xl:mr-1 text-sky-600" /> <span className="hidden xl:inline">CALC</span>
                 </button>
 
                 <button
@@ -393,16 +388,14 @@ export default function App() {
                     sound.playSelect();
                     setShowCodex(true);
                   }}
-                  className="font-pixel text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-1 sm:py-1.5 border sm:border-2 border-black bg-white hover:bg-black hover:text-white text-black transition-colors cursor-pointer"
+                  className="font-pixel text-[9px] sm:text-[10px] px-2 py-1.5 border-2 border-[#1b3b2b] rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-colors cursor-pointer shadow-xs"
                   title="Grimório de Fórmulas e Teoria"
                 >
-                  <BookOpen size={12} className="inline md:mr-1" /> <span className="hidden md:inline">GRIMÓRIO</span>
+                  <BookOpen size={13} className="inline md:mr-1" /> <span className="hidden md:inline">GRIMÓRIO</span>
                 </button>
 
-                
-
-                <div className="flex items-center gap-0.5 font-mono text-[10px] sm:text-xs font-black text-black bg-white px-1 sm:px-2 py-0.5 sm:py-1 border sm:border-2 border-black">
-                  <span>🪙{coins}</span>
+                <div className="flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black text-amber-950 bg-gradient-to-r from-amber-200 to-yellow-300 px-2 py-1 border-2 border-amber-700 rounded-lg shadow-xs">
+                  <span>🪙 {coins}</span>
                 </div>
               </>
             )}
@@ -413,32 +406,32 @@ export default function App() {
                   sound.playSelect();
                   setShowDriveModal(true);
                 }}
-                className="font-pixel text-[9px] sm:text-[10px] px-2 sm:px-3 py-1 sm:py-1.5 border sm:border-2 border-black bg-black text-white hover:bg-slate-800 flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer font-bold"
+                className="font-pixel text-[9px] sm:text-[10px] px-3 py-1.5 border-2 border-[#1b3b2b] rounded-lg bg-[#1b3b2b] text-white hover:bg-[#2d5a42] flex items-center gap-1.5 transition-all cursor-pointer font-bold shadow-xs"
               >
-                <Cloud size={11} /> <span>SAVE</span>
+                <Cloud size={12} className="text-sky-300" /> <span>NUVEM</span>
               </button>
             )}
 
             {/* Quick Audio & CRT Toggles */}
-            <div className="flex items-center bg-white p-0.5 border sm:border-2 border-black gap-0.5">
+            <div className="flex items-center bg-white p-0.5 border-2 border-[#1b3b2b] rounded-lg gap-0.5 shadow-xs">
               <button
                 onClick={handleToggleSound}
                 title={soundEnabled ? "Desativar Sons" : "Ativar Sons"}
-                className={`p-0.5 sm:p-1 transition-colors cursor-pointer ${
-                  soundEnabled ? 'text-black font-bold' : 'text-slate-400'
+                className={`p-1 rounded transition-colors cursor-pointer ${
+                  soundEnabled ? 'text-emerald-700 font-bold' : 'text-slate-400'
                 }`}
               >
-                {soundEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
+                {soundEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
               </button>
 
               <button
                 onClick={handleToggleBgm}
                 title={bgmActive ? "Desativar Música BGM" : "Ativar Música BGM"}
-                className={`p-0.5 sm:p-1 transition-colors cursor-pointer ${
-                  bgmActive ? 'bg-black text-white' : 'text-slate-400'
+                className={`p-1 rounded transition-colors cursor-pointer ${
+                  bgmActive ? 'bg-[#1b3b2b] text-emerald-300' : 'text-slate-400'
                 }`}
               >
-                <Music size={12} />
+                <Music size={13} />
               </button>
             </div>
           </div>
@@ -533,17 +526,17 @@ export default function App() {
 
       {/* 3. MOBILE BOTTOM NAVIGATION BAR FOR TOUCH DEVICES */}
       {playerCreature && (
-        <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-3 border-black px-2 py-1.5 flex items-center justify-around shadow-[0_-2px_6px_rgba(0,0,0,0.15)] safe-bottom">
+        <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#fbfdfa] border-t-3 border-[#1b3b2b] px-2 py-1.5 flex items-center justify-around shadow-[0_-3px_0_#122b1e] safe-bottom">
           <button
             onClick={() => {
               sound.playSelect();
               setView('map');
             }}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
-              view === 'map' ? 'text-black font-black underline' : 'text-slate-600'
+            className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg font-pixel text-[8px] cursor-pointer transition-all ${
+              view === 'map' ? 'bg-emerald-600 text-white font-black shadow-xs' : 'text-[#193325] hover:bg-[#edf7f1]'
             }`}
           >
-            <Map size={16} />
+            <Map size={15} />
             <span>MAPA</span>
           </button>
 
@@ -552,11 +545,11 @@ export default function App() {
               sound.playSelect();
               setView('training');
             }}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
-              view === 'training' ? 'text-black font-black underline' : 'text-slate-600'
+            className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg font-pixel text-[8px] cursor-pointer transition-all ${
+              view === 'training' ? 'bg-sky-600 text-white font-black shadow-xs' : 'text-[#193325] hover:bg-[#edf7f1]'
             }`}
           >
-            <Target size={16} />
+            <Target size={15} />
             <span>TREINO</span>
           </button>
 
@@ -565,11 +558,11 @@ export default function App() {
               sound.playSelect();
               setView('challenge');
             }}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
-              view === 'challenge' ? 'text-black font-black underline' : 'text-slate-600'
+            className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg font-pixel text-[8px] cursor-pointer transition-all ${
+              view === 'challenge' ? 'bg-amber-500 text-amber-950 font-black shadow-xs' : 'text-[#193325] hover:bg-[#edf7f1]'
             }`}
           >
-            <Zap size={16} />
+            <Zap size={15} />
             <span>DESAFIO</span>
           </button>
 
@@ -578,11 +571,11 @@ export default function App() {
               sound.playSelect();
               setView('shop');
             }}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer transition-colors ${
-              view === 'shop' ? 'text-black font-black underline' : 'text-slate-600'
+            className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg font-pixel text-[8px] cursor-pointer transition-all ${
+              view === 'shop' ? 'bg-rose-600 text-white font-black shadow-xs' : 'text-[#193325] hover:bg-[#edf7f1]'
             }`}
           >
-            <ShoppingBag size={16} className="text-amber-500" />
+            <ShoppingBag size={15} />
             <span>LOJA</span>
           </button>
 
@@ -591,9 +584,9 @@ export default function App() {
               sound.playSelect();
               setShowNotepad(true);
             }}
-            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-black"
+            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-[#1b3b2b]"
           >
-            <StickyNote size={16} />
+            <StickyNote size={15} />
             <span>NOTAS</span>
           </button>
 
@@ -602,9 +595,9 @@ export default function App() {
               sound.playSelect();
               setShowCalculator(true);
             }}
-            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-black"
+            className="flex flex-col items-center gap-0.5 py-1 px-2 font-pixel text-[8px] cursor-pointer text-slate-600 hover:text-[#1b3b2b]"
           >
-            <Calculator size={16} />
+            <Calculator size={15} />
             <span>CALC</span>
           </button>
         </nav>
