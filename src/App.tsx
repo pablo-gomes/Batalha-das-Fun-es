@@ -273,7 +273,7 @@ export default function App() {
             }}
             className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0"
           >
-            
+
             <div className="min-w-0">
               <h1 className="font-pixel text-[10px] min-[400px]:text-xs sm:text-sm text-[#143021] font-black truncate drop-shadow-xs">
                 BATALHA DAS FUNÇÕES
