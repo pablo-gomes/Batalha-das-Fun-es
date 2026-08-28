@@ -104,7 +104,7 @@ export const QuickNotepad: React.FC<QuickNotepadProps> = ({ className = '', onCl
           />
 
           <div className="text-[8px] font-mono text-emerald-800 font-bold mt-1 text-right">
-            Salvo automaticamente ✓
+            Salvo automaticamente 
           </div>
         </>
       )}

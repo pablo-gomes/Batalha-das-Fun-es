@@ -51,8 +51,8 @@ export const EvolutionModal: React.FC<EvolutionModalProps> = ({ creature, onComp
         {/* Title */}
         <h2 className="font-pixel text-xs sm:text-lg text-amber-300 font-black px-2 drop-shadow-md">
           {phase === 'evolved' 
-            ? '✨ EVOLUÇÃO CONCLUÍDA! ✨' 
-            : '⚡ O QUE ESTÁ ACONTECENDO?! ⚡'}
+            ? ' EVOLUÇÃO CONCLUÍDA! ' 
+            : ' O QUE ESTÁ ACONTECENDO?! '}
         </h2>
 
         {/* Sprite Display with Colored Aura */}
@@ -111,7 +111,7 @@ export const EvolutionModal: React.FC<EvolutionModalProps> = ({ creature, onComp
             }}
             className="gba-btn-primary font-pixel text-[11px] sm:text-xs py-3 px-8 rounded-xl cursor-pointer shadow-[3px_3px_0_#022c22]"
           >
-            CONTINUAR AVENTURA ▶
+            CONTINUAR AVENTURA 
           </button>
         )}
       </div>

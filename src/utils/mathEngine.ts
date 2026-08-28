@@ -43,7 +43,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '🎯 Precisão de f(x)',
+      title: ' Precisão de f(x)',
       formula,
       a, b, c,
       paramX: xVal,
@@ -82,7 +82,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '🔥 Explosão do Delta (Δ)',
+      title: ' Explosão do Delta (Δ)',
       formula,
       a, b, c,
       question: `Calcule o discriminante Δ = b² - 4ac:`,
@@ -121,7 +121,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '⚡ Golpe das Raízes (x₁ e x₂)',
+      title: ' Golpe das Raízes (x₁ e x₂)',
       formula,
       a, b, c,
       question: `Encontre as raízes reais (x₁ e x₂) que zeram a função f(x) = 0:`,
@@ -159,7 +159,7 @@ export function generateMathChallenge(
       return {
         id,
         concept,
-        title: '🌀 Vórtice do Vértice (Xᵥ)',
+        title: ' Vórtice do Vértice (Xᵥ)',
         formula,
         a, b, c,
         question: `Calcule a coordenada X do vértice (Xᵥ = -b / 2a):`,
@@ -177,7 +177,7 @@ export function generateMathChallenge(
       return {
         id,
         concept,
-        title: '🌀 Vórtice do Vértice (Yᵥ)',
+        title: ' Vórtice do Vértice (Yᵥ)',
         formula,
         a, b, c,
         question: `Calcule a ordenada Y do vértice (Yᵥ = -Δ / 4a ou f(Xᵥ)):`,
@@ -199,7 +199,7 @@ export function generateMathChallenge(
       return {
         id,
         concept,
-        title: '🌀 Ponto do Vértice V(Xᵥ, Yᵥ)',
+        title: ' Ponto do Vértice V(Xᵥ, Yᵥ)',
         formula,
         a, b, c,
         question: `Determine as coordenadas completas do Vértice V(Xᵥ, Yᵥ):`,
@@ -232,7 +232,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '🛡️ Barreira da Concavidade',
+      title: 'Barreira da Concavidade',
       formula,
       a, b, c,
       question: `Para onde está voltada a concavidade da parábola desta função?`,
@@ -261,7 +261,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '📍 Interseção com o Eixo Y',
+      title: ' Interseção com o Eixo Y',
       formula,
       a, b, c,
       question: `Qual é o valor onde o gráfico corta o eixo vertical Y (quando x = 0)?`,
@@ -287,7 +287,7 @@ export function generateMathChallenge(
     return {
       id,
       concept,
-      title: '📐 Eixo de Simetria da Parábola',
+      title: ' Eixo de Simetria da Parábola',
       formula,
       a, b, c,
       question: `Qual é a equação da reta vertical do Eixo de Simetria (x = ?)?`,
@@ -318,7 +318,7 @@ export function generateMathChallenge(
   return {
     id,
     concept: 'supreme',
-    title: '💥 Ataque Supremo de Bhaskara',
+    title: ' Ataque Supremo de Bhaskara',
     formula,
     a, b, c,
     question: `Desafio Total: Calcule o discriminante Δ desta função quadrática:`,
@@ -433,7 +433,7 @@ export function generateEnemyDefenseChallenge(enemyLevel: number): MathChallenge
   const picked = concepts[Math.floor(Math.random() * concepts.length)];
   const challenge = generateMathChallenge(picked, enemyLevel >= 15 ? 'dificil' : enemyLevel >= 8 ? 'medio' : 'facil');
   
-  challenge.title = `🛡️ DEFESA: Bloquear Ataque Inimigo!`;
-  challenge.question = `⚠️ O Inimigo atacou com a parábola! ${challenge.question}`;
+  challenge.title = `DEFESA: Bloquear Ataque Inimigo!`;
+  challenge.question = `O Inimigo atacou com a parabola! ${challenge.question}`;
   return challenge;
 }

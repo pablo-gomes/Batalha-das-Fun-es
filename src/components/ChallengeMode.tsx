@@ -4,6 +4,7 @@ import { generateMathChallenge, calculatePrecision } from '../utils/mathEngine';
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
 import { ParabolaGraph } from './ParabolaGraph';
+import { Timer, Trophy } from 'lucide-react';
 
 interface ChallengeModeProps {
   onBack: () => void;
@@ -47,7 +48,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
   const handleSkipQuestion = () => {
     sound.playCancel();
     setCombo(0);
-    setLastFeedback('⏭️ Pergunta pulada! Combo zerado.');
+    setLastFeedback(' Pergunta pulada! Combo zerado.');
     generateNextQuestion();
   };
 
@@ -92,7 +93,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
       if (onEarnCoins) onEarnCoins(coinsGained);
 
       setTimeLeft((prev) => Math.min(90, prev + 3));
-      setLastFeedback(`🔥 EXATO (+${pts} pts | 🪙+${coinsGained}) • +3s! x${newCombo}`);
+      setLastFeedback(` EXATO (+${pts} pts | +${coinsGained}) • +3s! x${newCombo}`);
     } else if (res.rating === 'ALTA') {
       sound.playCorrect(false);
       const pts = 60 * (combo + 1);
@@ -102,11 +103,11 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
       setEarnedCoins((prev) => prev + coinsGained);
       if (onEarnCoins) onEarnCoins(coinsGained);
 
-      setLastFeedback(`⚡ ALTA PRECISÃO (+${pts} pts | 🪙+${coinsGained})`);
+      setLastFeedback(` ALTA PRECISÃO (+${pts} pts | +${coinsGained})`);
     } else {
       sound.playWrong();
       setCombo(0);
-      setLastFeedback('❌ INCORRETO! Combo zerado.');
+      setLastFeedback(' INCORRETO! Combo zerado.');
     }
 
     generateNextQuestion();
@@ -123,10 +124,10 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
           }}
           className="bg-white hover:bg-[#edf7f1] text-[#1b3b2b] font-pixel text-[9px] sm:text-xs px-2.5 sm:px-3 py-1.5 border-2 border-[#1b3b2b] rounded-lg transition-colors cursor-pointer font-bold shadow-xs"
         >
-          ⬅ VOLTAR
+           VOLTAR
         </button>
         <h1 className="font-pixel text-[11px] sm:text-sm text-[#143021] font-black flex items-center gap-1.5 uppercase truncate">
-          ⚡ DESAFIO TURBO (60S)
+           DESAFIO TURBO (60S)
         </h1>
         <div className="font-pixel text-[9px] sm:text-[11px] text-amber-950 bg-amber-200 px-3 py-1 border-2 border-amber-800 rounded-lg font-black shadow-xs">
           PTS: {score}
@@ -135,7 +136,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
 
       {!isPlaying && !gameOver ? (
         <div className="bg-[#fbfdfa] border-3 sm:border-4 border-[#1b3b2b] rounded-2xl p-5 sm:p-8 text-center space-y-4 sm:space-y-5 shadow-[4px_4px_0_#122b1e]">
-          <div className="text-4xl sm:text-6xl">⏱️</div>
+          <div className="text-4xl sm:text-6xl flex justify-center"><Timer size={52} className="text-amber-600" /></div>
           <h2 className="font-pixel text-xs sm:text-base text-[#143021] font-black uppercase">Teste sua agilidade e precisão!</h2>
           <p className="font-mono text-xs sm:text-sm text-slate-700 max-w-md mx-auto leading-relaxed font-bold">
             Resolva o máximo de problemas em 60 segundos. Respostas perfeitas concedem <strong>+3 segundos</strong>, moedas e bônus de combos!
@@ -144,24 +145,24 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
             onClick={startChallenge}
             className="gba-btn-yellow font-pixel text-[11px] sm:text-sm py-3 px-8 rounded-xl font-black cursor-pointer shadow-[3px_3px_0_#451a03]"
           >
-            ▶ INICIAR DESAFIO
+             INICIAR DESAFIO
           </button>
         </div>
       ) : gameOver ? (
         <div className="bg-[#fbfdfa] border-3 sm:border-4 border-[#1b3b2b] rounded-2xl p-5 sm:p-8 text-center space-y-4 sm:space-y-5 shadow-[4px_4px_0_#122b1e]">
-          <div className="text-4xl sm:text-6xl">🏆</div>
+          <div className="text-4xl sm:text-6xl flex justify-center"><Trophy size={52} className="text-amber-600" /></div>
           <h2 className="font-pixel text-sm sm:text-lg text-emerald-950 font-black">TEMPO ESGOTADO!</h2>
           <div className="bg-[#f0f7f2] p-4 border-2 border-[#1b3b2b] rounded-xl font-mono text-sm sm:text-base space-y-1.5 max-w-xs mx-auto font-bold shadow-inner">
             <div>Pontuação: <strong className="text-emerald-950">{score} pts</strong></div>
             <div>Maior Combo: <strong className="text-amber-700">x{highestCombo}</strong></div>
-            {earnedCoins > 0 && <div className="text-emerald-800">Moedas Ganhas: <strong>🪙+{earnedCoins}</strong></div>}
+            {earnedCoins > 0 && <div className="text-emerald-800">Moedas Ganhas: <strong>+{earnedCoins}</strong></div>}
           </div>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             <button
               onClick={startChallenge}
               className="gba-btn-primary font-pixel text-[10px] sm:text-xs py-2.5 px-5 rounded-lg cursor-pointer font-black"
             >
-              JOGAR DE NOVO ▶
+              JOGAR DE NOVO 
             </button>
             <button
               onClick={onBack}
@@ -193,7 +194,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
             <div className="bg-[#fbfdfa] border-2 sm:border-3 border-[#1b3b2b] rounded-xl p-2 text-center shadow-xs">
               <div className="text-[8px] sm:text-[9px] font-pixel font-bold text-slate-600">MOEDAS</div>
               <div className="font-pixel text-base sm:text-2xl text-amber-600 font-black mt-0.5">
-                🪙{earnedCoins}
+                {earnedCoins}
               </div>
             </div>
 
@@ -228,14 +229,14 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
                       showGraph ? 'bg-[#1b3b2b] text-white' : 'bg-slate-100 text-[#1b3b2b] hover:bg-slate-200'
                     }`}
                   >
-                    {showGraph ? '🙈 OCULTAR GRÁFICO' : '📈 VER GRÁFICO'}
+                    {showGraph ? ' OCULTAR GRÁFICO' : ' VER GRÁFICO'}
                   </button>
 
                   <button
                     onClick={handleSkipQuestion}
                     className="font-pixel text-[9px] sm:text-[10px] px-2.5 py-1 border-2 border-rose-800 bg-rose-100 hover:bg-rose-200 text-rose-900 rounded transition-colors cursor-pointer font-bold"
                   >
-                    ⏭️ PULAR
+                     PULAR
                   </button>
                 </div>
               </div>
@@ -291,7 +292,7 @@ export const ChallengeMode: React.FC<ChallengeModeProps> = ({ onBack, onEarnCoin
                     onClick={() => handleSubmit()}
                     className="gba-btn-primary font-pixel text-[10px] sm:text-xs px-5 py-2 rounded-lg font-black cursor-pointer shrink-0"
                   >
-                    ENVIAR ▶
+                    ENVIAR 
                   </button>
                 </div>
               )}

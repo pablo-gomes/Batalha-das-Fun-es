@@ -314,7 +314,7 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
                   <div className="font-mono text-[11px] sm:text-xs text-emerald-800 font-bold">
                     {playerCreature ? (
                       <span>
-                        {playerCreature.name} (Nv {playerCreature.level}) • 🪙{userCoins}
+                        {playerCreature.name} (Nv {playerCreature.level}) • {userCoins}
                       </span>
                     ) : (
                       <span className="text-slate-500">Nenhum monstro selecionado</span>
@@ -405,7 +405,7 @@ export const GoogleDriveSaveModal: React.FC<GoogleDriveSaveModalProps> = ({
                 onClick={handleLogin}
                 className="gba-btn-blue inline-flex items-center gap-1.5 px-4 py-2 font-pixel text-[10px] sm:text-[11px] rounded-lg cursor-pointer font-black"
               >
-                CONECTAR COM GOOGLE ▶
+                CONECTAR COM GOOGLE 
               </button>
             </div>
           )}

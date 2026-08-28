@@ -3,6 +3,8 @@ import { MathChallenge, MathConcept } from '../types';
 import { generateMathChallenge, calculatePrecision } from '../utils/mathEngine';
 import { ParabolaGraph } from './ParabolaGraph';
 import { sound } from '../utils/audio';
+import { GameIcon } from '../utils/iconMap';
+import { Target } from 'lucide-react';
 
 interface TrainingModeProps {
   onBack: () => void;
@@ -17,13 +19,13 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
   const [solvedCount, setSolvedCount] = useState<number>(0);
 
   const concepts: { key: MathConcept; name: string; icon: string; desc: string }[] = [
-    { key: 'roots', name: 'Raízes (x₁, x₂)', icon: '⚡', desc: 'Pontos onde f(x) = 0 cruza o eixo X' },
-    { key: 'delta', name: 'Discriminante (Δ)', icon: '🔥', desc: 'Cálculo de Δ = b² - 4ac' },
-    { key: 'vertex_x', name: 'Abscissa (Xᵥ)', icon: '🌀', desc: 'Eixo de simetria x = -b/2a' },
-    { key: 'vertex_y', name: 'Ordenada (Yᵥ)', icon: '🏔️', desc: 'Valor extremo y = -Δ/4a' },
-    { key: 'fx_value', name: 'Valor f(x)', icon: '🎯', desc: 'Substituição de x na equação' },
-    { key: 'concavity', name: 'Concavidade (a)', icon: '🛡️', desc: 'Sentido da abertura da parábola' },
-    { key: 'y_intercept', name: 'Corte Y (0, c)', icon: '📍', desc: 'Ponto onde cruza o eixo Y' }
+    { key: 'roots', name: 'Raízes (x₁, x₂)', icon: 'Zap', desc: 'Pontos onde f(x) = 0 cruza o eixo X' },
+    { key: 'delta', name: 'Discriminante (Δ)', icon: 'Flame', desc: 'Cálculo de Δ = b² - 4ac' },
+    { key: 'vertex_x', name: 'Abscissa (Xᵥ)', icon: 'Orbit', desc: 'Eixo de simetria x = -b/2a' },
+    { key: 'vertex_y', name: 'Ordenada (Yᵥ)', icon: 'Mountain', desc: 'Valor extremo y = -Δ/4a' },
+    { key: 'fx_value', name: 'Valor f(x)', icon: 'Crosshair', desc: 'Substituição de x na equação' },
+    { key: 'concavity', name: 'Concavidade (a)', icon: 'Shield', desc: 'Sentido da abertura da parábola' },
+    { key: 'y_intercept', name: 'Corte Y (0, c)', icon: 'MapPin', desc: 'Ponto onde cruza o eixo Y' }
   ];
 
   const handlePickConcept = (c: MathConcept) => {
@@ -73,10 +75,10 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
             }}
             className="bg-white hover:bg-[#edf7f1] text-[#1b3b2b] font-pixel text-[9px] sm:text-xs px-2.5 sm:px-3 py-1.5 border-2 border-[#1b3b2b] rounded-lg transition-colors cursor-pointer font-bold shadow-xs"
           >
-            ⬅ VOLTAR
+             VOLTAR
           </button>
           <h1 className="font-pixel text-[11px] sm:text-sm text-[#143021] font-black flex items-center gap-1.5 uppercase">
-            🎯 DOJO DE TREINO MATEMÁTICO
+            <Target size={16} /> DOJO DE TREINO MATEMÁTICO
           </h1>
         </div>
 
@@ -97,7 +99,7 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
                 : 'bg-[#fbfdfa] border-[#1b3b2b] text-[#143021] hover:bg-[#edf7f1] shadow-xs'
             }`}
           >
-            <div className="text-base sm:text-lg mb-0.5">{c.icon}</div>
+            <div className="text-base sm:text-lg mb-0.5 flex justify-center"><GameIcon name={c.icon} size={18} /></div>
             <div className="font-pixel text-[8px] sm:text-[9px] font-black truncate">{c.name}</div>
           </button>
         ))}
@@ -126,7 +128,7 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
                   onClick={handleCycleHint}
                   className="text-[8px] sm:text-[9px] font-pixel px-2.5 py-1 border border-amber-600 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded transition-all cursor-pointer shadow-xs"
                 >
-                  💡 {hintStep === 0 ? 'VER DICA' : `DICA (${hintStep}/3)`}
+                   {hintStep === 0 ? 'VER DICA' : `DICA (${hintStep}/3)`}
                 </button>
                 {hintStep === 0 && (
                   <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 truncate">
@@ -172,7 +174,7 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
                 onClick={() => handleSubmit()}
                 className="gba-btn-primary font-pixel text-[10px] sm:text-xs px-4 py-2 rounded-lg font-black cursor-pointer shrink-0"
               >
-                VERIFICAR ▶
+                VERIFICAR 
               </button>
             </div>
           )}
@@ -191,7 +193,7 @@ export const TrainingMode: React.FC<TrainingModeProps> = ({ onBack }) => {
                 onClick={handleNextQuestion}
                 className="mt-2.5 font-pixel text-[9px] sm:text-[10px] gba-btn-blue px-3 py-1.5 rounded-lg border border-sky-900 cursor-pointer font-black"
               >
-                PRÓXIMA QUESTÃO ▶
+                PRÓXIMA QUESTÃO 
               </button>
             </div>
           )}

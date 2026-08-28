@@ -46,7 +46,7 @@ export const MapView: React.FC<MapViewProps> = ({
             }}
             className="bg-slate-100 hover:bg-slate-200 text-[#1b3b2b] font-pixel text-[9px] sm:text-[10px] px-2.5 py-1 rounded border border-[#1b3b2b]/50 transition-colors cursor-pointer font-bold"
           >
-            ⬅ INÍCIO
+             INÍCIO
           </button>
           <h1 className="font-pixel text-[11px] sm:text-xs text-[#143021] font-black flex items-center gap-1.5 uppercase">
             <Map size={14} className="text-emerald-700" /> MAPA DE REGIÕES
@@ -162,7 +162,7 @@ export const MapView: React.FC<MapViewProps> = ({
                   stage.isBoss ? 'gba-btn-red' : 'gba-btn-primary'
                 } font-pixel text-[9px] sm:text-[10px] py-2 px-2.5 rounded-lg flex items-center justify-center gap-1 cursor-pointer font-bold shadow-xs`}
               >
-                <Swords size={11} /> {stage.isBoss ? 'DESAFIAR CHEFE ▶' : 'BATALHAR ▶'}
+                <Swords size={11} /> {stage.isBoss ? 'DESAFIAR CHEFE ' : 'BATALHAR '}
               </button>
             </div>
           ))}

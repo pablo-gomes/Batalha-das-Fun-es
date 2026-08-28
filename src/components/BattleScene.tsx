@@ -6,8 +6,9 @@ import { MathDialogueBox } from './MathDialogueBox';
 import { generateMathChallenge, generateEnemyDefenseChallenge, calculatePrecision } from '../utils/mathEngine';
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
-import { Flame, X, AlertTriangle, Trophy, Star, Skull, PartyPopper } from 'lucide-react';
+import { Flame, X, AlertTriangle, Trophy, Star, Skull, PartyPopper, HelpCircle, Sparkles } from 'lucide-react';
 import battleBackground from '../../fundo_do_jogo.png';
+import { BattleGuideModal } from './BattleGuideModal';
 
 interface BattleSceneProps {
   playerCreature: Creature;
@@ -56,6 +57,14 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
   const [damageMultiplier, setDamageMultiplier] = useState<number>(1);
   const [shieldActive, setShieldActive] = useState<boolean>(false);
   const [isBattleOver, setIsBattleOver] = useState<boolean>(false);
+  const [showBattleGuide, setShowBattleGuide] = useState<boolean>(false);
+  const [showInitialPrompt, setShowInitialPrompt] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('batalha_funcoes_battle_guide_seen') !== 'true';
+    } catch {
+      return false;
+    }
+  });
 
   // Start BGM on load if enabled
   useEffect(() => {
@@ -200,7 +209,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
         setIsEnemyHit(true);
         if (precision.isExact) {
           sound.playCrit();
-          triggerFloatingText(`💥 CRÍTICO! -${totalDamage} (${precision.accuracyPercentage}%)`, 'crit', 'enemy');
+          triggerFloatingText(` CRÍTICO! -${totalDamage} (${precision.accuracyPercentage}%)`, 'crit', 'enemy');
         } else {
           sound.playHit();
           triggerFloatingText(`-${totalDamage} (${precision.accuracyPercentage}%)`, 'normal', 'enemy');
@@ -365,11 +374,23 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
         className="w-full h-72 min-[420px]:h-80 sm:h-96 bg-[#dcfce7] border-3 sm:border-4 border-[#1b3b2b] rounded-xl relative overflow-hidden shadow-[4px_4px_0px_#122b1e] sm:shadow-[6px_6px_0px_#122b1e] p-2 min-[420px]:p-3 sm:p-4 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${battleBackground})` }}
       >
-        {/* TOP ROW: Opponent HUD (Left) & Opponent Sprite (Right) */}
-        <div className="w-full flex items-start justify-between z-10 gap-1">
+        {/* TOP ROW: Opponent HUD (Left) & Opponent Sprite (Right) + Guide Button */}
+        <div className="w-full flex items-start justify-between z-10 gap-1 relative">
           <div className="pt-0.5">
             <CombatHUD creature={enemy} isPlayer={false} />
           </div>
+
+          {/* Persistent In-Battle Guide Button */}
+          <button
+            onClick={() => {
+              sound.playSelect();
+              setShowBattleGuide(true);
+            }}
+            className="absolute top-0 right-0 sm:right-2 z-30 font-pixel text-[8px] sm:text-[9px] px-2 sm:px-2.5 py-1 rounded-lg bg-amber-400 text-amber-950 border-2 border-amber-800 shadow-md hover:bg-yellow-300 transition-all cursor-pointer font-black flex items-center gap-1"
+            title="Ver Guia de Combate"
+          >
+            <span> GUIA</span>
+          </button>
 
           <div className="relative pr-1 sm:pr-8 pt-0.5 gba-sprite shrink-0">
             {/* Responsive Sprite Container */}
@@ -395,6 +416,38 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
             )}
           </div>
         </div>
+
+        {/* Initial First-Battle Prompt Banner */}
+        {showInitialPrompt && (
+          <div className="absolute top-12 left-2 right-2 z-40 bg-[#0f2419]/95 border-2 border-amber-500 rounded-xl p-2 sm:p-2.5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-2 animate-in fade-in slide-in-from-top text-white">
+            <div className="flex items-center gap-2 text-[9px] sm:text-xs font-mono text-emerald-200">
+              <AlertTriangle size={18} className="text-amber-400 shrink-0" />
+              <span><strong>Primeira Batalha?</strong> Deseja ver um guia de combate ou continuar jogando?</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => {
+                  sound.playSelect();
+                  setShowInitialPrompt(false);
+                  setShowBattleGuide(true);
+                }}
+                className="gba-btn-yellow text-amber-950 font-pixel text-[8px] sm:text-[9px] px-2.5 py-1.5 rounded-lg cursor-pointer flex items-center gap-1 font-black"
+              >
+                <Sparkles size={11} /> VER GUIA
+              </button>
+              <button
+                onClick={() => {
+                  sound.playConfirm();
+                  localStorage.setItem('batalha_funcoes_battle_guide_seen', 'true');
+                  setShowInitialPrompt(false);
+                }}
+                className="bg-emerald-800 hover:bg-emerald-700 text-white font-pixel text-[8px] sm:text-[9px] px-2.5 py-1.5 rounded-lg border border-emerald-500 cursor-pointer"
+              >
+                CONTINUAR NORMAL 
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* BOTTOM ROW: Player Back Sprite (Left) & Player HUD (Right) */}
         <div className="w-full flex items-end justify-between z-10 pb-0.5 gap-1">
@@ -448,6 +501,15 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
           setActiveMenu={setActiveMenu}
         />
       </div>
+
+      {/* 3. IN-BATTLE GUIDE MODAL */}
+      {showBattleGuide && (
+        <BattleGuideModal
+          onClose={() => setShowBattleGuide(false)}
+          playerCreatureName={player.name}
+          enemyCreatureName={enemy.name}
+        />
+      )}
     </div>
   );
 };

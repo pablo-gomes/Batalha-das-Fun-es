@@ -3,15 +3,18 @@ import { Creature } from '../types';
 import { STARTER_CREATURES } from '../data/creatures';
 import { PixelSprite } from './PixelSprite';
 import { sound } from '../utils/audio';
+import { ChevronRight } from 'lucide-react';
 
 interface StarterSelectionProps {
   onSelectStarter: (creature: Creature) => void;
   onOpenDriveCloud?: () => void;
+  onOpenTutorial?: () => void;
 }
 
 export const StarterSelection: React.FC<StarterSelectionProps> = ({
   onSelectStarter,
-  onOpenDriveCloud
+  onOpenDriveCloud,
+  onOpenTutorial
 }) => {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const creature = STARTER_CREATURES[selectedIdx] || STARTER_CREATURES[0];
@@ -41,7 +44,7 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
     <div className="w-full max-w-3xl mx-auto p-1.5 sm:p-4 select-none space-y-3 text-[#163323]">
 
       {/* Starter Selector Cards Grid */}
-      <div className="grid grid-cols-2 min-[540px]:grid-cols-4 gap-2">
+      <div data-tour="starter-cards" className="grid grid-cols-2 min-[540px]:grid-cols-4 gap-2">
         {STARTER_CREATURES.map((st, idx) => {
           const isChosen = idx === selectedIdx;
           const stTheme = getElementTheme(st.element);
@@ -111,23 +114,39 @@ export const StarterSelection: React.FC<StarterSelectionProps> = ({
             <span className="text-[8px] font-pixel text-emerald-900 font-bold shrink-0 mr-1.5">EVOLUÇÃO:</span>
             <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-[#143021] font-bold overflow-x-auto whitespace-nowrap">
               <span className="bg-white px-1.5 py-0.2 rounded border border-[#1b3b2b]/40 font-bold">{creature.forms[0]?.name || creature.name}</span>
-              <span className="text-emerald-700">➔</span>
+              <ChevronRight size={14} className="text-emerald-700" />
               <span>{creature.forms[1]?.name || 'Forma 2'}</span>
-              <span className="text-emerald-700">➔</span>
+              <ChevronRight size={14} className="text-emerald-700" />
               <span>{creature.forms[2]?.name || 'Forma 3'}</span>
             </div>
           </div>
 
-          {/* Start Journey Button */}
-          <button
-            onClick={() => {
-              sound.playConfirm();
-              onSelectStarter(creature);
-            }}
-            className="w-full gba-btn-primary py-2.5 text-[10px] sm:text-xs font-black tracking-wide flex items-center justify-center gap-1.5 cursor-pointer shadow-xs rounded-xl"
-          >
-            ESCOLHER {creature.name.toUpperCase()} ▶
-          </button>
+          {/* Start Journey Button & Tutorial */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            {onOpenTutorial && (
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playSelect();
+                  onOpenTutorial();
+                }}
+                className="gba-btn-yellow py-2.5 px-3 text-[10px] sm:text-xs font-black tracking-wide flex items-center justify-center gap-1.5 cursor-pointer rounded-xl shrink-0"
+              >
+                 COMO JOGAR
+              </button>
+            )}
+
+            <button
+              data-tour="starter-choose"
+              onClick={() => {
+                sound.playConfirm();
+                onSelectStarter(creature);
+              }}
+              className="flex-1 gba-btn-primary py-2.5 text-[10px] sm:text-xs font-black tracking-wide flex items-center justify-center gap-1.5 cursor-pointer shadow-xs rounded-xl"
+            >
+              ESCOLHER {creature.name.toUpperCase()} 
+            </button>
+          </div>
         </div>
       </div>
     </div>

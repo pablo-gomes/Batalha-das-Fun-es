@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ParabolaGraph } from './ParabolaGraph';
 import { sound } from '../utils/audio';
+import { BookOpen } from 'lucide-react';
 
 interface CodexGrimoireProps {
   onClose: () => void;
@@ -22,7 +23,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
         {/* Header */}
         <div className="bg-[#f0f7f2] border-b-2 border-[#1b3b2b] p-3 sm:p-4 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
-            <span className="text-2xl">📖</span>
+            <BookOpen size={24} className="text-emerald-800" aria-label="Grimório" />
             <div>
               <h2 className="font-pixel text-[11px] sm:text-sm text-[#143021] font-black uppercase">
                 Grimório das Funções
@@ -66,7 +67,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
               }}
               className="bg-white hover:bg-rose-50 text-rose-800 font-pixel text-[10px] sm:text-xs px-3 py-1.5 border-2 border-rose-800 rounded-lg transition-colors cursor-pointer font-bold shadow-xs"
             >
-              ✕ FECHAR
+               FECHAR
             </button>
           </div>
         </div>
@@ -78,7 +79,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
               {/* Card 1: Forma Geral */}
               <div className="bg-[#f0f9ff] border-2 border-[#0284c7] rounded-xl p-3 sm:p-4 shadow-[2px_2px_0_#0369a1] space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-pixel text-[10px] sm:text-xs text-sky-950 font-black uppercase">📐 Forma Geral</h3>
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-sky-950 font-black uppercase"> Forma Geral</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-white bg-sky-700 px-2 py-0.5 rounded font-bold">a ≠ 0</span>
                 </div>
                 <div className="bg-white p-2.5 border-2 border-sky-300 rounded-lg font-mono text-center text-sm sm:text-base text-sky-950 font-black shadow-xs">
@@ -94,7 +95,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
               {/* Card 2: Discriminante Delta */}
               <div className="bg-[#fff7ed] border-2 border-[#ea580c] rounded-xl p-3 sm:p-4 shadow-[2px_2px_0_#c2410c] space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-pixel text-[10px] sm:text-xs text-orange-950 font-black uppercase">🔥 Discriminante (Δ)</h3>
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-orange-950 font-black uppercase"> Discriminante (Δ)</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-white bg-orange-700 px-2 py-0.5 rounded font-bold">Raízes</span>
                 </div>
                 <div className="bg-white p-2.5 border-2 border-orange-300 rounded-lg font-mono text-center text-sm sm:text-base text-orange-950 font-black shadow-xs">
@@ -110,7 +111,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
               {/* Card 3: Fórmula de Bhaskara */}
               <div className="bg-[#f0fdf4] border-2 border-[#16a34a] rounded-xl p-3 sm:p-4 shadow-[2px_2px_0_#15803d] space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black uppercase">⚡ Bhaskara</h3>
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black uppercase"> Bhaskara</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-white bg-emerald-700 px-2 py-0.5 rounded font-bold">f(x) = 0</span>
                 </div>
                 <div className="bg-white p-2.5 border-2 border-emerald-300 rounded-lg font-mono text-center text-sm sm:text-base text-emerald-950 font-black shadow-xs">
@@ -124,7 +125,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
               {/* Card 4: Coordenadas do Vértice */}
               <div className="bg-[#faf5ff] border-2 border-[#9333ea] rounded-xl p-3 sm:p-4 shadow-[2px_2px_0_#7e22ce] space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-pixel text-[10px] sm:text-xs text-purple-950 font-black uppercase">🌀 Vértice V(Xᵥ, Yᵥ)</h3>
+                  <h3 className="font-pixel text-[10px] sm:text-xs text-purple-950 font-black uppercase"> Vértice V(Xᵥ, Yᵥ)</h3>
                   <span className="text-[9px] sm:text-[10px] font-mono text-white bg-purple-700 px-2 py-0.5 rounded font-bold">Extremo</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -146,7 +147,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
             <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center">
               {/* Sliders Control */}
               <div className="w-full md:w-1/2 bg-[#f0f7f2] p-3.5 sm:p-4 border-2 border-[#1b3b2b] rounded-xl space-y-3 shadow-sm">
-                <h3 className="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black uppercase mb-1">🎛️ Ajustar Coeficientes:</h3>
+                <h3 className="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black uppercase mb-1">Ajustar Coeficientes:</h3>
 
                 {/* Slider A */}
                 <div>
@@ -211,7 +212,7 @@ export const CodexGrimoire: React.FC<CodexGrimoireProps> = ({ onClose }) => {
                     Vértice V = ({xv.toFixed(1)}, {yv.toFixed(1)})
                   </div>
                   <div className="text-slate-600 text-[11px]">
-                    {delta > 0 ? '✓ 2 Raízes reais' : delta === 0 ? '✓ 1 Raiz dupla' : '✗ Nenhuma raiz real'}
+                    {delta > 0 ? ' 2 Raízes reais' : delta === 0 ? ' 1 Raiz dupla' : ' Nenhuma raiz real'}
                   </div>
                 </div>
               </div>

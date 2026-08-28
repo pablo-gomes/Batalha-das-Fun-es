@@ -58,7 +58,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
     if (coins < totalCost) {
       sound.playWrong();
       setFeedback({
-        text: `Moedas insuficientes! Você precisa de 🪙 ${totalCost} moedas.`,
+        text: `Moedas insuficientes! Você precisa de  ${totalCost} moedas.`,
         type: 'error'
       });
       setTimeout(() => setFeedback(null), 3000);
@@ -68,7 +68,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
     sound.playConfirm();
     onBuyItem(item.id, qty, totalCost);
     setFeedback({
-      text: `Você comprou +${qty} ${item.name} por 🪙 ${totalCost} moedas!`,
+      text: `Você comprou +${qty} ${item.name} por  ${totalCost} moedas!`,
       type: 'success'
     });
     setTimeout(() => setFeedback(null), 3000);
@@ -94,7 +94,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
 
         <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-300 to-yellow-400 text-amber-950 font-pixel text-[10px] sm:text-xs px-3 py-1.5 border-2 border-amber-800 rounded-lg shadow-xs font-black">
           <Coins size={15} className="text-amber-800" />
-          <span>SALDO: 🪙 {coins}</span>
+          <span>SALDO:  {coins}</span>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
 
       {/* Subtitle description */}
       <div className="bg-[#edf7f1] border-2 sm:border-3 border-[#1b3b2b] rounded-xl p-2.5 sm:p-3 font-mono text-xs sm:text-sm text-emerald-900 font-bold shadow-xs">
-        🪙 <strong>Itens de Apoio & Poções:</strong> Utilize suas moedas ganhas nas batalhas para recuperar HP, restaurar Energia e multiplicar seu poder!
+         <strong>Itens de Apoio & Poções:</strong> Utilize suas moedas ganhas nas batalhas para recuperar HP, restaurar Energia e multiplicar seu poder!
       </div>
 
       {/* Items Grid */}
@@ -126,7 +126,8 @@ export const ShopView: React.FC<ShopViewProps> = ({
           return (
             <div 
               key={item.id}
-              className="bg-[#fbfdfa] border-3 sm:border-4 border-[#1b3b2b] rounded-xl p-3.5 flex flex-col justify-between space-y-3 shadow-[3px_3px_0_#122b1e] hover:translate-y-[-2px] transition-transform"
+              title={item.description}
+              className="bg-[#fbfdfa] border-3 sm:border-4 border-[#1b3b2b] rounded-xl p-3.5 flex flex-col justify-between space-y-3 shadow-[3px_3px_0_#122b1e] hover:translate-y-[-2px] hover:border-emerald-700 transition-all"
             >
               {/* Top info */}
               <div className="space-y-2">
@@ -154,7 +155,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
                 <div className="flex items-center justify-between font-mono text-xs font-black">
                   <span className="text-slate-600">PREÇO:</span>
                   <span className="text-amber-950 bg-amber-100 border border-amber-400 px-2 py-0.5 rounded shadow-xs">
-                    🪙 {item.cost} moedas
+                     {item.cost} moedas
                   </span>
                 </div>
 
@@ -168,7 +169,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
                         : 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed shadow-none'
                     }`}
                   >
-                    1x (🪙{item.cost})
+                    1x ({item.cost})
                   </button>
 
                   <button
@@ -180,7 +181,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
                         : 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed shadow-none'
                     }`}
                   >
-                    5x (🪙{item.cost * 5})
+                    5x ({item.cost * 5})
                   </button>
                 </div>
               </div>

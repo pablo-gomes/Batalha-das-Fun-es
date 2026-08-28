@@ -14,10 +14,12 @@ import { GoogleDriveSaveModal } from './components/GoogleDriveSaveModal';
 import { QuickNotepad } from './components/QuickNotepad';
 import { MiniCalculator } from './components/MiniCalculator';
 import { ShopView } from './components/ShopView';
+import { InteractiveOnboarding } from './components/InteractiveOnboarding';
 import { GameSaveData } from './services/driveStorage';
 import { sound } from './utils/audio';
 import { preloadSprites } from './utils/spritePreloader';
-import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, StickyNote, Calculator, X, ShoppingBag } from 'lucide-react';
+import { Volume2, VolumeX, Music, BookOpen, Map, Target, Zap, Cloud, StickyNote, Calculator, X, ShoppingBag, HelpCircle, Coins } from 'lucide-react';
+import backgroundImage from '../background.png';
 
 const STORAGE_KEY_PLAYER = 'batalha_funcoes_player_creature';
 const STORAGE_KEY_COINS = 'batalha_funcoes_player_coins';
@@ -62,7 +64,15 @@ export default function App() {
   const [items, setItems] = useState<InventoryItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_ITEMS);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed: InventoryItem[] = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return INITIAL_ITEMS.map(defaultItem => {
+            const found = parsed.find(p => p.id === defaultItem.id);
+            return found ? { ...defaultItem, amount: Math.max(0, found.amount) } : defaultItem;
+          });
+        }
+      }
     } catch {
       // ignore
     }
@@ -79,22 +89,21 @@ export default function App() {
     return 150;
   });
 
-  // Active View Screen
-  const [view, setView] = useState<'starter' | 'map' | 'battle' | 'training' | 'challenge' | 'shop'>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_PLAYER);
-      if (saved) return 'map';
-    } catch {
-      // ignore
-    }
-    return 'starter';
-  });
+  // Active View Screen - Abre sempre direto na tela de escolher personagem
+  const [view, setView] = useState<'starter' | 'map' | 'battle' | 'training' | 'challenge' | 'shop'>('starter');
   
   // Modals, Tools & Extras
   const [showCodex, setShowCodex] = useState<boolean>(false);
   const [showDriveModal, setShowDriveModal] = useState<boolean>(false);
   const [showNotepad, setShowNotepad] = useState<boolean>(false);
   const [showCalculator, setShowCalculator] = useState<boolean>(false);
+  const [showOnboarding, setShowOnboarding] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('batalha_funcoes_tutorial_seen') !== 'true';
+    } catch {
+      return false;
+    }
+  });
   const [evolvingCreature, setEvolvingCreature] = useState<Creature | null>(null);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [bgmActive, setBgmActive] = useState<boolean>(false);
@@ -262,7 +271,10 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-transparent text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}>
+    <div 
+      className={`min-h-screen bg-cover bg-center bg-fixed bg-no-repeat text-black flex flex-col justify-between font-mono relative pb-16 sm:pb-0 ${scanlines ? 'scanlines' : ''}`}
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       {/* 1. TOP HEADER & GBA RETRO NAVIGATION */}
       <header className="bg-[#fbfdfa] border-b-3 sm:border-b-4 border-[#1b3b2b] px-2 sm:px-4 py-2 sticky top-0 z-40 shadow-[0_3px_0_#122b1e]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
@@ -288,6 +300,7 @@ export default function App() {
           {playerCreature && (
             <nav className="hidden sm:flex items-center gap-1.5">
               <button
+                data-tour="nav-map"
                 onClick={() => {
                   sound.playSelect();
                   setView('map');
@@ -303,6 +316,7 @@ export default function App() {
               </button>
 
               <button
+                data-tour="nav-training"
                 onClick={() => {
                   sound.playSelect();
                   setView('training');
@@ -318,6 +332,7 @@ export default function App() {
               </button>
 
               <button
+                data-tour="nav-challenge"
                 onClick={() => {
                   sound.playSelect();
                   setView('challenge');
@@ -333,6 +348,7 @@ export default function App() {
               </button>
 
               <button
+                data-tour="nav-shop"
                 onClick={() => {
                   sound.playSelect();
                   setView('shop');
@@ -355,6 +371,7 @@ export default function App() {
               <>
                 {/* Notepad Toggle Button */}
                 <button
+                  data-tour="tool-notepad"
                   onClick={() => {
                     sound.playSelect();
                     setShowNotepad(!showNotepad);
@@ -369,6 +386,7 @@ export default function App() {
 
                 {/* Calculator Toggle Button */}
                 <button
+                  data-tour="tool-calc"
                   onClick={() => {
                     sound.playSelect();
                     setShowCalculator(!showCalculator);
@@ -382,6 +400,7 @@ export default function App() {
                 </button>
 
                 <button
+                  data-tour="tool-grimorio"
                   onClick={() => {
                     sound.playSelect();
                     setShowCodex(true);
@@ -392,14 +411,29 @@ export default function App() {
                   <BookOpen size={13} className="inline md:mr-1" /> <span className="hidden md:inline">GRIMÓRIO</span>
                 </button>
 
-                <div className="flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black text-amber-950 bg-gradient-to-r from-amber-200 to-yellow-300 px-2 py-1 border-2 border-amber-700 rounded-lg shadow-xs">
-                  <span>🪙 {coins}</span>
+                <div data-tour="player-coins" className="flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black text-amber-950 bg-gradient-to-r from-amber-200 to-yellow-300 px-2 py-1 border-2 border-amber-700 rounded-lg shadow-xs">
+                  <Coins size={14} className="text-amber-800" aria-label="Moedas" /><span>{coins}</span>
                 </div>
               </>
             )}
 
+            {/* Guia Tutorial Button (Always Available) */}
+            <button
+              data-tour="tool-guide"
+              onClick={() => {
+                sound.playSelect();
+                setShowOnboarding(true);
+              }}
+              className="font-pixel text-[9px] sm:text-[10px] px-2.5 py-1.5 border-2 border-amber-800 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-400 text-amber-950 hover:brightness-105 transition-all cursor-pointer font-black shadow-xs flex items-center gap-1"
+              title="Guia Interativo & Como Jogar"
+            >
+              <HelpCircle size={13} className="text-amber-950 shrink-0" />
+              <span className="hidden min-[400px]:inline">GUIA</span>
+            </button>
+
             {!playerCreature && (
               <button
+                data-tour="tool-cloud"
                 onClick={() => {
                   sound.playSelect();
                   setShowDriveModal(true);
@@ -451,6 +485,7 @@ export default function App() {
             <StarterSelection
               onSelectStarter={handleSelectStarter}
               onOpenDriveCloud={() => setShowDriveModal(true)}
+              onOpenTutorial={() => setShowOnboarding(true)}
             />
           )}
 
@@ -526,6 +561,7 @@ export default function App() {
       {playerCreature && (
         <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#fbfdfa] border-t-3 border-[#1b3b2b] px-2 py-1.5 flex items-center justify-around shadow-[0_-3px_0_#122b1e] safe-bottom">
           <button
+            data-tour="mobile-nav-map"
             onClick={() => {
               sound.playSelect();
               setView('map');
@@ -539,6 +575,7 @@ export default function App() {
           </button>
 
           <button
+            data-tour="mobile-nav-training"
             onClick={() => {
               sound.playSelect();
               setView('training');
@@ -552,6 +589,7 @@ export default function App() {
           </button>
 
           <button
+            data-tour="mobile-nav-challenge"
             onClick={() => {
               sound.playSelect();
               setView('challenge');
@@ -565,6 +603,7 @@ export default function App() {
           </button>
 
           <button
+            data-tour="mobile-nav-shop"
             onClick={() => {
               sound.playSelect();
               setView('shop');
@@ -578,6 +617,7 @@ export default function App() {
           </button>
 
           <button
+            data-tour="mobile-nav-notepad"
             onClick={() => {
               sound.playSelect();
               setShowNotepad(true);
@@ -589,6 +629,7 @@ export default function App() {
           </button>
 
           <button
+            data-tour="mobile-nav-calc"
             onClick={() => {
               sound.playSelect();
               setShowCalculator(true);
@@ -601,7 +642,16 @@ export default function App() {
         </nav>
       )}
 
-      {/* 4. MODALS (Grimório das Fórmulas & Evolução & Google Drive Nuvem) */}
+      {/* 4. MODALS (Grimório das Fórmulas & Onboarding & Evolução & Google Drive Nuvem) */}
+      {showOnboarding && (
+        <InteractiveOnboarding
+          onClose={() => setShowOnboarding(false)}
+          playerCreatureName={playerCreature?.name}
+          currentView={view}
+          onNavigateView={(nextView) => setView(nextView)}
+        />
+      )}
+
       {showCodex && (
         <CodexGrimoire onClose={() => setShowCodex(false)} />
       )}

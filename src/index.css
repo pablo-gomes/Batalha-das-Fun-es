@@ -8,7 +8,10 @@
   body {
     font-family: 'JetBrains Mono', monospace;
     background-color: #84cb9c;
-    background-image: linear-gradient(180deg, #78c291 0%, #8dd1a5 50%, #7dbf94 100%);
+    background-image: url('../background.png'), linear-gradient(180deg, #78c291 0%, #8dd1a5 50%, #7dbf94 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     color: #1a3325;
     overflow-x: hidden;
@@ -202,3 +205,82 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* =========================================================
+   ONBOARDING TUTORIAL & MASCOT ANIMATIONS
+   ========================================================= */
+
+@keyframes mascot-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1.5deg);
+  }
+}
+
+@keyframes mascot-point {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10px, -6px) scale(1.08);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7), 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(234, 179, 8, 0), 0 0 0 24px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0), 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-mascot-float {
+  animation: mascot-float 3s ease-in-out infinite;
+}
+
+.animate-mascot-point {
+  animation: mascot-point 1.2s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Candy Crush / Retro GBA Style Pill Button */
+.candy-btn-skip {
+  background: linear-gradient(180deg, #ff6b9d 0%, #f43f5e 50%, #e11d48 100%);
+  border: 3px solid #881337;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #4c0519, inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 1px 1px 0 #881337;
+  border-radius: 9999px;
+  transition: all 0.1s ease;
+}
+
+.candy-btn-skip:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #4c0519, inset 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.candy-btn-skip:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #4c0519, inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Cartoon Dialog Speech Bubble */
+.bubble-speech {
+  position: relative;
+  background: #ffffff;
+  border: 3px solid #1a3c2c;
+  box-shadow: 4px 4px 0px #122b1e, 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+

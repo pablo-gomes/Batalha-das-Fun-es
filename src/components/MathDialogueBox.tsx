@@ -41,6 +41,8 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
   const [inputValue, setInputValue] = useState<string>('');
   const [hintLevel, setHintLevel] = useState<number>(0);
   const [showGraphModal, setShowGraphModal] = useState<boolean>(false);
+  const [hoveredItem, setHoveredItem] = useState<InventoryItem | null>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<Skill | null>(null);
 
   const handleNumClick = (val: string) => {
     sound.playSelect();
@@ -87,9 +89,9 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
       <div className="flex items-center justify-between border-b border-[#2d5a42]/20 pb-1.5 mb-1.5 gap-1.5">
         <span className="text-[9px] sm:text-xs font-pixel font-bold text-[#163323] uppercase truncate">
           {isDefenseTurn 
-            ? <span className="text-rose-600">🛡️ BLOQUEIE O ATAQUE!</span>
+            ? <span className="text-rose-600"> BLOQUEIE O ATAQUE!</span>
             : activeMenu === 'challenge' 
-              ? <span className="text-sky-700">⚡ {selectedSkill?.name || 'ATAQUE'}</span>
+              ? <span className="text-sky-700"> {selectedSkill?.name || 'ATAQUE'}</span>
               : <span>O que fará {playerCreature.name.toUpperCase()}?</span>
           }
         </span>
@@ -177,21 +179,27 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
 
       {/* VIEW 2: Skills / Math Attack Selection */}
       {activeMenu === 'skills' && !isDefenseTurn && (
-        <div className="flex-1 space-y-1.5">
+        <div className="flex-1 space-y-1.5 flex flex-col justify-between">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {playerCreature.skills.map((skill) => {
               const hasEnergy = playerCreature.currentEnergy >= skill.energyCost;
+              const isHovered = hoveredSkill?.id === skill.id;
               return (
                 <button
                   key={skill.id}
                   disabled={!hasEnergy}
+                  onMouseEnter={() => setHoveredSkill(skill)}
+                  onMouseLeave={() => setHoveredSkill(null)}
                   onClick={() => {
                     sound.playSelect();
                     onSelectSkill(skill);
                   }}
+                  title={skill.description}
                   className={`p-2 border rounded-lg text-left flex items-center justify-between transition-all ${
                     hasEnergy 
-                      ? 'bg-white hover:bg-emerald-50 border-[#1b3b2b] text-[#163323] cursor-pointer shadow-xs' 
+                      ? isHovered
+                        ? 'bg-emerald-50 border-emerald-600 text-[#163323] cursor-pointer shadow-xs ring-1 ring-emerald-500'
+                        : 'bg-white hover:bg-emerald-50 border-[#1b3b2b] text-[#163323] cursor-pointer shadow-xs' 
                       : 'bg-slate-100 border-slate-300 opacity-40 cursor-not-allowed text-slate-400'
                   }`}
                 >
@@ -207,26 +215,50 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               );
             })}
           </div>
+
+          {/* Description preview bar on hover */}
+          <div className="bg-[#f0fdf4] border border-emerald-700/30 rounded-lg px-2.5 py-1.5 min-h-[32px] flex items-center shadow-xs">
+            {hoveredSkill ? (
+              <div className="flex items-center gap-1.5 text-[#163323] w-full animate-in fade-in duration-150">
+                <span className="font-pixel text-[8px] bg-sky-600 text-white px-1.5 py-0.5 rounded shrink-0">
+                  {hoveredSkill.type.toUpperCase()}
+                </span>
+                <p className="font-mono text-[10px] sm:text-[11px] font-bold leading-tight truncate">
+                  <strong className="text-emerald-950">{hoveredSkill.name}:</strong> {hoveredSkill.description}
+                </p>
+              </div>
+            ) : (
+              <p className="font-mono text-[10px] text-slate-500 italic">
+                ⚡ Passe o mouse sobre uma habilidade para ver detalhes do ataque.
+              </p>
+            )}
+          </div>
         </div>
       )}
 
       {/* VIEW 3: Inventory Items Selection */}
       {activeMenu === 'items' && !isDefenseTurn && (
-        <div className="flex-1 space-y-1.5">
+        <div className="flex-1 space-y-1.5 flex flex-col justify-between">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {items.map((item) => {
               const canUse = item.amount > 0;
+              const isHovered = hoveredItem?.id === item.id;
               return (
                 <button
                   key={item.id}
                   disabled={!canUse}
+                  onMouseEnter={() => setHoveredItem(item)}
+                  onMouseLeave={() => setHoveredItem(null)}
                   onClick={() => {
                     sound.playConfirm();
                     onUseItem(item);
                   }}
+                  title={item.description}
                   className={`p-2 border rounded-lg text-left flex items-center justify-between transition-all ${
                     canUse 
-                      ? 'bg-white hover:bg-emerald-50 border-[#1b3b2b] text-[#163323] cursor-pointer shadow-xs' 
+                      ? isHovered
+                        ? 'bg-emerald-50 border-emerald-600 text-[#163323] cursor-pointer shadow-xs ring-1 ring-emerald-500'
+                        : 'bg-white hover:bg-emerald-50 border-[#1b3b2b] text-[#163323] cursor-pointer shadow-xs' 
                       : 'bg-slate-100 border-slate-300 opacity-40 cursor-not-allowed text-slate-400'
                   }`}
                 >
@@ -234,12 +266,35 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                     <GameIcon name={item.icon} size={15} />
                     <span className="font-pixel text-[9px] sm:text-[10px] font-bold text-[#143021] truncate">{item.name}</span>
                   </div>
-                  <span className="font-pixel text-[9px] font-bold bg-emerald-600 text-white px-1.5 py-0.5 rounded">
+                  <span className={`font-pixel text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                    canUse ? 'bg-emerald-600 text-white' : 'bg-slate-300 text-slate-500'
+                  }`}>
                     x{item.amount}
                   </span>
                 </button>
               );
             })}
+          </div>
+
+          {/* Description preview bar on hover */}
+          <div className="bg-[#f0fdf4] border border-emerald-700/30 rounded-lg px-2.5 py-1.5 min-h-[32px] flex items-center shadow-xs">
+            {hoveredItem ? (
+              <div className="flex items-center gap-1.5 text-[#163323] w-full animate-in fade-in duration-150">
+                <div className="shrink-0">
+                  <GameIcon name={hoveredItem.icon} size={14} />
+                </div>
+                <p className="font-mono text-[10px] sm:text-[11px] font-bold leading-tight truncate">
+                  <strong className="text-emerald-950">{hoveredItem.name}:</strong> {hoveredItem.description}
+                </p>
+                <span className="shrink-0 font-pixel text-[8px] bg-emerald-100 text-emerald-900 border border-emerald-300 px-1 py-0.5 rounded ml-auto">
+                  Qtd: {hoveredItem.amount}
+                </span>
+              </div>
+            ) : (
+              <p className="font-mono text-[10px] text-slate-500 italic">
+                ✨ Passe o mouse sobre um item para ver a descrição e seus efeitos.
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -281,7 +336,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                   onClick={() => setShowGraphModal(!showGraphModal)}
                   className="font-pixel text-[8px] sm:text-[9px] bg-white hover:bg-emerald-50 text-emerald-900 px-2 py-1 border border-emerald-600 rounded transition-colors cursor-pointer font-bold shadow-xs"
                 >
-                  {showGraphModal ? '🙈 Ocultar Gráfico' : '📈 Ver Gráfico'}
+                  {showGraphModal ? ' Ocultar Gráfico' : ' Ver Gráfico'}
                 </button>
               </div>
             </div>
@@ -312,7 +367,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
               onClick={handleCycleHint}
               className="text-[8px] font-pixel px-2 py-0.5 border border-amber-500 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded cursor-pointer"
             >
-              💡 {hintLevel === 0 ? 'DICA' : `DICA (${hintLevel}/3)`}
+               {hintLevel === 0 ? 'DICA' : `DICA (${hintLevel}/3)`}
             </button>
 
             {hintLevel > 0 && (
@@ -372,7 +427,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
                   isDefenseTurn ? 'gba-btn-yellow' : 'gba-btn-primary'
                 } text-[9px] sm:text-[10px] py-1.5 px-3 rounded-lg shrink-0 font-bold`}
               >
-                {isDefenseTurn ? 'DEFENDER ▶' : 'CONFIRMAR ▶'}
+                {isDefenseTurn ? 'DEFENDER ' : 'CONFIRMAR '}
               </button>
             </form>
           )}
