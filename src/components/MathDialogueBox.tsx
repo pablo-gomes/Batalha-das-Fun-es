@@ -221,7 +221,7 @@ export const MathDialogueBox: React.FC<MathDialogueBoxProps> = ({
             {hoveredSkill ? (
               <div className="flex items-center gap-1.5 text-[#163323] w-full animate-in fade-in duration-150">
                 <span className="font-pixel text-[8px] bg-sky-600 text-white px-1.5 py-0.5 rounded shrink-0">
-                  {hoveredSkill.type.toUpperCase()}
+                  {(hoveredSkill.category === 'offensive' ? 'ATAQUE' : hoveredSkill.category === 'defensive' ? 'DEFESA' : hoveredSkill.category === 'supreme' ? 'SUPREMO' : hoveredSkill.category || 'HABILIDADE').toUpperCase()}
                 </span>
                 <p className="font-mono text-[10px] sm:text-[11px] font-bold leading-tight truncate">
                   <strong className="text-emerald-950">{hoveredSkill.name}:</strong> {hoveredSkill.description}
