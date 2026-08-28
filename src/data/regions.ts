@@ -50,7 +50,7 @@ export const GAME_REGIONS: Region[] = [
     theme: 'vertex',
     icon: 'Mountain',
     bgGradient: 'from-blue-950 via-slate-900 to-indigo-950',
-    unlocked: false,
+    unlocked: true,
     bossDefeated: false,
     conceptFocus: ['vertex_x', 'vertex_y', 'vertex_point', 'max_min'],
     stages: [
@@ -91,7 +91,7 @@ export const GAME_REGIONS: Region[] = [
     theme: 'delta',
     icon: 'Flame',
     bgGradient: 'from-red-950 via-slate-900 to-amber-950',
-    unlocked: false,
+    unlocked: true,
     bossDefeated: false,
     conceptFocus: ['delta', 'roots', 'fx_value'],
     stages: [
@@ -132,7 +132,7 @@ export const GAME_REGIONS: Region[] = [
     theme: 'parabola',
     icon: 'Star',
     bgGradient: 'from-purple-950 via-slate-900 to-fuchsia-950',
-    unlocked: false,
+    unlocked: true,
     bossDefeated: false,
     conceptFocus: ['concavity', 'y_intercept', 'symmetry_axis', 'graph_interpret'],
     stages: [
@@ -173,7 +173,7 @@ export const GAME_REGIONS: Region[] = [
     theme: 'general',
     icon: 'Castle',
     bgGradient: 'from-amber-950 via-slate-900 to-yellow-950',
-    unlocked: false,
+    unlocked: true,
     bossDefeated: false,
     conceptFocus: ['supreme', 'roots', 'vertex_point', 'delta'],
     stages: [
