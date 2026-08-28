@@ -273,9 +273,7 @@ export default function App() {
             }}
             className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0"
           >
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-rose-500 via-red-500 to-amber-400 border-2 border-[#1b3b2b] flex items-center justify-center shadow-xs">
-              <span className="font-pixel text-[9px] text-white font-black">f(x)</span>
-            </div>
+            
             <div className="min-w-0">
               <h1 className="font-pixel text-[10px] min-[400px]:text-xs sm:text-sm text-[#143021] font-black truncate drop-shadow-xs">
                 BATALHA DAS FUNÇÕES
