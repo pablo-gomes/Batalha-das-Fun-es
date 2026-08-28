@@ -392,7 +392,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
             <span> GUIA</span>
           </button>
 
-          <div className="relative pr-1 sm:pr-8 pt-0.5 gba-sprite shrink-0">
+          <div className="relative pr-1 sm:pr-27 pt-0.5 gba-sprite shrink-0 translate-y-3 sm:translate-y-12">
             {/* Responsive Sprite Container */}
             <div className="w-24 h-24 min-[420px]:w-28 min-[420px]:h-28 sm:w-36 sm:h-36 flex items-center justify-center">
               <PixelSprite 
@@ -451,7 +451,7 @@ export const BattleScene: React.FC<BattleSceneProps> = ({
 
         {/* BOTTOM ROW: Player Back Sprite (Left) & Player HUD (Right) */}
         <div className="w-full flex items-end justify-between z-10 pb-0.5 gap-1">
-          <div className="relative pl-1 sm:pl-8 gba-sprite shrink-0">
+          <div className="relative pl-1 sm:pl-34 gba-sprite shrink-0 translate-y-2 sm:translate-y-0 ">
             {/* Responsive Sprite Container */}
             <div className="w-24 h-24 min-[420px]:w-32 min-[420px]:h-32 sm:w-40 sm:h-40 flex items-center justify-center">
               <PixelSprite 
